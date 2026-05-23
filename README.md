@@ -6,17 +6,12 @@
   <p>
     面向 iOS / SwiftUI 的设计系统百科，为 AI 辅助界面设计提供稳定、可落地的风格参考。
   </p>
-  <p>
-    <kbd><strong>中文</strong></kbd>
-    &nbsp;·&nbsp;
-    <a href="#english">English</a>
-  </p>
 </div>
 
 <hr>
 
-<section id="中文">
-  <h2>中文</h2>
+<details id="中文" name="readme-language" open>
+  <summary><strong>中文</strong></summary>
 
   <p>
     Mira 是一个面向 iOS / SwiftUI 的设计系统百科。它把不同视觉风格整理成文档、规则、Skill 和可交互的 App 演示，让 AI 在生成界面时有稳定的参考，而不是只复述几个风格关键词。
@@ -80,15 +75,12 @@
     <li>项目标准：<code>project-standards/</code></li>
     <li>风格运行时代码：<code>Mira/Features/Styles/</code></li>
   </ul>
-</section>
+</details>
 
 <hr>
 
-<section id="english">
-  <h2>English</h2>
-  <p>
-    <a href="#top">Back to language switch</a>
-  </p>
+<details id="english" name="readme-language">
+  <summary><strong>English</strong></summary>
 
   <p>
     Mira is an iOS / SwiftUI-first design system encyclopedia. It turns visual styles into documents, rules, skills, and interactive app demos so AI tools can design from concrete references instead of loose style keywords.
@@ -152,4 +144,4 @@ Output: visual direction, tokens, layout, component guidance, SwiftUI notes, ant
     <li>Project standards: <code>project-standards/</code></li>
     <li>Style runtime modules: <code>Mira/Features/Styles/</code></li>
   </ul>
-</section>
+</details>
