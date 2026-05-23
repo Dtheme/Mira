@@ -1,0 +1,17 @@
+ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
+CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/Alamofire" "${PODS_CONFIGURATION_BUILD_DIR}/AlertToast" "${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess" "${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftyBeaver" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftyUserDefaults" "${PODS_CONFIGURATION_BUILD_DIR}/lottie-ios"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/Alamofire/Alamofire.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/AlertToast/AlertToast.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess/KeychainAccess.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher/Kingfisher.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftyBeaver/SwiftyBeaver.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftyUserDefaults/SwiftyUserDefaults.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/lottie-ios/Lottie.framework/Headers"
+LD_RUNPATH_SEARCH_PATHS = $(inherited) /usr/lib/swift '@executable_path/Frameworks' '@loader_path/Frameworks'
+LIBRARY_SEARCH_PATHS = $(inherited) /usr/lib/swift
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_CONFIGURATION_BUILD_DIR}/Alamofire/Alamofire.framework/Headers" -isystem "${PODS_CONFIGURATION_BUILD_DIR}/AlertToast/AlertToast.framework/Headers" -isystem "${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess/KeychainAccess.framework/Headers" -isystem "${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher/Kingfisher.framework/Headers" -isystem "${PODS_CONFIGURATION_BUILD_DIR}/SwiftyBeaver/SwiftyBeaver.framework/Headers" -isystem "${PODS_CONFIGURATION_BUILD_DIR}/SwiftyUserDefaults/SwiftyUserDefaults.framework/Headers" -isystem "${PODS_CONFIGURATION_BUILD_DIR}/lottie-ios/Lottie.framework/Headers" -iframework "${PODS_CONFIGURATION_BUILD_DIR}/Alamofire" -iframework "${PODS_CONFIGURATION_BUILD_DIR}/AlertToast" -iframework "${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess" -iframework "${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher" -iframework "${PODS_CONFIGURATION_BUILD_DIR}/SwiftyBeaver" -iframework "${PODS_CONFIGURATION_BUILD_DIR}/SwiftyUserDefaults" -iframework "${PODS_CONFIGURATION_BUILD_DIR}/lottie-ios"
+OTHER_LDFLAGS = $(inherited) -framework "Accelerate" -framework "Alamofire" -framework "AlertToast" -framework "CFNetwork" -framework "CoreGraphics" -framework "KeychainAccess" -framework "Kingfisher" -framework "Lottie" -framework "QuartzCore" -framework "SwiftyBeaver" -framework "SwiftyUserDefaults" -framework "UIKit" -weak_framework "Combine" -weak_framework "SwiftUI"
+OTHER_MODULE_VERIFIER_FLAGS = $(inherited) "-F${PODS_CONFIGURATION_BUILD_DIR}/Alamofire" "-F${PODS_CONFIGURATION_BUILD_DIR}/AlertToast" "-F${PODS_CONFIGURATION_BUILD_DIR}/KeychainAccess" "-F${PODS_CONFIGURATION_BUILD_DIR}/Kingfisher" "-F${PODS_CONFIGURATION_BUILD_DIR}/SwiftyBeaver" "-F${PODS_CONFIGURATION_BUILD_DIR}/SwiftyUserDefaults" "-F${PODS_CONFIGURATION_BUILD_DIR}/lottie-ios"
+OTHER_SWIFT_FLAGS = $(inherited) -D COCOAPODS
+PODS_BUILD_DIR = ${BUILD_DIR}
+PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+PODS_PODFILE_DIR_PATH = ${SRCROOT}/.
+PODS_ROOT = ${SRCROOT}/Pods
+PODS_XCFRAMEWORKS_BUILD_DIR = $(PODS_CONFIGURATION_BUILD_DIR)/XCFrameworkIntermediates
+USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES = YES

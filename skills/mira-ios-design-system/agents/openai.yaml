@@ -1,0 +1,9 @@
+interface:
+  display_name: "Mira iOS Design System"
+  short_description: "iOS-first design style guidance for Mira"
+  brand_color: "#5B5FEF"
+  default_prompt: "Use $mira-ios-design-system to design or review a Mira iOS screen with a selected visual style."
+
+policy:
+  allow_implicit_invocation: true
+
