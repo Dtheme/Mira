@@ -34,6 +34,7 @@ struct MiNeumorphismHomePreview: View {
                         .foregroundStyle(MiNeumorphismTokens.ink)
                         .lineLimit(1)
                         .minimumScaleFactor(0.62)
+                        .miStyleTitleTransition(style.id)
 
                     Spacer(minLength: 0)
                 }

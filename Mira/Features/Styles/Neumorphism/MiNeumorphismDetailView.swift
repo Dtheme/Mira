@@ -17,6 +17,7 @@ struct MiNeumorphismDetailView: View {
     @State private var selectedSegment = 0
     @State private var inputText = ""
     @FocusState private var inputFocused: Bool
+    @State private var isRevealed = false
 
     init(style: MiDesignStyle, onBack: (() -> Void)? = nil) {
         self.style = style
@@ -33,34 +34,44 @@ struct MiNeumorphismDetailView: View {
                     close()
                 }
                 .padding(.horizontal, 20)
-                .padding(.top, 10)
-                .padding(.bottom, 14)
+                .padding(.top, 2)
+                .padding(.bottom, 6)
 
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 28) {
+                    LazyVStack(alignment: .leading, spacing: MiNeumorphismTokens.sectionSpacing) {
                         MiNeumorphismHeroView(style: style)
+                            .miStaggeredReveal(index: 0, isRevealed: isRevealed)
 
                         styleCardSection
+                            .miStaggeredReveal(index: 1, isRevealed: isRevealed)
 
                         surfaceStatesSection
+                            .miStaggeredReveal(index: 2, isRevealed: isRevealed)
 
                         componentSection
+                            .miStaggeredReveal(index: 3, isRevealed: isRevealed)
 
                         formSection
+                            .miStaggeredReveal(index: 4, isRevealed: isRevealed)
 
                         sheetSection
+                            .miStaggeredReveal(index: 5, isRevealed: isRevealed)
 
                         statesSection
+                            .miStaggeredReveal(index: 6, isRevealed: isRevealed)
 
                         tokenSection
+                            .miStaggeredReveal(index: 7, isRevealed: isRevealed)
 
                         motionAccessibilitySection
+                            .miStaggeredReveal(index: 8, isRevealed: isRevealed)
 
                         promptSection
+                            .miStaggeredReveal(index: 9, isRevealed: isRevealed)
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 12)
-                    .padding(.bottom, 42)
+                    .padding(.horizontal, 22)
+                    .padding(.top, 14)
+                    .padding(.bottom, 48)
                     .frame(maxWidth: 780, alignment: .leading)
                     .frame(maxWidth: .infinity)
                 }
@@ -71,6 +82,16 @@ struct MiNeumorphismDetailView: View {
         .toolbar(.hidden, for: .navigationBar)
         .animation(reduceMotion ? nil : .spring(response: 0.28, dampingFraction: 0.82), value: isToggleOn)
         .animation(reduceMotion ? nil : .spring(response: 0.25, dampingFraction: 0.86), value: selectedSegment)
+        .onAppear {
+            triggerReveal()
+        }
+    }
+
+    private func triggerReveal() {
+        guard !isRevealed else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
+            isRevealed = true
+        }
     }
 
     private var surfaceStatesSection: some View {
@@ -91,23 +112,31 @@ struct MiNeumorphismDetailView: View {
 
     private var componentSection: some View {
         MiNeumorphismSection(titleKey: "neu_component_lab", bodyKey: "neu_component_body") {
-            MiNeumorphismSoftSurface(cornerRadius: 24, contentPadding: 16) {
-                VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 16) {
+                MiNeumorphismDemoPanel {
                     MiNeumorphismButtonShowcase()
+                }
 
-                    MiNeumorphismToggleControl(isOn: $isToggleOn)
+                MiNeumorphismDemoPanel {
+                    VStack(alignment: .leading, spacing: 18) {
+                        MiNeumorphismToggleControl(isOn: $isToggleOn)
 
-                    MiNeumorphismSegmentedControl(
-                        selectedIndex: $selectedSegment,
-                        itemKeys: MiNeumorphismDetailContent.segmentKeys
-                    )
-
-                    HStack(spacing: 10) {
-                        MiNeumorphismPill(titleKey: "neu_selected", isSelected: true)
-                        MiNeumorphismPill(titleKey: "neu_disabled", isSelected: false, isDisabled: true)
+                        MiNeumorphismSegmentedControl(
+                            selectedIndex: $selectedSegment,
+                            itemKeys: MiNeumorphismDetailContent.segmentKeys
+                        )
                     }
+                }
 
-                    MiNeumorphismTagRail()
+                MiNeumorphismDemoPanel {
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack(spacing: 10) {
+                            MiNeumorphismPill(titleKey: "neu_selected", isSelected: true)
+                            MiNeumorphismPill(titleKey: "neu_disabled", isSelected: false, isDisabled: true)
+                        }
+
+                        MiNeumorphismTagRail()
+                    }
                 }
             }
         }
@@ -115,13 +144,17 @@ struct MiNeumorphismDetailView: View {
 
     private var formSection: some View {
         MiNeumorphismSection(titleKey: "neu_form_lab", bodyKey: "neu_form_body") {
-            VStack(alignment: .leading, spacing: 14) {
-                MiNeumorphismInputField(text: $inputText, isFocused: $inputFocused)
+            VStack(alignment: .leading, spacing: 16) {
+                MiNeumorphismDemoPanel {
+                    VStack(alignment: .leading, spacing: 14) {
+                        MiNeumorphismInputField(text: $inputText, isFocused: $inputFocused)
 
-                LazyVGrid(columns: adaptiveColumns, spacing: 12) {
-                    MiNeumorphismPill(titleKey: inputFocused ? "neu_focused" : "neu_resting", isSelected: inputFocused)
-                    MiNeumorphismPill(titleKey: inputText.isEmpty ? "neu_empty" : "neu_filled", isSelected: !inputText.isEmpty)
-                    MiNeumorphismPill(titleKey: "neu_error", isSelected: false)
+                        LazyVGrid(columns: adaptiveColumns, spacing: 12) {
+                            MiNeumorphismPill(titleKey: inputFocused ? "neu_focused" : "neu_resting", isSelected: inputFocused)
+                            MiNeumorphismPill(titleKey: inputText.isEmpty ? "neu_empty" : "neu_filled", isSelected: !inputText.isEmpty)
+                            MiNeumorphismPill(titleKey: "neu_error", isSelected: false)
+                        }
+                    }
                 }
 
                 MiNeumorphismInputStateGallery()
@@ -137,7 +170,7 @@ struct MiNeumorphismDetailView: View {
 
     private var statesSection: some View {
         MiNeumorphismSection(titleKey: "neu_states_lab", bodyKey: "neu_states_body") {
-            LazyVGrid(columns: adaptiveColumns, spacing: 14) {
+            LazyVGrid(columns: adaptiveColumns, spacing: 16) {
                 MiNeumorphismDemoStateCard(titleKey: "neu_state_empty", bodyKey: "neu_state_empty_body", symbolName: "tray")
                 MiNeumorphismDemoStateCard(titleKey: "neu_state_loading", bodyKey: "neu_state_loading_body", symbolName: "clock", isLoading: true)
                 MiNeumorphismDemoStateCard(titleKey: "neu_state_error", bodyKey: "neu_state_error_body", symbolName: "exclamationmark.triangle", accent: MiNeumorphismTokens.error)
@@ -150,7 +183,7 @@ struct MiNeumorphismDetailView: View {
     private var tokenSection: some View {
         MiNeumorphismSection(titleKey: "neu_tokens", bodyKey: "neu_tokens_body") {
             VStack(alignment: .leading, spacing: 18) {
-                LazyVGrid(columns: adaptiveColumns, spacing: 14) {
+                LazyVGrid(columns: adaptiveColumns, spacing: 16) {
                     ForEach(MiNeumorphismDetailContent.tokenSwatches, id: \.titleKey) { swatch in
                         MiNeumorphismTokenSwatch(
                             titleKey: swatch.titleKey,
@@ -191,7 +224,7 @@ struct MiNeumorphismDetailView: View {
     }
 
     private var adaptiveColumns: [GridItem] {
-        [GridItem(.adaptive(minimum: 148), spacing: 14)]
+        [GridItem(.adaptive(minimum: 158), spacing: 16)]
     }
 
     private func close() {
@@ -208,24 +241,25 @@ private struct MiNeumorphismTopBar: View {
     let onBack: () -> Void
 
     var body: some View {
-        MiNeumorphismSoftSurface(cornerRadius: 28, contentPadding: 8) {
+        MiNeumorphismSoftSurface(cornerRadius: 22, contentPadding: 4) {
             HStack(spacing: 10) {
                 Button(action: onBack) {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 17, weight: .bold))
+                        .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(MiNeumorphismTokens.ink)
                 }
                 .buttonStyle(MiNeumorphismNavigationButtonStyle())
                 .accessibilityLabel(MiL10n.text("c_back"))
 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 1) {
                     Text(MiL10n.text(style.name))
-                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
                         .foregroundStyle(MiNeumorphismTokens.ink)
                         .lineLimit(1)
+                        .miStyleTitleTransition(style.id)
 
                     Text(MiL10n.text("neu_soft_ui"))
-                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                        .font(.system(size: 10, weight: .semibold, design: .rounded))
                         .foregroundStyle(MiNeumorphismTokens.muted)
                 }
                 .layoutPriority(1)
@@ -236,7 +270,7 @@ private struct MiNeumorphismTopBar: View {
             }
         }
         .frame(maxWidth: 780)
-        .frame(height: 64)
+        .frame(height: 52)
     }
 }
 
@@ -281,22 +315,32 @@ private struct MiNeumorphismHeroView: View {
 
     var body: some View {
         MiNeumorphismSoftSurface(cornerRadius: 32, contentPadding: 22) {
-            VStack(alignment: .leading, spacing: 22) {
+            VStack(alignment: .leading, spacing: 24) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(MiL10n.text("neu_soft_lab"))
                         .font(.system(size: 12, weight: .bold, design: .rounded))
                         .foregroundStyle(MiNeumorphismTokens.accentDeep)
+                        .padding(.horizontal, 12)
+                        .frame(height: 30)
+                        .background {
+                            Capsule(style: .continuous)
+                                .fill(MiNeumorphismTokens.focusSoft.opacity(0.74))
+                                .shadow(color: MiNeumorphismTokens.shadowDark.opacity(0.20), radius: 4, x: 2, y: 2)
+                                .shadow(color: MiNeumorphismTokens.shadowLight.opacity(0.82), radius: 4, x: -2, y: -2)
+                        }
 
                     Text(MiL10n.text(style.name))
-                        .font(.system(size: 38, weight: .bold, design: .rounded))
+                        .font(.system(size: 38, weight: .black, design: .rounded))
                         .foregroundStyle(MiNeumorphismTokens.ink)
                         .lineLimit(2)
                         .minimumScaleFactor(0.72)
+                        .padding(.top, 4)
 
                     Text(MiL10n.text("neu_hero_body"))
                         .font(.system(size: 15, weight: .medium, design: .rounded))
-                        .foregroundStyle(MiNeumorphismTokens.muted)
-                        .lineSpacing(3)
+                        .foregroundStyle(MiNeumorphismTokens.quietText)
+                        .lineSpacing(4)
+                        .frame(maxWidth: 560, alignment: .leading)
                 }
 
                 MiNeumorphismHeroPreview()
@@ -362,7 +406,7 @@ private struct MiNeumorphismStyleCardDemo: View {
 
     var body: some View {
         MiNeumorphismSoftSurface(cornerRadius: 30, contentPadding: 18) {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 18) {
                 HStack(alignment: .center, spacing: 12) {
                     MiNeumorphismSoftSurface(cornerRadius: 16, contentPadding: 0) {
                         Text("NU")
@@ -374,7 +418,7 @@ private struct MiNeumorphismStyleCardDemo: View {
 
                     VStack(alignment: .leading, spacing: 3) {
                         Text(MiL10n.text(style.name))
-                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                            .font(.system(size: 25, weight: .black, design: .rounded))
                             .foregroundStyle(MiNeumorphismTokens.ink)
                             .lineLimit(1)
                             .minimumScaleFactor(0.75)
@@ -389,8 +433,8 @@ private struct MiNeumorphismStyleCardDemo: View {
 
                 Text(MiL10n.text("neu_card_summary"))
                     .font(.system(size: 14, weight: .medium, design: .rounded))
-                    .foregroundStyle(MiNeumorphismTokens.muted)
-                    .lineSpacing(2)
+                    .foregroundStyle(MiNeumorphismTokens.quietText)
+                    .lineSpacing(3)
 
                 MiNeumorphismMiniInputPreview()
 
@@ -451,12 +495,12 @@ private struct MiNeumorphismSurfaceStateCard: View {
 
                 Text(MiL10n.text(bodyKey))
                     .font(.system(size: 13, weight: .medium, design: .rounded))
-                    .foregroundStyle(MiNeumorphismTokens.muted)
-                    .lineSpacing(2)
+                    .foregroundStyle(MiNeumorphismTokens.quietText)
+                    .lineSpacing(3)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .frame(minHeight: 126)
+        .frame(minHeight: 138)
     }
 }
 
@@ -491,7 +535,7 @@ private struct MiNeumorphismDepthGlyph: View {
 
 private struct MiNeumorphismInspectorDemo: View {
     var body: some View {
-        MiNeumorphismSoftSurface(cornerRadius: 28, contentPadding: 18) {
+        MiNeumorphismDemoPanel(cornerRadius: 28) {
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 4) {
@@ -501,7 +545,7 @@ private struct MiNeumorphismInspectorDemo: View {
 
                         Text(MiL10n.text("neu_inspector_hint"))
                             .font(.system(size: 13, weight: .medium, design: .rounded))
-                            .foregroundStyle(MiNeumorphismTokens.muted)
+                            .foregroundStyle(MiNeumorphismTokens.quietText)
                     }
 
                     Spacer(minLength: 0)
@@ -550,10 +594,12 @@ private struct MiNeumorphismInspectorRow: View {
                 .padding(.horizontal, 10)
                 .frame(height: 28)
                 .background {
-                    Capsule(style: .continuous)
-                        .fill(MiNeumorphismTokens.focusAccent.opacity(0.18))
+                    MiNeumorphismSoftSurface(cornerRadius: 14, depth: .pressed, fill: MiNeumorphismTokens.focusSoft.opacity(0.88), contentPadding: 0) {
+                        EmptyView()
+                    }
                 }
         }
+        .padding(.vertical, 2)
     }
 }
 
@@ -594,14 +640,14 @@ private struct MiNeumorphismDemoStateCard: View {
                 } else {
                     Text(MiL10n.text(bodyKey))
                         .font(.system(size: 13, weight: .medium, design: .rounded))
-                        .foregroundStyle(MiNeumorphismTokens.muted)
-                        .lineSpacing(2)
+                        .foregroundStyle(MiNeumorphismTokens.quietText)
+                        .lineSpacing(3)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .opacity(isDisabled ? 0.56 : 1)
-        .frame(minHeight: 136)
+        .frame(minHeight: 144)
     }
 }
 
@@ -654,8 +700,8 @@ private struct MiNeumorphismAccessibilityRow: View {
 
                 Text(MiL10n.text(bodyKey))
                     .font(.system(size: 13, weight: .medium, design: .rounded))
-                    .foregroundStyle(MiNeumorphismTokens.muted)
-                    .lineSpacing(2)
+                    .foregroundStyle(MiNeumorphismTokens.quietText)
+                    .lineSpacing(3)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -682,8 +728,8 @@ private struct MiNeumorphismListPanel: View {
 
                         Text(MiL10n.text(item.key))
                             .font(.system(size: 14, weight: .medium, design: .rounded))
-                            .foregroundStyle(MiNeumorphismTokens.muted)
-                            .lineSpacing(2)
+                            .foregroundStyle(MiNeumorphismTokens.quietText)
+                            .lineSpacing(3)
                     }
                 }
             }

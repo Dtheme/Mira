@@ -13,29 +13,43 @@ struct MiStyleConstellationView: View {
     let focusedStyleID: String?
     let focusSignal: Int
     let resetSignal: Int
+    let isNavigationTransitionActive: Bool
+    let activeTransitionSourceID: String?
+    let activeTitleTransitionStyleID: String?
     let transitionNamespace: Namespace.ID
-    let onSelectStyle: (MiDesignStyle, String) -> Void
+    let onSelectStyle: (MiDesignStyle, MiStyleTransitionContext) -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var offset: CGSize = .zero
     @State private var gestureStartOffset: CGSize = .zero
     @State private var isDragging = false
+    @State private var isPreparingNavigation = false
     @State private var activeGestureStartOffset: CGSize?
     @State private var pressedSourceID: String?
+    @State private var pendingSelectionToken = 0
 
     var body: some View {
         GeometryReader { proxy in
             let canvas = MiWatchAppCanvas(size: proxy.size, styleCount: styles.count)
+            let isTransitioning = isPreparingNavigation || isNavigationTransitionActive
 
             ZStack {
                 ForEach(canvas.visibleSlots(for: offset)) { slot in
+                    let style = styles[slot.styleIndex]
+                    let sourceID = slot.transitionSourceID(styleID: style.id)
+                    let isTransitionSource = sourceID == pressedSourceID || sourceID == activeTransitionSourceID
+                    let shouldReduceCardEffects = isDragging || (isTransitioning && !isTransitionSource)
+
                     MiWatchAppCardReplicaView(
                         slot: slot,
-                        style: styles[slot.styleIndex],
-                        isHighlighted: highlightedStyleIDs.contains(styles[slot.styleIndex].id),
+                        style: style,
+                        isHighlighted: highlightedStyleIDs.contains(style.id),
                         offset: offset,
                         canvas: canvas,
-                        isDragging: isDragging,
+                        isDragging: shouldReduceCardEffects,
+                        isTransitioning: isTransitioning,
+                        isTitleTransitionSource: isTransitionSource,
+                        activeTitleTransitionStyleID: activeTitleTransitionStyleID,
                         pressedSourceID: pressedSourceID,
                         transitionNamespace: transitionNamespace,
                         onSelectStyle: onSelectStyle
@@ -54,8 +68,10 @@ struct MiStyleConstellationView: View {
                     offset = .zero
                     gestureStartOffset = .zero
                     isDragging = false
+                    isPreparingNavigation = false
                     activeGestureStartOffset = nil
                     pressedSourceID = nil
+                    pendingSelectionToken += 1
                 }
             }
             .onChange(of: focusSignal) {
@@ -76,8 +92,10 @@ struct MiStyleConstellationView: View {
                     offset = nextOffset
                     gestureStartOffset = nextOffset
                     isDragging = false
+                    isPreparingNavigation = false
                     activeGestureStartOffset = nil
                     pressedSourceID = nil
+                    pendingSelectionToken += 1
                 }
             }
             .accessibilityElement(children: .contain)
@@ -87,9 +105,15 @@ struct MiStyleConstellationView: View {
     private func canvasGesture(canvas: MiWatchAppCanvas) -> some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
+                guard !isNavigationTransitionActive else {
+                    return
+                }
+
                 if activeGestureStartOffset == nil {
                     activeGestureStartOffset = offset
                     gestureStartOffset = offset
+                    isPreparingNavigation = false
+                    pendingSelectionToken += 1
                 }
 
                 let gestureOriginOffset = activeGestureStartOffset ?? offset
@@ -101,12 +125,14 @@ struct MiStyleConstellationView: View {
                         styles: styles,
                         highlightedStyleIDs: highlightedStyleIDs,
                         reduceMotion: reduceMotion
-                    )?.transitionSourceID
+                    )?.context.sourceID
                     return
                 }
 
                 pressedSourceID = nil
                 isDragging = true
+                isPreparingNavigation = false
+                pendingSelectionToken += 1
 
                 var transaction = Transaction()
                 transaction.animation = nil
@@ -118,6 +144,14 @@ struct MiStyleConstellationView: View {
                 }
             }
             .onEnded { value in
+                guard !isNavigationTransitionActive else {
+                    isDragging = false
+                    isPreparingNavigation = false
+                    pressedSourceID = nil
+                    activeGestureStartOffset = nil
+                    return
+                }
+
                 let gestureOriginOffset = activeGestureStartOffset ?? offset
 
                 defer {
@@ -141,14 +175,25 @@ struct MiStyleConstellationView: View {
                     }
 
                     isDragging = false
-                    pressedSourceID = hit.transitionSourceID
+                    isPreparingNavigation = !reduceMotion
+                    pressedSourceID = hit.context.sourceID
                     if reduceMotion {
-                        onSelectStyle(style, hit.transitionSourceID)
+                        onSelectStyle(style, hit.context)
                         pressedSourceID = nil
+                        isPreparingNavigation = false
                     } else {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.06) {
-                            onSelectStyle(style, hit.transitionSourceID)
+                        pendingSelectionToken += 1
+                        let token = pendingSelectionToken
+                        let handoffDelay = 0.075
+
+                        DispatchQueue.main.asyncAfter(deadline: .now() + handoffDelay) {
+                            guard token == pendingSelectionToken else {
+                                return
+                            }
+
+                            onSelectStyle(style, hit.context)
                             pressedSourceID = nil
+                            isPreparingNavigation = false
                         }
                     }
                     return
@@ -174,6 +219,7 @@ struct MiStyleConstellationView: View {
                 withAnimation(animation) {
                     offset = nextOffset
                     isDragging = false
+                    isPreparingNavigation = false
                 }
                 pressedSourceID = nil
                 self.gestureStartOffset = nextOffset
@@ -192,9 +238,12 @@ private struct MiWatchAppCardReplicaView: View {
     let offset: CGSize
     let canvas: MiWatchAppCanvas
     let isDragging: Bool
+    let isTransitioning: Bool
+    let isTitleTransitionSource: Bool
+    let activeTitleTransitionStyleID: String?
     let pressedSourceID: String?
     let transitionNamespace: Namespace.ID
-    let onSelectStyle: (MiDesignStyle, String) -> Void
+    let onSelectStyle: (MiDesignStyle, MiStyleTransitionContext) -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -219,16 +268,15 @@ private struct MiWatchAppCardReplicaView: View {
             isDragging: isDragging
         )
         .environment(\.miHomePressedStyleID, isPressed ? style.id : nil)
-        .matchedTransitionSource(id: transitionSourceID, in: transitionNamespace)
-        .scaleEffect(isPressed && style.id == MiNeoBrutalismModule.styleID ? 0.985 : 1)
-        .brightness(isPressed && style.id == MiNeoBrutalismModule.styleID ? -0.025 : 0)
+        .scaleEffect(pressScale)
+        .brightness(pressBrightness)
         .animation(reduceMotion ? .easeOut(duration: 0.01) : .spring(response: 0.18, dampingFraction: 0.74), value: isPressed)
-        .disabled(!isHighlighted)
+        .disabled(!isHighlighted || isTransitioning)
         .position(center)
         .zIndex(focus.zIndex)
-        .allowsHitTesting(isHighlighted)
+        .allowsHitTesting(isHighlighted && !isTransitioning)
         .accessibilityAction {
-            onSelectStyle(style, transitionSourceID)
+            onSelectStyle(style, transitionContext)
         }
     }
 
@@ -238,6 +286,46 @@ private struct MiWatchAppCardReplicaView: View {
 
     private var transitionSourceID: String {
         slot.transitionSourceID(styleID: style.id)
+    }
+
+    private var transitionContext: MiStyleTransitionContext {
+        let renderedSize = CGSize(
+            width: canvas.cardSize.width * focus.scale,
+            height: canvas.cardSize.height * focus.scale
+        )
+        return MiStyleTransitionContext(
+            sourceID: transitionSourceID,
+            styleID: style.id,
+            sourceFrame: CGRect(
+                x: center.x - renderedSize.width / 2,
+                y: center.y - renderedSize.height / 2,
+                width: renderedSize.width,
+                height: renderedSize.height
+            ),
+            cardSize: canvas.cardSize,
+            sourceScale: focus.scale,
+            cornerRadius: canvas.cardRadius * focus.scale
+        )
+    }
+
+    private var pressScale: CGFloat {
+        guard isPressed else {
+            return 1
+        }
+        if style.id == MiNeoBrutalismModule.styleID {
+            return 0.985
+        }
+        return 0.978
+    }
+
+    private var pressBrightness: Double {
+        guard isPressed else {
+            return 0
+        }
+        if style.id == MiNeoBrutalismModule.styleID {
+            return -0.025
+        }
+        return 0.015
     }
 }
 
@@ -272,9 +360,18 @@ private struct MiWatchAppSlot: Identifiable, Hashable {
     }
 }
 
+struct MiStyleTransitionContext {
+    let sourceID: String
+    let styleID: String
+    let sourceFrame: CGRect
+    let cardSize: CGSize
+    let sourceScale: CGFloat
+    let cornerRadius: CGFloat
+}
+
 private struct MiWatchAppHitResult {
     let styleID: String
-    let transitionSourceID: String
+    let context: MiStyleTransitionContext
 }
 
 private struct MiWatchAppCanvas {
@@ -369,15 +466,19 @@ private struct MiWatchAppCanvas {
                     y: size.height / 2 + slot.position.y + offset.height
                 )
                 let focus = reduceMotion ? self.focus(for: center).reducedMotion() : self.focus(for: center)
-                let hitSize = CGSize(
-                    width: cardSize.width * focus.scale + MiWatchAppGestureMetrics.cardHitSlop * 2,
-                    height: cardSize.height * focus.scale + MiWatchAppGestureMetrics.cardHitSlop * 2
+                let renderedSize = CGSize(
+                    width: cardSize.width * focus.scale,
+                    height: cardSize.height * focus.scale
                 )
-                let hitRect = CGRect(
-                    x: center.x - hitSize.width / 2,
-                    y: center.y - hitSize.height / 2,
-                    width: hitSize.width,
-                    height: hitSize.height
+                let sourceFrame = CGRect(
+                    x: center.x - renderedSize.width / 2,
+                    y: center.y - renderedSize.height / 2,
+                    width: renderedSize.width,
+                    height: renderedSize.height
+                )
+                let hitRect = sourceFrame.insetBy(
+                    dx: -MiWatchAppGestureMetrics.cardHitSlop,
+                    dy: -MiWatchAppGestureMetrics.cardHitSlop
                 )
 
                 guard hitRect.contains(point) else {
@@ -387,7 +488,14 @@ private struct MiWatchAppCanvas {
                 return (
                     MiWatchAppHitResult(
                         styleID: style.id,
-                        transitionSourceID: slot.transitionSourceID(styleID: style.id)
+                        context: MiStyleTransitionContext(
+                            sourceID: slot.transitionSourceID(styleID: style.id),
+                            styleID: style.id,
+                            sourceFrame: sourceFrame,
+                            cardSize: cardSize,
+                            sourceScale: focus.scale,
+                            cornerRadius: cardRadius * focus.scale
+                        )
                     ),
                     focus.zIndex
                 )
@@ -444,9 +552,9 @@ private struct MiWatchAppCanvas {
         let prominence = 1 - normalized
 
         return MiCardFocus(
-            scale: 0.60 + prominence * 0.66,
-            opacity: 0.20 + prominence * 0.80,
-            shadowOpacity: 0.03 + prominence * 0.31,
+            scale: 0.66 + prominence * 0.52,
+            opacity: 0.24 + prominence * 0.76,
+            shadowOpacity: 0.03 + prominence * 0.25,
             borderOpacity: 0.12 + prominence * 0.50,
             zIndex: Double(prominence * 100)
         )

@@ -336,6 +336,7 @@ private struct MiCardTitleRow: View {
                 .foregroundStyle(isLiquidGlassCard ? Color(hex: 0x121A27).opacity(0.96) : MiColorTokens.contentPrimary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.56)
+                .miStyleTitleTransition(style.id)
         }
     }
 

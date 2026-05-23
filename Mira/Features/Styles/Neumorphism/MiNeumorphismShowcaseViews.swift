@@ -9,12 +9,12 @@ import SwiftUI
 
 struct MiNeumorphismButtonShowcase: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 14) {
             Text(MiL10n.text("neu_button_states"))
-                .font(.system(size: 14, weight: .bold, design: .rounded))
+                .font(.system(size: 15, weight: .bold, design: .rounded))
                 .foregroundStyle(MiNeumorphismTokens.ink)
 
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 138), spacing: 12)], spacing: 12) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 148), spacing: 14)], spacing: 14) {
                 Button(MiL10n.text("neu_primary")) {}
                     .buttonStyle(MiNeumorphismButtonStyle(role: .primary))
 
@@ -36,7 +36,7 @@ struct MiNeumorphismTagRail: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(MiL10n.text("neu_tag_rail"))
-                .font(.system(size: 14, weight: .bold, design: .rounded))
+                .font(.system(size: 15, weight: .bold, design: .rounded))
                 .foregroundStyle(MiNeumorphismTokens.ink)
 
             ViewThatFits(in: .horizontal) {
@@ -61,38 +61,40 @@ struct MiNeumorphismTagRail: View {
 
 struct MiNeumorphismInputStateGallery: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(MiL10n.text("neu_input_states"))
-                .font(.system(size: 14, weight: .bold, design: .rounded))
-                .foregroundStyle(MiNeumorphismTokens.ink)
+        MiNeumorphismDemoPanel {
+            VStack(alignment: .leading, spacing: 14) {
+                Text(MiL10n.text("neu_input_states"))
+                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                    .foregroundStyle(MiNeumorphismTokens.ink)
 
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 154), spacing: 12)], spacing: 12) {
-                MiNeumorphismInputStateTile(
-                    titleKey: "neu_input_default",
-                    valueKey: "neu_resting",
-                    depth: .raised
-                )
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 158), spacing: 14)], spacing: 14) {
+                    MiNeumorphismInputStateTile(
+                        titleKey: "neu_input_default",
+                        valueKey: "neu_resting",
+                        depth: .raised
+                    )
 
-                MiNeumorphismInputStateTile(
-                    titleKey: "neu_input_focused",
-                    valueKey: "neu_focused",
-                    depth: .inset,
-                    accent: MiNeumorphismTokens.focusAccent
-                )
+                    MiNeumorphismInputStateTile(
+                        titleKey: "neu_input_focused",
+                        valueKey: "neu_focused",
+                        depth: .inset,
+                        accent: MiNeumorphismTokens.focusAccent
+                    )
 
-                MiNeumorphismInputStateTile(
-                    titleKey: "neu_input_filled",
-                    valueKey: "neu_filled",
-                    depth: .raised,
-                    accent: MiNeumorphismTokens.accentDeep
-                )
+                    MiNeumorphismInputStateTile(
+                        titleKey: "neu_input_filled",
+                        valueKey: "neu_filled",
+                        depth: .raised,
+                        accent: MiNeumorphismTokens.accentDeep
+                    )
 
-                MiNeumorphismInputStateTile(
-                    titleKey: "neu_input_error",
-                    valueKey: "neu_error",
-                    depth: .pressed,
-                    accent: MiNeumorphismTokens.error
-                )
+                    MiNeumorphismInputStateTile(
+                        titleKey: "neu_input_error",
+                        valueKey: "neu_error",
+                        depth: .pressed,
+                        accent: MiNeumorphismTokens.error
+                    )
+                }
             }
         }
     }
@@ -127,6 +129,11 @@ private struct MiNeumorphismInputStateTile: View {
                 RoundedRectangle(cornerRadius: 7, style: .continuous)
                     .fill(accent.opacity(0.18))
                     .frame(height: 9)
+                    .overlay(alignment: .leading) {
+                        RoundedRectangle(cornerRadius: 7, style: .continuous)
+                            .fill(accent.opacity(0.34))
+                            .frame(width: 42, height: 9)
+                    }
 
                 Text(MiL10n.text(valueKey))
                     .font(.system(size: 12, weight: .semibold, design: .rounded))
@@ -140,15 +147,17 @@ private struct MiNeumorphismInputStateTile: View {
 
 struct MiNeumorphismShadowTokenGallery: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(MiL10n.text("neu_shadow_tokens"))
-                .font(.system(size: 14, weight: .bold, design: .rounded))
-                .foregroundStyle(MiNeumorphismTokens.ink)
+        MiNeumorphismDemoPanel {
+            VStack(alignment: .leading, spacing: 14) {
+                Text(MiL10n.text("neu_shadow_tokens"))
+                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                    .foregroundStyle(MiNeumorphismTokens.ink)
 
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 126), spacing: 12)], spacing: 12) {
-                MiNeumorphismShadowTokenTile(titleKey: "neu_shadow_small", depth: .raised, size: 34)
-                MiNeumorphismShadowTokenTile(titleKey: "neu_shadow_inset", depth: .inset, size: 34)
-                MiNeumorphismShadowTokenTile(titleKey: "neu_shadow_pressed", depth: .pressed, size: 34)
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 136), spacing: 14)], spacing: 14) {
+                    MiNeumorphismShadowTokenTile(titleKey: "neu_shadow_small", depth: .raised, size: 34)
+                    MiNeumorphismShadowTokenTile(titleKey: "neu_shadow_inset", depth: .inset, size: 34)
+                    MiNeumorphismShadowTokenTile(titleKey: "neu_shadow_pressed", depth: .pressed, size: 34)
+                }
             }
         }
     }
@@ -200,8 +209,8 @@ struct MiNeumorphismMotionSamplePanel: View {
 
                         Text(MiL10n.text("neu_press_motion_body"))
                             .font(.system(size: 13, weight: .medium, design: .rounded))
-                            .foregroundStyle(MiNeumorphismTokens.muted)
-                            .lineSpacing(2)
+                            .foregroundStyle(MiNeumorphismTokens.quietText)
+                            .lineSpacing(3)
                     }
 
                     Spacer(minLength: 0)

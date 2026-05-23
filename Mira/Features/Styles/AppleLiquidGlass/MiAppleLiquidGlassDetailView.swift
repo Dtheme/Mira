@@ -15,6 +15,7 @@ struct MiAppleLiquidGlassDetailView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var demoSearchText = ""
     @State private var selectedDemoMode = "alg_shell"
+    @State private var isRevealed = false
 
     init(style: MiDesignStyle, onBack: (() -> Void)? = nil) {
         self.style = style
@@ -31,21 +32,27 @@ struct MiAppleLiquidGlassDetailView: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: MiSpacingTokens.lg) {
                     MiStyleDetailHeroView(style: style)
+                        .miStaggeredReveal(index: 0, isRevealed: isRevealed)
 
                     MiAppleLiquidGlassLiveDemoView(
                         searchText: $demoSearchText,
                         selectedMode: $selectedDemoMode,
                         accent: style.accent
                     )
+                    .miStaggeredReveal(index: 1, isRevealed: isRevealed)
 
                     MiAppleLiquidGlassComponentShowcaseView(accent: style.accent)
+                        .miStaggeredReveal(index: 2, isRevealed: isRevealed)
 
                     MiDemoSlotOverviewView(style: style)
+                        .miStaggeredReveal(index: 3, isRevealed: isRevealed)
 
                     MiVisualTokensView(style: style)
+                        .miStaggeredReveal(index: 4, isRevealed: isRevealed)
 
-                    ForEach(style.sections) { section in
+                    ForEach(Array(style.sections.enumerated()), id: \.element.id) { index, section in
                         MiStyleDetailSectionView(section: section, accent: style.accent)
+                            .miStaggeredReveal(index: 5 + index, isRevealed: isRevealed)
                     }
                 }
                 .padding(.horizontal, MiSpacingTokens.md)
@@ -65,7 +72,16 @@ struct MiAppleLiquidGlassDetailView: View {
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.86), value: style.id)
+        .onAppear {
+            triggerReveal()
+        }
+    }
+
+    private func triggerReveal() {
+        guard !isRevealed else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
+            isRevealed = true
+        }
     }
 
     private func close() {
@@ -172,6 +188,7 @@ private struct MiDetailTopBar: View {
                     .foregroundStyle(MiColorTokens.contentPrimary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.82)
+                    .miStyleTitleTransition(style.id)
 
                 if localizedName != displayName {
                     HStack(spacing: 6) {
@@ -186,6 +203,7 @@ private struct MiDetailTopBar: View {
                     }
                 }
             }
+            .layoutPriority(1)
 
             Spacer(minLength: MiSpacingTokens.sm)
 

@@ -57,6 +57,7 @@ struct MiNeoBrutalismHomePreview: View {
                         .foregroundStyle(MiNeoBrutalismTokens.ink)
                         .lineLimit(1)
                         .minimumScaleFactor(0.58)
+                        .miStyleTitleTransition(style.id)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 

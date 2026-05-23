@@ -10,30 +10,26 @@ import AlertToast
 
 struct MiAppRootView: View {
     @State private var selectedStyle: MiDesignStyle?
-    @State private var selectedTransitionSourceID: String?
     @State private var unavailableStyle: MiDesignStyle?
     @State private var showsUnavailableToast = false
-    @Namespace private var styleTransitionNamespace
+    @Namespace private var dummyNamespace
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        NavigationStack {
-            MiHomeView(
-                styles: MiStyleRepository.styles,
-                transitionNamespace: styleTransitionNamespace
-            ) { style, transitionSourceID in
-                if MiAppleLiquidGlassModule.canOpen(style) || MiNeumorphismModule.canOpen(style) || MiNeoBrutalismModule.canOpen(style) {
-                    selectedTransitionSourceID = transitionSourceID
-                    selectedStyle = style
-                } else {
-                    unavailableStyle = style
-                    showsUnavailableToast = true
-                }
-            }
-            .navigationDestination(item: $selectedStyle) { style in
-                detailView(for: style)
+        ZStack {
+            homeLayer
+                .opacity(homeOpacity)
+                .scaleEffect(homeScale)
+                .blur(radius: homeBlur)
+                .allowsHitTesting(selectedStyle == nil)
+
+            if let selectedStyle {
+                detailView(for: selectedStyle)
+                    .transition(detailTransition)
+                    .zIndex(10)
             }
         }
+        .animation(dissolveAnimation, value: selectedStyle?.id)
         .tint(MiColorTokens.appleBlue500)
         .toast(
             isPresenting: $showsUnavailableToast,
@@ -56,6 +52,23 @@ struct MiAppRootView: View {
         }
     }
 
+    private var homeLayer: some View {
+        MiHomeView(
+            styles: MiStyleRepository.styles,
+            isNavigationTransitionActive: selectedStyle != nil,
+            activeTransitionSourceID: nil,
+            activeTitleTransitionStyleID: nil,
+            transitionNamespace: dummyNamespace
+        ) { style, _ in
+            if MiAppleLiquidGlassModule.canOpen(style) || MiNeumorphismModule.canOpen(style) || MiNeoBrutalismModule.canOpen(style) {
+                openDetail(for: style)
+            } else {
+                unavailableStyle = style
+                showsUnavailableToast = true
+            }
+        }
+    }
+
     private var unavailableToastSubtitle: String {
         guard let unavailableStyle else {
             return MiL10n.text("app_unready")
@@ -65,8 +78,6 @@ struct MiAppRootView: View {
 
     @ViewBuilder
     private func detailView(for style: MiDesignStyle) -> some View {
-        let sourceID = selectedTransitionSourceID ?? style.id
-
         Group {
             if MiAppleLiquidGlassModule.canOpen(style) {
                 MiAppleLiquidGlassModule.detailView(for: style) {
@@ -84,37 +95,44 @@ struct MiAppRootView: View {
                 EmptyView()
             }
         }
-        .modifier(
-            MiStyleNavigationTransitionModifier(
-                sourceID: sourceID,
-                namespace: styleTransitionNamespace,
-                reduceMotion: reduceMotion
-            )
+    }
+
+    private var homeOpacity: Double {
+        selectedStyle == nil ? 1 : 0
+    }
+
+    private var homeScale: CGFloat {
+        selectedStyle == nil ? 1 : 0.985
+    }
+
+    private var homeBlur: CGFloat {
+        guard !reduceMotion else { return 0 }
+        return selectedStyle == nil ? 0 : 4
+    }
+
+    private var detailTransition: AnyTransition {
+        if reduceMotion {
+            return .opacity
+        }
+        return .asymmetric(
+            insertion: .opacity.combined(with: .scale(scale: 1.018)),
+            removal: .opacity.combined(with: .scale(scale: 1.012))
         )
+    }
+
+    private var dissolveAnimation: Animation {
+        reduceMotion ? .easeInOut(duration: 0.22) : .easeInOut(duration: 0.48)
+    }
+
+    private func openDetail(for style: MiDesignStyle) {
+        selectedStyle = style
     }
 
     private func closeDetail() {
         selectedStyle = nil
-        selectedTransitionSourceID = nil
     }
 }
 
 #Preview {
     MiAppRootView()
-}
-
-private struct MiStyleNavigationTransitionModifier: ViewModifier {
-    let sourceID: String
-    let namespace: Namespace.ID
-    let reduceMotion: Bool
-
-    @ViewBuilder
-    func body(content: Content) -> some View {
-        if reduceMotion {
-            content
-        } else {
-            content
-                .navigationTransition(.zoom(sourceID: sourceID, in: namespace))
-        }
-    }
 }

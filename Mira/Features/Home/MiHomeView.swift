@@ -9,8 +9,11 @@ import SwiftUI
 
 struct MiHomeView: View {
     let styles: [MiDesignStyle]
+    let isNavigationTransitionActive: Bool
+    let activeTransitionSourceID: String?
+    let activeTitleTransitionStyleID: String?
     let transitionNamespace: Namespace.ID
-    let onSelectStyle: (MiDesignStyle, String) -> Void
+    let onSelectStyle: (MiDesignStyle, MiStyleTransitionContext) -> Void
 
     @State private var searchText = ""
     @State private var selectedCategory: MiStyleCategory?
@@ -65,6 +68,9 @@ struct MiHomeView: View {
                     focusedStyleID: focusedSearchStyleID,
                     focusSignal: searchFocusSignal,
                     resetSignal: resetSignal,
+                    isNavigationTransitionActive: isNavigationTransitionActive,
+                    activeTransitionSourceID: activeTransitionSourceID,
+                    activeTitleTransitionStyleID: activeTitleTransitionStyleID,
                     transitionNamespace: transitionNamespace,
                     onSelectStyle: onSelectStyle
                 )
@@ -247,6 +253,12 @@ private struct MiHomePreviewWrapper: View {
     @Namespace private var namespace
 
     var body: some View {
-        MiHomeView(styles: MiStyleRepository.styles, transitionNamespace: namespace) { _, _ in }
+        MiHomeView(
+            styles: MiStyleRepository.styles,
+            isNavigationTransitionActive: false,
+            activeTransitionSourceID: nil,
+            activeTitleTransitionStyleID: nil,
+            transitionNamespace: namespace
+        ) { _, _ in }
     }
 }

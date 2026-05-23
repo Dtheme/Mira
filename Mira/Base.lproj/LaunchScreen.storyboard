@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MiL-vc-root">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="MiL-scene-root">
+            <objects>
+                <viewController id="MiL-vc-root" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MiL-view-root">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="app_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="MiL-img-logo">
+                                <rect key="frame" x="136.66666666666666" y="312" width="119.99999999999997" height="120"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="120" id="MiL-logo-height"/>
+                                    <constraint firstAttribute="width" constant="120" id="MiL-logo-width"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Mira" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MiL-label-title">
+                                <rect key="frame" x="160.66666666666666" y="696" width="71.666666666666657" height="43"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="36"/>
+                                <color key="textColor" red="0.058823529411764705" green="0.078431372549019607" blue="0.11764705882352941" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Design Styles, Made Native" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MiL-label-slogan">
+                                <rect key="frame" x="95.000000000000014" y="746" width="203.33333333333337" height="20"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                <color key="textColor" red="0.3843137254901961" green="0.43137254901960786" blue="0.50196078431372548" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="MiL-safe-area"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="MiL-img-logo" firstAttribute="centerX" secondItem="MiL-view-root" secondAttribute="centerX" id="MiL-logo-center-x"/>
+                            <constraint firstItem="MiL-img-logo" firstAttribute="centerY" secondItem="MiL-view-root" secondAttribute="centerY" constant="-54" id="MiL-logo-center-y"/>
+                            <constraint firstItem="MiL-label-slogan" firstAttribute="centerX" secondItem="MiL-view-root" secondAttribute="centerX" id="MiL-slogan-center-x"/>
+                            <constraint firstItem="MiL-label-slogan" firstAttribute="top" secondItem="MiL-label-title" secondAttribute="bottom" constant="7" id="MiL-slogan-top"/>
+                            <constraint firstItem="MiL-label-title" firstAttribute="centerX" secondItem="MiL-view-root" secondAttribute="centerX" id="MiL-title-center-x"/>
+                            <constraint firstItem="MiL-safe-area" firstAttribute="bottom" secondItem="MiL-label-slogan" secondAttribute="bottom" constant="18" id="U1r-fL-3fN"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MiL-first-responder" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="132" y="4"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="app_logo.png" width="1254" height="1254"/>
+    </resources>
+</document>

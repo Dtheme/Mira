@@ -17,6 +17,7 @@ struct MiNeoBrutalismDetailView: View {
     @State private var inspectModeOn = true
     @State private var searchText = MiL10n.text("nbd_hard_shadow")
     @State private var showsInspector = false
+    @State private var isRevealed = false
 
     init(style: MiDesignStyle, onBack: (() -> Void)? = nil) {
         self.style = style
@@ -30,27 +31,36 @@ struct MiNeoBrutalismDetailView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 30) {
                     MiNeoBrutalismHeroView(style: style)
+                        .miStaggeredReveal(index: 0, isRevealed: isRevealed)
 
                     MiNeoBrutalismStyleDNASection()
+                        .miStaggeredReveal(index: 1, isRevealed: isRevealed)
 
                     MiNeoBrutalismShadowSection()
+                        .miStaggeredReveal(index: 2, isRevealed: isRevealed)
 
                     MiNeoBrutalismCoreComponentsSection(
                         selectedSpec: $selectedSpec,
                         inspectModeOn: $inspectModeOn
                     )
+                    .miStaggeredReveal(index: 3, isRevealed: isRevealed)
 
                     MiNeoBrutalismLayoutPatternSection(selectedSpec: $selectedSpec)
+                        .miStaggeredReveal(index: 4, isRevealed: isRevealed)
 
                     MiNeoBrutalismFormSection(searchText: $searchText)
+                        .miStaggeredReveal(index: 5, isRevealed: isRevealed)
 
                     MiNeoBrutalismInspectorSection {
                         showsInspector = true
                     }
+                    .miStaggeredReveal(index: 6, isRevealed: isRevealed)
 
                     MiNeoBrutalismStatesSection()
+                        .miStaggeredReveal(index: 7, isRevealed: isRevealed)
 
                     MiNeoBrutalismPromptSection(selectedSegment: $selectedSegment)
+                        .miStaggeredReveal(index: 8, isRevealed: isRevealed)
                 }
                 .padding(.horizontal, 18)
                 .padding(.top, 104)
@@ -74,6 +84,16 @@ struct MiNeoBrutalismDetailView: View {
                 showsInspector = false
             }
             .presentationDetents([.medium, .large])
+        }
+        .onAppear {
+            triggerReveal()
+        }
+    }
+
+    private func triggerReveal() {
+        guard !isRevealed else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
+            isRevealed = true
         }
     }
 
@@ -104,6 +124,7 @@ private struct MiNeoBrutalismTopBar: View {
                         .font(MiNeoBrutalismTokens.label)
                         .foregroundStyle(MiNeoBrutalismTokens.ink)
                         .lineLimit(1)
+                        .miStyleTitleTransition(style.id)
 
                     if localizedName != displayName {
                         Text(localizedName)
@@ -112,6 +133,7 @@ private struct MiNeoBrutalismTopBar: View {
                             .lineLimit(1)
                     }
                 }
+                .layoutPriority(1)
 
                 Spacer(minLength: 8)
 
