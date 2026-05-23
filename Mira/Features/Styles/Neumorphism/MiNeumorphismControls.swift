@@ -50,27 +50,34 @@ struct MiNeumorphismSegmentedControl: View {
     let itemKeys: [String]
 
     var body: some View {
-        HStack(spacing: 8) {
-            ForEach(itemKeys.indices, id: \.self) { index in
-                Button {
-                    selectedIndex = index
-                } label: {
-                    Text(MiL10n.text(itemKeys[index]))
-                        .font(.system(size: 13, weight: .semibold, design: .rounded))
-                        .foregroundStyle(index == selectedIndex ? MiNeumorphismTokens.ink : MiNeumorphismTokens.muted)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 42)
-                }
-                .buttonStyle(.plain)
-                .background {
-                    MiNeumorphismSoftSurface(
-                        cornerRadius: 16,
-                        depth: index == selectedIndex ? .inset : .raised,
-                        fill: index == selectedIndex ? MiNeumorphismTokens.basePressed : MiNeumorphismTokens.base,
-                        contentPadding: 0
-                    ) {
-                        EmptyView()
+        MiNeumorphismSoftSurface(cornerRadius: 22, depth: .inset, contentPadding: 4) {
+            HStack(spacing: 6) {
+                ForEach(itemKeys.indices, id: \.self) { index in
+                    Button {
+                        selectedIndex = index
+                    } label: {
+                        Text(MiL10n.text(itemKeys[index]))
+                            .font(.system(size: 13, weight: .semibold, design: .rounded))
+                            .foregroundStyle(index == selectedIndex ? MiNeumorphismTokens.ink : MiNeumorphismTokens.muted)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.72)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 44)
                     }
+                    .buttonStyle(.plain)
+                    .background {
+                        if index == selectedIndex {
+                            MiNeumorphismSoftSurface(
+                                cornerRadius: 18,
+                                depth: .raised,
+                                fill: MiNeumorphismTokens.baseLight,
+                                contentPadding: 0
+                            ) {
+                                EmptyView()
+                            }
+                        }
+                    }
+                    .accessibilityValue(MiL10n.text(index == selectedIndex ? "c_selected" : "c_not_selected"))
                 }
             }
         }
@@ -93,6 +100,19 @@ struct MiNeumorphismInputField: View {
                 .foregroundStyle(MiNeumorphismTokens.ink)
                 .textInputAutocapitalization(.never)
                 .disableAutocorrection(true)
+
+            if !text.isEmpty {
+                Button {
+                    text = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(MiNeumorphismTokens.muted.opacity(0.72))
+                        .frame(width: 32, height: 32)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(MiL10n.text("neu_clear"))
+            }
         }
         .padding(.horizontal, 16)
         .frame(height: 54)

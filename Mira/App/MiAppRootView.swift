@@ -10,13 +10,20 @@ import AlertToast
 
 struct MiAppRootView: View {
     @State private var selectedStyle: MiDesignStyle?
+    @State private var selectedTransitionSourceID: String?
     @State private var unavailableStyle: MiDesignStyle?
     @State private var showsUnavailableToast = false
+    @Namespace private var styleTransitionNamespace
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         NavigationStack {
-            MiHomeView(styles: MiStyleRepository.styles) { style in
+            MiHomeView(
+                styles: MiStyleRepository.styles,
+                transitionNamespace: styleTransitionNamespace
+            ) { style, transitionSourceID in
                 if MiAppleLiquidGlassModule.canOpen(style) || MiNeumorphismModule.canOpen(style) || MiNeoBrutalismModule.canOpen(style) {
+                    selectedTransitionSourceID = transitionSourceID
                     selectedStyle = style
                 } else {
                     unavailableStyle = style
@@ -24,21 +31,7 @@ struct MiAppRootView: View {
                 }
             }
             .navigationDestination(item: $selectedStyle) { style in
-                if MiAppleLiquidGlassModule.canOpen(style) {
-                    MiAppleLiquidGlassModule.detailView(for: style) {
-                        selectedStyle = nil
-                    }
-                } else if MiNeumorphismModule.canOpen(style) {
-                    MiNeumorphismModule.detailView(for: style) {
-                        selectedStyle = nil
-                    }
-                } else if MiNeoBrutalismModule.canOpen(style) {
-                    MiNeoBrutalismModule.detailView(for: style) {
-                        selectedStyle = nil
-                    }
-                } else {
-                    EmptyView()
-                }
+                detailView(for: style)
             }
         }
         .tint(MiColorTokens.appleBlue500)
@@ -69,8 +62,59 @@ struct MiAppRootView: View {
         }
         return MiL10n.format("app_unready_fmt", MiL10n.text(unavailableStyle.name))
     }
+
+    @ViewBuilder
+    private func detailView(for style: MiDesignStyle) -> some View {
+        let sourceID = selectedTransitionSourceID ?? style.id
+
+        Group {
+            if MiAppleLiquidGlassModule.canOpen(style) {
+                MiAppleLiquidGlassModule.detailView(for: style) {
+                    closeDetail()
+                }
+            } else if MiNeumorphismModule.canOpen(style) {
+                MiNeumorphismModule.detailView(for: style) {
+                    closeDetail()
+                }
+            } else if MiNeoBrutalismModule.canOpen(style) {
+                MiNeoBrutalismModule.detailView(for: style) {
+                    closeDetail()
+                }
+            } else {
+                EmptyView()
+            }
+        }
+        .modifier(
+            MiStyleNavigationTransitionModifier(
+                sourceID: sourceID,
+                namespace: styleTransitionNamespace,
+                reduceMotion: reduceMotion
+            )
+        )
+    }
+
+    private func closeDetail() {
+        selectedStyle = nil
+        selectedTransitionSourceID = nil
+    }
 }
 
 #Preview {
     MiAppRootView()
+}
+
+private struct MiStyleNavigationTransitionModifier: ViewModifier {
+    let sourceID: String
+    let namespace: Namespace.ID
+    let reduceMotion: Bool
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if reduceMotion {
+            content
+        } else {
+            content
+                .navigationTransition(.zoom(sourceID: sourceID, in: namespace))
+        }
+    }
 }

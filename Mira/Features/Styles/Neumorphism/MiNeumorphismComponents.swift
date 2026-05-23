@@ -13,6 +13,12 @@ enum MiNeumorphismSurfaceDepth: Equatable {
     case pressed
 }
 
+enum MiNeumorphismButtonRole {
+    case primary
+    case secondary
+    case destructive
+}
+
 struct MiNeumorphismSoftSurface<Content: View>: View {
     let cornerRadius: CGFloat
     let depth: MiNeumorphismSurfaceDepth
@@ -187,49 +193,107 @@ struct MiNeumorphismSection<Content: View>: View {
 }
 
 struct MiNeumorphismButtonStyle: ButtonStyle {
-    let isPrimary: Bool
+    let role: MiNeumorphismButtonRole
+
+    @Environment(\.isEnabled) private var isEnabled
+
+    init(isPrimary: Bool) {
+        self.role = isPrimary ? .primary : .secondary
+    }
+
+    init(role: MiNeumorphismButtonRole) {
+        self.role = role
+    }
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.system(size: 14, weight: .semibold, design: .rounded))
-            .foregroundStyle(isPrimary ? MiNeumorphismTokens.ink : MiNeumorphismTokens.accentDeep)
+            .foregroundStyle(foregroundColor)
             .frame(minHeight: 44)
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 16)
             .background {
                 MiNeumorphismSoftSurface(
                     cornerRadius: 18,
-                    depth: configuration.isPressed ? .pressed : .raised,
-                    fill: isPrimary ? MiNeumorphismTokens.focusAccent.opacity(0.44) : MiNeumorphismTokens.base,
+                    depth: depth(isPressed: configuration.isPressed),
+                    fill: fillColor(isPressed: configuration.isPressed),
                     contentPadding: 0
                 ) {
                     EmptyView()
                 }
             }
-            .offset(x: configuration.isPressed ? 1 : 0, y: configuration.isPressed ? 1 : 0)
+            .opacity(isEnabled ? 1 : 0.48)
+            .offset(x: configuration.isPressed && isEnabled ? 1 : 0, y: configuration.isPressed && isEnabled ? 1 : 0)
+    }
+
+    private var foregroundColor: Color {
+        guard isEnabled else {
+            return MiNeumorphismTokens.muted
+        }
+
+        switch role {
+        case .primary:
+            return MiNeumorphismTokens.ink
+        case .secondary:
+            return MiNeumorphismTokens.accentDeep
+        case .destructive:
+            return MiNeumorphismTokens.error
+        }
+    }
+
+    private func depth(isPressed: Bool) -> MiNeumorphismSurfaceDepth {
+        guard isEnabled else {
+            return .pressed
+        }
+        return isPressed ? .pressed : .raised
+    }
+
+    private func fillColor(isPressed: Bool) -> Color {
+        guard isEnabled else {
+            return MiNeumorphismTokens.basePressed
+        }
+
+        switch role {
+        case .primary:
+            return MiNeumorphismTokens.focusAccent.opacity(isPressed ? 0.32 : 0.44)
+        case .secondary:
+            return MiNeumorphismTokens.base
+        case .destructive:
+            return MiNeumorphismTokens.error.opacity(isPressed ? 0.12 : 0.18)
+        }
     }
 }
 
 struct MiNeumorphismPill: View {
     let titleKey: String
     let isSelected: Bool
+    var isDisabled = false
 
     var body: some View {
         Text(MiL10n.text(titleKey))
             .font(.system(size: 12, weight: .semibold, design: .rounded))
-            .foregroundStyle(isSelected ? MiNeumorphismTokens.ink : MiNeumorphismTokens.muted)
+            .foregroundStyle(textColor)
             .frame(minHeight: 34)
             .padding(.horizontal, 14)
             .background {
                 MiNeumorphismSoftSurface(
                     cornerRadius: 17,
-                    depth: isSelected ? .inset : .raised,
+                    depth: isDisabled ? .pressed : (isSelected ? .inset : .raised),
                     fill: isSelected ? MiNeumorphismTokens.basePressed : MiNeumorphismTokens.base,
                     contentPadding: 0
                 ) {
                     EmptyView()
                 }
             }
+            .opacity(isDisabled ? 0.50 : 1)
+            .accessibilityValue(MiL10n.text(isSelected ? "c_selected" : "c_not_selected"))
+    }
+
+    private var textColor: Color {
+        if isDisabled {
+            return MiNeumorphismTokens.muted.opacity(0.78)
+        }
+        return isSelected ? MiNeumorphismTokens.ink : MiNeumorphismTokens.muted
     }
 }
 

@@ -9,7 +9,8 @@ import SwiftUI
 
 struct MiHomeView: View {
     let styles: [MiDesignStyle]
-    let onSelectStyle: (MiDesignStyle) -> Void
+    let transitionNamespace: Namespace.ID
+    let onSelectStyle: (MiDesignStyle, String) -> Void
 
     @State private var searchText = ""
     @State private var selectedCategory: MiStyleCategory?
@@ -64,6 +65,7 @@ struct MiHomeView: View {
                     focusedStyleID: focusedSearchStyleID,
                     focusSignal: searchFocusSignal,
                     resetSignal: resetSignal,
+                    transitionNamespace: transitionNamespace,
                     onSelectStyle: onSelectStyle
                 )
                 .ignoresSafeArea()
@@ -238,5 +240,13 @@ private struct MiCategoryChipView: View {
 }
 
 #Preview {
-    MiHomeView(styles: MiStyleRepository.styles) { _ in }
+    MiHomePreviewWrapper()
+}
+
+private struct MiHomePreviewWrapper: View {
+    @Namespace private var namespace
+
+    var body: some View {
+        MiHomeView(styles: MiStyleRepository.styles, transitionNamespace: namespace) { _, _ in }
+    }
 }

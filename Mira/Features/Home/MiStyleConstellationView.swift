@@ -13,14 +13,15 @@ struct MiStyleConstellationView: View {
     let focusedStyleID: String?
     let focusSignal: Int
     let resetSignal: Int
-    let onSelectStyle: (MiDesignStyle) -> Void
+    let transitionNamespace: Namespace.ID
+    let onSelectStyle: (MiDesignStyle, String) -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var offset: CGSize = .zero
     @State private var gestureStartOffset: CGSize = .zero
     @State private var isDragging = false
     @State private var activeGestureStartOffset: CGSize?
-    @State private var pressedStyleID: String?
+    @State private var pressedSourceID: String?
 
     var body: some View {
         GeometryReader { proxy in
@@ -35,7 +36,8 @@ struct MiStyleConstellationView: View {
                         offset: offset,
                         canvas: canvas,
                         isDragging: isDragging,
-                        pressedStyleID: pressedStyleID,
+                        pressedSourceID: pressedSourceID,
+                        transitionNamespace: transitionNamespace,
                         onSelectStyle: onSelectStyle
                     )
                 }
@@ -53,7 +55,7 @@ struct MiStyleConstellationView: View {
                     gestureStartOffset = .zero
                     isDragging = false
                     activeGestureStartOffset = nil
-                    pressedStyleID = nil
+                    pressedSourceID = nil
                 }
             }
             .onChange(of: focusSignal) {
@@ -75,7 +77,7 @@ struct MiStyleConstellationView: View {
                     gestureStartOffset = nextOffset
                     isDragging = false
                     activeGestureStartOffset = nil
-                    pressedStyleID = nil
+                    pressedSourceID = nil
                 }
             }
             .accessibilityElement(children: .contain)
@@ -93,17 +95,17 @@ struct MiStyleConstellationView: View {
                 let gestureOriginOffset = activeGestureStartOffset ?? offset
 
                 if isTapCandidate(value.translation) {
-                    pressedStyleID = canvas.hitTestStyleID(
+                    pressedSourceID = canvas.hitTest(
                         at: value.startLocation,
                         offset: gestureOriginOffset,
                         styles: styles,
                         highlightedStyleIDs: highlightedStyleIDs,
                         reduceMotion: reduceMotion
-                    )
+                    )?.transitionSourceID
                     return
                 }
 
-                pressedStyleID = nil
+                pressedSourceID = nil
                 isDragging = true
 
                 var transaction = Transaction()
@@ -120,26 +122,35 @@ struct MiStyleConstellationView: View {
 
                 defer {
                     activeGestureStartOffset = nil
-                    pressedStyleID = nil
                 }
 
                 if isTapCandidate(value.translation) {
                     guard
-                        let styleID = canvas.hitTestStyleID(
+                        let hit = canvas.hitTest(
                             at: value.startLocation,
                             offset: gestureOriginOffset,
                             styles: styles,
                             highlightedStyleIDs: highlightedStyleIDs,
                             reduceMotion: reduceMotion
                         ),
-                        let style = styles.first(where: { $0.id == styleID })
+                        let style = styles.first(where: { $0.id == hit.styleID })
                     else {
                         isDragging = false
+                        pressedSourceID = nil
                         return
                     }
 
                     isDragging = false
-                    onSelectStyle(style)
+                    pressedSourceID = hit.transitionSourceID
+                    if reduceMotion {
+                        onSelectStyle(style, hit.transitionSourceID)
+                        pressedSourceID = nil
+                    } else {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.06) {
+                            onSelectStyle(style, hit.transitionSourceID)
+                            pressedSourceID = nil
+                        }
+                    }
                     return
                 }
 
@@ -164,6 +175,7 @@ struct MiStyleConstellationView: View {
                     offset = nextOffset
                     isDragging = false
                 }
+                pressedSourceID = nil
                 self.gestureStartOffset = nextOffset
             }
     }
@@ -180,8 +192,9 @@ private struct MiWatchAppCardReplicaView: View {
     let offset: CGSize
     let canvas: MiWatchAppCanvas
     let isDragging: Bool
-    let pressedStyleID: String?
-    let onSelectStyle: (MiDesignStyle) -> Void
+    let pressedSourceID: String?
+    let transitionNamespace: Namespace.ID
+    let onSelectStyle: (MiDesignStyle, String) -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -206,6 +219,7 @@ private struct MiWatchAppCardReplicaView: View {
             isDragging: isDragging
         )
         .environment(\.miHomePressedStyleID, isPressed ? style.id : nil)
+        .matchedTransitionSource(id: transitionSourceID, in: transitionNamespace)
         .scaleEffect(isPressed && style.id == MiNeoBrutalismModule.styleID ? 0.985 : 1)
         .brightness(isPressed && style.id == MiNeoBrutalismModule.styleID ? -0.025 : 0)
         .animation(reduceMotion ? .easeOut(duration: 0.01) : .spring(response: 0.18, dampingFraction: 0.74), value: isPressed)
@@ -214,12 +228,16 @@ private struct MiWatchAppCardReplicaView: View {
         .zIndex(focus.zIndex)
         .allowsHitTesting(isHighlighted)
         .accessibilityAction {
-            onSelectStyle(style)
+            onSelectStyle(style, transitionSourceID)
         }
     }
 
     private var isPressed: Bool {
-        pressedStyleID == style.id && !isDragging
+        pressedSourceID == transitionSourceID && !isDragging
+    }
+
+    private var transitionSourceID: String {
+        slot.transitionSourceID(styleID: style.id)
     }
 }
 
@@ -248,6 +266,15 @@ private struct MiWatchAppSlot: Identifiable, Hashable {
     var id: String {
         "\(row)-\(column)"
     }
+
+    func transitionSourceID(styleID: String) -> String {
+        "\(styleID)-\(id)"
+    }
+}
+
+private struct MiWatchAppHitResult {
+    let styleID: String
+    let transitionSourceID: String
 }
 
 private struct MiWatchAppCanvas {
@@ -323,15 +350,15 @@ private struct MiWatchAppCanvas {
         return CGSize(width: -nearestSlot.position.x, height: -nearestSlot.position.y)
     }
 
-    func hitTestStyleID(
+    func hitTest(
         at point: CGPoint,
         offset: CGSize,
         styles: [MiDesignStyle],
         highlightedStyleIDs: Set<String>,
         reduceMotion: Bool
-    ) -> String? {
+    ) -> MiWatchAppHitResult? {
         visibleSlots(for: offset)
-            .compactMap { slot -> (styleID: String, zIndex: Double)? in
+            .compactMap { slot -> (result: MiWatchAppHitResult, zIndex: Double)? in
                 let style = styles[slot.styleIndex]
                 guard highlightedStyleIDs.contains(style.id) else {
                     return nil
@@ -357,10 +384,16 @@ private struct MiWatchAppCanvas {
                     return nil
                 }
 
-                return (style.id, focus.zIndex)
+                return (
+                    MiWatchAppHitResult(
+                        styleID: style.id,
+                        transitionSourceID: slot.transitionSourceID(styleID: style.id)
+                    ),
+                    focus.zIndex
+                )
             }
             .max { lhs, rhs in lhs.zIndex < rhs.zIndex }?
-            .styleID
+            .result
     }
 
     private func candidateSlots(for offset: CGSize, margin: CGFloat) -> [MiWatchAppSlot] {
