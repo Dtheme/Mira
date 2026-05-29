@@ -23,9 +23,13 @@ For future vibe coding or SwiftUI implementation:
 For implemented style modules:
 
 - `docs/design-system/styles/apple-liquid-glass/Design.md`
+- `docs/design-system/styles/glassmorphism/Design.md`
 - `docs/design-system/styles/neumorphism/Design.md`
+- `docs/design-system/styles/claymorphism/Design.md`
 - `docs/design-system/styles/neo-brutalism/Design.md`
 - `docs/design-system/styles/neo-brutalism/component-spec.md`
+- `docs/design-system/styles/minimalism/Design.md`
+- `docs/design-system/styles/material-3/Design.md`
 
 ## Rules
 
@@ -36,6 +40,10 @@ For implemented style modules:
 - Every new design style must have a matching `docs/design-system/styles/<style-slug>/Design.md` before it is used for detailed UI implementation.
 - Neo-Brutalism implementation uses `Mira/Features/Styles/NeoBrutalism/` and must not reuse the Apple Liquid Glass detail template.
 - Neumorphism / Soft UI uses `docs/design-system/styles/neumorphism/Design.md` and `Mira/Features/Styles/Neumorphism/`; translate web shadow recipes into iOS raised/inset surface states instead of copying CSS literally.
+- Claymorphism uses `docs/design-system/styles/claymorphism/Design.md` and `Mira/Features/Styles/Claymorphism/`; use matte pastel puffy surfaces, huge radii, dual outer shadows, masked inner shadows, inset inputs, and springy press feedback.
+- Glassmorphism uses `docs/design-system/styles/glassmorphism/Design.md` and `Mira/Features/Styles/Glassmorphism/`; keep it distinct from Apple Liquid Glass by defining layer roles and readable opacity limits.
+- Minimalism uses `docs/design-system/styles/minimalism/Design.md` and `Mira/Features/Styles/Minimalism/`; use grid, typography, whitespace, and hairline rules instead of decoration.
+- Material 3 uses `docs/design-system/styles/material-3/Design.md` and `Mira/Features/Styles/Material3/`; adapt semantic color roles, tonal containers, shape scale, and state layers to iOS.
 - Keep style guidance iOS / SwiftUI first.
 - For new Mira app code, every newly created Swift type and matching Swift file must use the `Mi` prefix, for example `MiStyleListView.swift` or `MiDesignStyle.swift`.
 - Do not duplicate long style content in tool-specific adapter files.

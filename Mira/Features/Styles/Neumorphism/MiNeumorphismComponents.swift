@@ -183,20 +183,55 @@ struct MiNeumorphismSection<Content: View>: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: MiNeumorphismTokens.groupSpacing) {
-            VStack(alignment: .leading, spacing: 7) {
-                Text(MiL10n.text(titleKey))
-                    .font(.system(size: 24, weight: .bold, design: .rounded))
-                    .foregroundStyle(MiNeumorphismTokens.ink)
-                    .tracking(-0.1)
+            HStack(alignment: .top, spacing: 14) {
+                MiNeumorphismSectionMarker()
+                    .padding(.top, 4)
 
-                Text(MiL10n.text(bodyKey))
-                    .font(.system(size: 14, weight: .medium, design: .rounded))
-                    .foregroundStyle(MiNeumorphismTokens.quietText)
-                    .lineSpacing(3)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(MiL10n.text(titleKey))
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .foregroundStyle(MiNeumorphismTokens.ink)
+                        .tracking(-0.2)
+
+                    Text(MiL10n.text(bodyKey))
+                        .font(.system(size: 13.5, weight: .medium, design: .rounded))
+                        .foregroundStyle(MiNeumorphismTokens.quietText)
+                        .lineSpacing(3)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                Spacer(minLength: 0)
             }
 
             content
         }
+    }
+}
+
+private struct MiNeumorphismSectionMarker: View {
+    var body: some View {
+        MiNeumorphismSoftSurface(
+            cornerRadius: 4,
+            depth: .inset,
+            fill: MiNeumorphismTokens.baseInset,
+            contentPadding: 0
+        ) {
+            RoundedRectangle(cornerRadius: 2.5, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            MiNeumorphismTokens.focusAccent,
+                            MiNeumorphismTokens.accentDeep.opacity(0.82)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .frame(width: 5, height: 18)
+                .shadow(color: MiNeumorphismTokens.shadowLight.opacity(0.78), radius: 1.2, x: -0.8, y: -0.8)
+                .shadow(color: MiNeumorphismTokens.shadowDark.opacity(0.30), radius: 1.2, x: 0.8, y: 0.8)
+        }
+        .frame(width: 8, height: 28)
     }
 }
 

@@ -71,13 +71,23 @@
       </tr>
       <tr>
         <td><strong>Glassmorphism</strong></td>
-        <td>Documented / demo pending</td>
-        <td>Registered as a style with a dedicated design document; the independent app demo is still pending.</td>
+        <td>Implemented</td>
+        <td>Frosted layers, luminous borders, translucent controls, readable glass panels, and state demos.</td>
       </tr>
       <tr>
-        <td><strong>Acid Graphic</strong></td>
-        <td>Documented / demo pending</td>
-        <td>Registered as an experimental visual style; the implementation module will be expanded later.</td>
+        <td><strong>Minimalism</strong></td>
+        <td>Implemented</td>
+        <td>Grid, typography, whitespace, hairline rules, high-contrast states, and restraint-first components.</td>
+      </tr>
+      <tr>
+        <td><strong>Material 3</strong></td>
+        <td>Implemented</td>
+        <td>Tonal containers, rounded shapes, semantic color roles, chips, state layers, and iOS adaptation notes.</td>
+      </tr>
+      <tr>
+        <td><strong>Claymorphism</strong></td>
+        <td>Implemented</td>
+        <td>Puffy matte pastel surfaces, soft 3D shadows, inset inputs, and springy press feedback.</td>
       </tr>
     </tbody>
   </table>
@@ -94,7 +104,7 @@
   <ul>
     <li><strong>Target screen</strong>: subscription page, dashboard, search, onboarding, settings, etc.</li>
     <li><strong>User scenario</strong>: what the user is trying to do and what must stay clear.</li>
-    <li><strong>Selected style</strong>: Apple Liquid Glass, Neumorphism, Neo-Brutalism, Glassmorphism, Acid Graphic, or another future style.</li>
+    <li><strong>Selected style</strong>: Apple Liquid Glass, Glassmorphism, Neumorphism, Claymorphism, Neo-Brutalism, Minimalism, Material 3, or another future style.</li>
     <li><strong>Platform constraints</strong>: iOS / SwiftUI, Dynamic Type, VoiceOver, Reduced Motion, safe areas, and performance.</li>
   </ul>
 
@@ -174,13 +184,23 @@ Output: visual direction, tokens, layout rules, component guidance, SwiftUI note
       </tr>
       <tr>
         <td><strong>Glassmorphism / 玻璃拟物化设计</strong></td>
-        <td>已文档化 / demo 待实现</td>
-        <td>已经有独立设计文档，后续补充 App 内独立演示模块。</td>
+        <td>已实现</td>
+        <td>磨砂层、发光边缘、半透明控件、可读玻璃面板和状态演示，已有独立详情页。</td>
       </tr>
       <tr>
-        <td><strong>Acid Graphic / 酸性美学</strong></td>
-        <td>已文档化 / demo 待实现</td>
-        <td>已登记为实验视觉风格，后续继续扩展实现规范和演示页面。</td>
+        <td><strong>Minimalism / 极简主义</strong></td>
+        <td>已实现</td>
+        <td>网格、字体、留白、细线、高对比状态和克制组件，已有独立详情页。</td>
+      </tr>
+      <tr>
+        <td><strong>Material 3</strong></td>
+        <td>已实现</td>
+        <td>色调容器、圆角形状、语义色彩、标签、状态层和 iOS 适配说明，已有独立详情页。</td>
+      </tr>
+      <tr>
+        <td><strong>黏土形态</strong></td>
+        <td>已实现</td>
+        <td>蓬松哑光粉彩表面、柔和 3D 阴影、凹槽输入和弹性按压反馈，已有独立详情页。</td>
       </tr>
     </tbody>
   </table>
@@ -197,7 +217,7 @@ Output: visual direction, tokens, layout rules, component guidance, SwiftUI note
   <ul>
     <li><strong>目标界面</strong>：订阅页、首页卡片、搜索页、设置页、引导页等。</li>
     <li><strong>用户场景</strong>：用户正在做什么，哪些内容必须清楚可见。</li>
-    <li><strong>选定风格</strong>：Apple Liquid Glass、新拟态、新粗野主义、玻璃拟物化、酸性美学，或后续新增风格。</li>
+    <li><strong>选定风格</strong>：Apple Liquid Glass、玻璃拟物化、新拟态、黏土形态、新粗野主义、极简主义、Material 3，或后续新增风格。</li>
     <li><strong>平台约束</strong>：iOS / SwiftUI、动态字体、VoiceOver、减少动态效果、安全区和性能。</li>
   </ul>
 

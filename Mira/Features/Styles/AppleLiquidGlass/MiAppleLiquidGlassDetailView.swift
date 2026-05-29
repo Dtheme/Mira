@@ -12,10 +12,8 @@ struct MiAppleLiquidGlassDetailView: View {
     let onBack: (() -> Void)?
 
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var demoSearchText = ""
     @State private var selectedDemoMode = "alg_shell"
-    @State private var isRevealed = false
 
     init(style: MiDesignStyle, onBack: (() -> Void)? = nil) {
         self.style = style
@@ -32,27 +30,21 @@ struct MiAppleLiquidGlassDetailView: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: MiSpacingTokens.lg) {
                     MiStyleDetailHeroView(style: style)
-                        .miStaggeredReveal(index: 0, isRevealed: isRevealed)
 
                     MiAppleLiquidGlassLiveDemoView(
                         searchText: $demoSearchText,
                         selectedMode: $selectedDemoMode,
                         accent: style.accent
                     )
-                    .miStaggeredReveal(index: 1, isRevealed: isRevealed)
 
                     MiAppleLiquidGlassComponentShowcaseView(accent: style.accent)
-                        .miStaggeredReveal(index: 2, isRevealed: isRevealed)
 
                     MiDemoSlotOverviewView(style: style)
-                        .miStaggeredReveal(index: 3, isRevealed: isRevealed)
 
                     MiVisualTokensView(style: style)
-                        .miStaggeredReveal(index: 4, isRevealed: isRevealed)
 
-                    ForEach(Array(style.sections.enumerated()), id: \.element.id) { index, section in
+                    ForEach(style.sections) { section in
                         MiStyleDetailSectionView(section: section, accent: style.accent)
-                            .miStaggeredReveal(index: 5 + index, isRevealed: isRevealed)
                     }
                 }
                 .padding(.horizontal, MiSpacingTokens.md)
@@ -72,16 +64,6 @@ struct MiAppleLiquidGlassDetailView: View {
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .onAppear {
-            triggerReveal()
-        }
-    }
-
-    private func triggerReveal() {
-        guard !isRevealed else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
-            isRevealed = true
-        }
     }
 
     private func close() {
@@ -220,8 +202,7 @@ private struct MiDetailTopBar: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 7)
         .frame(maxWidth: 780)
-        .shadow(color: style.accent.opacity(0.06), radius: 12, x: 0, y: 8)
-        .shadow(color: Color(hex: 0x738197).opacity(0.08), radius: 14, x: 0, y: 10)
+        .shadow(color: Color(hex: 0x738197).opacity(0.09), radius: 12, x: 0, y: 8)
     }
 }
 
@@ -244,6 +225,22 @@ private struct MiLiquidChromeStroke<S: InsettableShape>: View {
                 ),
                 lineWidth: 0.9
             )
+    }
+}
+
+struct MiAppleLiquidGlassPressButtonStyle: ButtonStyle {
+    let isEnabled: Bool
+
+    init(isEnabled: Bool = true) {
+        self.isEnabled = isEnabled
+    }
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed && isEnabled ? 0.982 : 1)
+            .brightness(configuration.isPressed && isEnabled ? 0.018 : 0)
+            .opacity(isEnabled ? 1 : 0.58)
+            .animation(.easeOut(duration: 0.10), value: configuration.isPressed)
     }
 }
 
@@ -292,6 +289,8 @@ private struct MiStyleDetailHeroView: View {
                 .lineSpacing(3)
                 .foregroundStyle(MiColorTokens.contentSecondary)
                 .fixedSize(horizontal: false, vertical: true)
+
+            MiAppleLiquidGlassHeroPreview(accent: style.accent)
 
             MiAppleLiquidGlassHeroChromeView(accent: style.accent)
 
@@ -345,8 +344,7 @@ private struct MiStyleDetailHeroView: View {
                     lineWidth: 1
                 )
         }
-        .shadow(color: style.accent.opacity(0.06), radius: 16, x: 0, y: 10)
-        .shadow(color: Color(hex: 0x738197).opacity(0.08), radius: 18, x: 0, y: 12)
+        .shadow(color: Color(hex: 0x738197).opacity(0.075), radius: 14, x: 0, y: 9)
         .accessibilityElement(children: .combine)
     }
 }
@@ -384,6 +382,314 @@ private struct MiAppleLiquidGlassHeroBackground: View {
                 .clipShape(shape)
                 .allowsHitTesting(false)
             }
+    }
+}
+
+private struct MiAppleLiquidGlassHeroPreview: View {
+    let accent: Color
+
+    @State private var isOn = true
+
+    var body: some View {
+        MiAppleLiquidGlassHeroPreviewContent(isOn: $isOn, accent: accent)
+            .padding(14)
+            .background {
+                MiAppleLiquidGlassHeroPreviewShell(accent: accent)
+            }
+    }
+}
+
+private struct MiAppleLiquidGlassHeroPreviewShell: View {
+    let accent: Color
+
+    @ViewBuilder
+    var body: some View {
+        let shape = RoundedRectangle(cornerRadius: 24, style: .continuous)
+
+        if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, visionOS 26.0, *) {
+            GlassEffectContainer(spacing: 10) {
+                shape
+                    .fill(Color.clear)
+                    .glassEffect(
+                        .regular
+                            .tint(accent.opacity(0.090))
+                            .interactive(true),
+                        in: shape
+                    )
+                    .overlay {
+                        MiAppleLiquidGlassHeroPreviewSheen(accent: accent)
+                            .clipShape(shape)
+                            .allowsHitTesting(false)
+                    }
+                    .overlay {
+                        MiLiquidChromeStroke(
+                            shape: shape,
+                            accent: accent,
+                            opacity: 0.24
+                        )
+                    }
+                    .shadow(color: Color(hex: 0x738197).opacity(0.11), radius: 12, x: 0, y: 7)
+            }
+        } else {
+            MiAppleLiquidGlassHeroPreviewFallback(accent: accent)
+                .overlay {
+                    shape
+                        .strokeBorder(Color.white.opacity(0.66), lineWidth: 1)
+                }
+        }
+    }
+}
+
+private struct MiAppleLiquidGlassHeroPreviewContent: View {
+    @Binding var isOn: Bool
+    let accent: Color
+
+    var body: some View {
+        HStack(alignment: .center, spacing: MiSpacingTokens.md) {
+            MiAppleLiquidGlassHeroSwitch(isOn: $isOn, accent: accent)
+                .frame(width: 134, height: 76)
+
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 6) {
+                    Circle()
+                        .fill(isOn ? accent : MiColorTokens.contentMuted.opacity(0.5))
+                        .frame(width: 6, height: 6)
+                        .transaction { transaction in
+                            transaction.animation = nil
+                        }
+
+                    Text(MiL10n.text(isOn ? "alg_hero_state_active" : "alg_hero_state_idle"))
+                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                        .foregroundStyle(MiColorTokens.contentPrimary)
+                        .tracking(0.4)
+                        .textCase(.uppercase)
+                        .transaction { transaction in
+                            transaction.animation = nil
+                        }
+                }
+
+                MiAppleLiquidGlassHeroMetricRow(
+                    titleKey: "alg_hero_metric_tint",
+                    value: isOn ? "14 %" : "0 %",
+                    accent: accent,
+                    isHighlighted: isOn
+                )
+                MiAppleLiquidGlassHeroMetricRow(
+                    titleKey: "alg_hero_metric_radius",
+                    value: "34 pt",
+                    accent: accent,
+                    isHighlighted: false
+                )
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+}
+
+private struct MiAppleLiquidGlassHeroPreviewSheen: View {
+    let accent: Color
+
+    var body: some View {
+        ZStack {
+            LinearGradient(
+                colors: [
+                    Color.white.opacity(0.28),
+                    .clear,
+                    accent.opacity(0.070)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+
+            LinearGradient(
+                colors: [
+                    Color.white.opacity(0.44),
+                    Color.white.opacity(0.06),
+                    .clear
+                ],
+                startPoint: .top,
+                endPoint: .center
+            )
+
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            accent.opacity(0.085),
+                            .clear
+                        ],
+                        center: .center,
+                        startRadius: 8,
+                        endRadius: 58
+                    )
+                )
+                .frame(width: 118, height: 118)
+                .offset(x: 112, y: -42)
+        }
+    }
+}
+
+private struct MiAppleLiquidGlassHeroPreviewFallback: View {
+    let accent: Color
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 24, style: .continuous)
+            .fill(Color.white.opacity(0.52))
+            .overlay {
+                RoundedRectangle(cornerRadius: 24, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(0.48),
+                                accent.opacity(0.080),
+                                Color.clear
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+            }
+    }
+}
+
+private struct MiAppleLiquidGlassHeroSwitch: View {
+    @Binding var isOn: Bool
+    let accent: Color
+
+    private let trackWidth: CGFloat = 134
+    private let trackHeight: CGFloat = 76
+    private let knobInset: CGFloat = 7
+    private var knobSize: CGFloat { trackHeight - knobInset * 2 }
+    private var knobTravel: CGFloat { trackWidth - knobSize - knobInset * 2 }
+
+    var body: some View {
+        Button {
+            isOn.toggle()
+        } label: {
+            ZStack(alignment: .leading) {
+                track
+
+                knob
+                    .padding(knobInset)
+                    .offset(x: isOn ? knobTravel : 0)
+                    .animation(.easeInOut(duration: 0.18), value: isOn)
+            }
+            .frame(width: trackWidth, height: trackHeight)
+            .contentShape(Capsule(style: .continuous))
+        }
+        .buttonStyle(MiAppleLiquidGlassPressButtonStyle())
+        .accessibilityLabel(MiL10n.text("alg_liquid_shell_demo"))
+        .accessibilityValue(MiL10n.text(isOn ? "c_selected" : "c_not_selected"))
+    }
+
+    @ViewBuilder
+    private var track: some View {
+        let shape = Capsule(style: .continuous)
+
+        shape
+            .fill(
+                LinearGradient(
+                    colors: [
+                        Color.white.opacity(0.68),
+                        MiColorTokens.frost100.opacity(0.56),
+                        accent.opacity(0.060)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay {
+                shape
+                    .fill(accent.opacity(isOn ? 0.145 : 0))
+                    .animation(.easeOut(duration: 0.14), value: isOn)
+            }
+            .overlay {
+                shape
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(0.86),
+                                accent.opacity(isOn ? 0.22 : 0.08),
+                                Color.white.opacity(0.42)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 1
+                    )
+            }
+    }
+
+    @ViewBuilder
+    private var knob: some View {
+        let shape = Circle()
+
+        shape
+            .fill(
+                LinearGradient(
+                    colors: [
+                        Color.white.opacity(0.96),
+                        MiColorTokens.frost050.opacity(0.86),
+                        accent.opacity(0.050)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .frame(width: knobSize, height: knobSize)
+            .overlay {
+                shape
+                    .strokeBorder(Color.white.opacity(0.86), lineWidth: 0.9)
+            }
+            .overlay { knobGlyph }
+            .shadow(color: Color(hex: 0x738197).opacity(0.14), radius: 3, x: 0, y: 2)
+    }
+
+    private var knobGlyph: some View {
+        Image(systemName: isOn ? "checkmark" : "circle")
+            .font(.system(size: 21, weight: .heavy))
+            .foregroundStyle(
+                LinearGradient(
+                    colors: isOn
+                        ? [accent, accent.opacity(0.72)]
+                        : [MiColorTokens.contentMuted, MiColorTokens.contentMuted.opacity(0.7)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+    }
+}
+
+private struct MiAppleLiquidGlassHeroMetricRow: View {
+    let titleKey: String
+    let value: String
+    let accent: Color
+    let isHighlighted: Bool
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Text(MiL10n.text(titleKey))
+                .font(.system(size: 10.5, weight: .semibold, design: .rounded))
+                .foregroundStyle(MiColorTokens.contentMuted)
+                .tracking(0.4)
+                .textCase(.uppercase)
+
+            Spacer(minLength: 6)
+
+            Text(value)
+                .font(.system(size: 11, weight: .bold, design: .monospaced))
+                .foregroundStyle(isHighlighted ? accent : MiColorTokens.contentPrimary)
+                .padding(.horizontal, 8)
+                .frame(height: 22)
+                .background {
+                    Capsule(style: .continuous)
+                        .fill(Color.white.opacity(0.58))
+                }
+                .overlay {
+                    Capsule(style: .continuous)
+                        .strokeBorder(Color.white.opacity(0.78), lineWidth: 0.7)
+                }
+        }
     }
 }
 
@@ -497,6 +803,7 @@ private struct MiAppleLiquidGlassLiveDemoView: View {
         GridItem(.flexible(), spacing: MiSpacingTokens.sm),
         GridItem(.flexible(), spacing: MiSpacingTokens.sm)
     ]
+    private let modeAnimation = Animation.easeInOut(duration: 0.18)
 
     var body: some View {
         MiDetailPanelView(title: "alg_liquid_shell_demo", accent: accent) {
@@ -518,7 +825,7 @@ private struct MiAppleLiquidGlassLiveDemoView: View {
                             isSelected: selectedMode == mode,
                             accent: accent
                         ) {
-                            withAnimation(.spring(response: 0.32, dampingFraction: 0.86)) {
+                            withAnimation(modeAnimation) {
                                 selectedMode = mode
                             }
                         }
@@ -568,7 +875,7 @@ private struct MiLiquidDemoStatusStrip: View {
                         .fill(accent.opacity(0.12))
                 }
 
-                    Text(MiL10n.text("alg_shell_controls_glass"))
+            Text(MiL10n.text("alg_shell_controls_glass"))
                 .font(.system(size: 13, weight: .medium, design: .rounded))
                 .foregroundStyle(MiColorTokens.contentSecondary)
                 .lineLimit(2)
@@ -604,7 +911,7 @@ private struct MiAppleLiquidGlassModeChip: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: 38)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(MiAppleLiquidGlassPressButtonStyle())
         .modifier(MiAppleLiquidGlassModeChipChrome(isSelected: isSelected, accent: accent))
         .accessibilityValue(MiL10n.text(isSelected ? "c_selected" : "c_not_selected"))
     }
@@ -614,34 +921,34 @@ private struct MiAppleLiquidGlassModeChipChrome: ViewModifier {
     let isSelected: Bool
     let accent: Color
 
-    @ViewBuilder
     func body(content: Content) -> some View {
         let shape = Capsule(style: .continuous)
 
-        if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, visionOS 26.0, *) {
-            content
-                .glassEffect(
-                    .regular
-                        .tint(accent.opacity(isSelected ? 0.20 : 0.060))
-                        .interactive(true),
-                    in: shape
-                )
-                .overlay {
-                    shape
-                        .strokeBorder(isSelected ? accent.opacity(0.24) : Color.white.opacity(0.34), lineWidth: 0.9)
-                }
-                .opacity(isSelected ? 1 : 0.84)
-        } else {
-            content
-                .background {
-                    shape
-                        .fill(isSelected ? accent.opacity(0.88) : Color.white.opacity(0.54))
-                }
-                .overlay {
-                    shape
-                        .strokeBorder(isSelected ? Color.white.opacity(0.68) : Color.white.opacity(0.78), lineWidth: 1)
-                }
-        }
+        content
+            .background {
+                shape
+                    .fill(
+                        LinearGradient(
+                            colors: isSelected
+                                ? [
+                                    Color.white.opacity(0.90),
+                                    accent.opacity(0.22),
+                                    Color.white.opacity(0.66)
+                                ]
+                                : [
+                                    Color.white.opacity(0.36),
+                                    MiColorTokens.frost100.opacity(0.28)
+                                ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+            }
+            .overlay {
+                shape
+                    .strokeBorder(isSelected ? accent.opacity(0.24) : Color.white.opacity(0.46), lineWidth: 0.85)
+            }
+            .opacity(isSelected ? 1 : 0.86)
     }
 }
 

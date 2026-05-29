@@ -24,16 +24,15 @@ struct MiStaggeredRevealModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .opacity(isRevealed ? 1 : 0)
-            .offset(y: isRevealed ? 0 : 22)
-            .blur(radius: isRevealed ? 0 : 8)
+            .offset(y: isRevealed ? 0 : 14)
             .animation(animation, value: isRevealed)
     }
 
     private var animation: Animation {
         if reduceMotion {
-            return .easeOut(duration: 0.18).delay(Double(index) * 0.02)
+            return .easeOut(duration: 0.16).delay(Double(index) * 0.015)
         }
-        return .spring(response: 0.62, dampingFraction: 0.86, blendDuration: 0)
-            .delay(Double(index) * 0.07)
+        return .spring(response: 0.42, dampingFraction: 0.88, blendDuration: 0)
+            .delay(Double(index) * 0.045)
     }
 }

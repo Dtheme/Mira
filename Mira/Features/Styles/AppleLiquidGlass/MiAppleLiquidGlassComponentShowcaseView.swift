@@ -153,7 +153,7 @@ private struct MiAppleLiquidGlassSegmentedPicker: View {
         HStack(spacing: 4) {
             ForEach(items, id: \.self) { item in
                 Button {
-                    withAnimation(.spring(response: 0.28, dampingFraction: 0.86)) {
+                    withAnimation(.easeInOut(duration: 0.18)) {
                         selection = item
                     }
                 } label: {
@@ -164,7 +164,7 @@ private struct MiAppleLiquidGlassSegmentedPicker: View {
                         .frame(maxWidth: .infinity)
                         .frame(height: 36)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(MiAppleLiquidGlassPressButtonStyle())
                 .modifier(MiAppleLiquidGlassSegmentItemChrome(isSelected: selection == item, accent: accent))
                 .accessibilityValue(MiL10n.text(selection == item ? "c_selected" : "c_not_selected"))
             }
@@ -283,7 +283,7 @@ private struct MiAppleLiquidGlassSegmentSelector: View {
                         .frame(maxWidth: .infinity)
                         .frame(height: 38)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(MiAppleLiquidGlassPressButtonStyle())
                 .modifier(MiAppleLiquidGlassSegmentItemChrome(isSelected: selection == item, accent: accent))
                 .accessibilityValue(MiL10n.text(selection == item ? "c_selected" : "c_not_selected"))
             }
@@ -295,49 +295,34 @@ private struct MiAppleLiquidGlassSegmentItemChrome: ViewModifier {
     let isSelected: Bool
     let accent: Color
 
-    @ViewBuilder
     func body(content: Content) -> some View {
         let shape = Capsule(style: .continuous)
 
-        if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, visionOS 26.0, *) {
-            content
-                .glassEffect(
-                    .regular
-                        .tint(accent.opacity(isSelected ? 0.20 : 0.045))
-                        .interactive(true),
-                    in: shape
-                )
-                .overlay {
-                    shape
-                        .strokeBorder(isSelected ? accent.opacity(0.24) : Color.white.opacity(0.26), lineWidth: 0.85)
-                }
-                .opacity(isSelected ? 1 : 0.84)
-        } else {
-            content
-                .background {
-                    shape
-                        .fill(
-                            LinearGradient(
-                                colors: isSelected
-                                    ? [
-                                        Color.white.opacity(0.88),
-                                        accent.opacity(0.30),
-                                        Color.white.opacity(0.66)
-                                    ]
-                                    : [
-                                        Color.white.opacity(0.52),
-                                        MiColorTokens.frost100.opacity(0.42)
-                                    ],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
+        content
+            .background {
+                shape
+                    .fill(
+                        LinearGradient(
+                            colors: isSelected
+                                ? [
+                                    Color.white.opacity(0.88),
+                                    accent.opacity(0.24),
+                                    Color.white.opacity(0.66)
+                                ]
+                                : [
+                                    Color.white.opacity(0.30),
+                                    MiColorTokens.frost100.opacity(0.20)
+                                ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
                         )
-                }
-                .overlay {
-                    shape
-                        .strokeBorder(isSelected ? accent.opacity(0.22) : Color.white.opacity(0.62), lineWidth: 1)
-                }
-        }
+                    )
+            }
+            .overlay {
+                shape
+                    .strokeBorder(isSelected ? accent.opacity(0.22) : Color.white.opacity(0.42), lineWidth: 0.85)
+            }
+            .opacity(isSelected ? 1 : 0.86)
     }
 }
 
@@ -380,14 +365,14 @@ private struct MiAppleLiquidGlassSelectorMetric: View {
         }
         .padding(.horizontal, 8)
         .frame(height: 34)
-        .modifier(
-            MiAppleLiquidGlassButtonChrome(
-                variant: .secondary,
-                accent: accent,
-                fill: Color.white.opacity(0.54),
-                stroke: Color.white.opacity(0.70)
-            )
-        )
+        .background {
+            Capsule(style: .continuous)
+                .fill(Color.white.opacity(0.54))
+        }
+        .overlay {
+            Capsule(style: .continuous)
+                .strokeBorder(Color.white.opacity(0.70), lineWidth: 1)
+        }
     }
 }
 
@@ -484,7 +469,7 @@ private struct MiAppleLiquidGlassDemoButton: View {
                 )
             )
         }
-        .buttonStyle(.plain)
+        .buttonStyle(MiAppleLiquidGlassPressButtonStyle(isEnabled: variant != .disabled))
         .disabled(variant == .disabled)
     }
 
@@ -547,19 +532,27 @@ private struct MiAppleLiquidGlassButtonChrome: ViewModifier {
                     in: shape
                 )
                 .overlay {
+                    MiAppleLiquidGlassButtonSheen(
+                        shape: shape,
+                        accent: accent,
+                        variant: variant
+                    )
+                    .allowsHitTesting(false)
+                }
+                .overlay {
                     shape
-                        .strokeBorder(stroke.opacity(variant == .disabled ? 0.56 : 0.86), lineWidth: 0.9)
+                        .strokeBorder(buttonStroke, lineWidth: 0.9)
                 }
                 .opacity(variant == .disabled ? 0.58 : 1)
         } else {
             content
                 .background {
                     shape
-                        .fill(fill)
+                        .fill(buttonFallbackFill)
                 }
                 .overlay {
                     shape
-                        .strokeBorder(stroke, lineWidth: 1)
+                        .strokeBorder(buttonStroke, lineWidth: 1)
                 }
         }
     }
@@ -567,14 +560,62 @@ private struct MiAppleLiquidGlassButtonChrome: ViewModifier {
     private var glassTint: Color {
         switch variant {
         case .primary:
-            return accent.opacity(0.20)
+            return accent.opacity(0.16)
         case .secondary:
-            return accent.opacity(0.075)
+            return accent.opacity(0.060)
         case .disabled:
             return MiColorTokens.contentMuted.opacity(0.040)
         case .destructive:
-            return MiColorTokens.rose500.opacity(0.14)
+            return MiColorTokens.rose500.opacity(0.12)
         }
+    }
+
+    private var buttonStroke: Color {
+        switch variant {
+        case .primary:
+            return Color.white.opacity(0.74)
+        case .secondary:
+            return Color.white.opacity(0.68)
+        case .disabled:
+            return Color.white.opacity(0.40)
+        case .destructive:
+            return MiColorTokens.rose500.opacity(0.24)
+        }
+    }
+
+    private var buttonFallbackFill: LinearGradient {
+        LinearGradient(
+            colors: [
+                Color.white.opacity(variant == .primary ? 0.82 : 0.62),
+                fill.opacity(variant == .primary ? 0.42 : 0.76),
+                Color.white.opacity(0.42)
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+}
+
+private struct MiAppleLiquidGlassButtonSheen<S: InsettableShape>: View {
+    let shape: S
+    let accent: Color
+    let variant: MiAppleLiquidGlassButtonVariant
+
+    var body: some View {
+        shape
+            .fill(
+                LinearGradient(
+                    colors: [
+                        Color.white.opacity(variant == .disabled ? 0.10 : 0.28),
+                        accent.opacity(variant == .primary ? 0.12 : 0.04),
+                        .clear
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .opacity(variant == .disabled ? 0.46 : 1)
+            .clipShape(shape)
     }
 }
 

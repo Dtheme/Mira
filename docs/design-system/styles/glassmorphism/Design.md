@@ -2,7 +2,7 @@
 
 ## Style Identity
 
-- **Status**: Registered draft. This file exists so AI tools can resolve the style path, but the style is not implementation-ready yet.
+- **Status**: Implementation-ready. Runtime demo lives in `Mira/Features/Styles/Glassmorphism/`.
 - **Definition**: Glassmorphism uses frosted translucent panels, blur, light borders, depth layering, and colorful background separation to simulate glass-like interface surfaces.
 - **iOS Interpretation**: Treat this as a broader glass aesthetic distinct from Mira's Apple Liquid Glass shell. Use it for style-specific demos and comparison content, not as a replacement for the global shell unless explicitly requested.
 
@@ -22,10 +22,13 @@
 
 ## Visual Tokens
 
-- Draft color direction: translucent white, cool cyan, blue-violet, soft black scrim.
-- Draft material direction: frosted blur, semi-transparent fill, luminous border, soft shadow.
-- Draft radius direction: large rounded rectangles and capsules.
-- Draft shadow direction: soft depth shadow with subtle inner highlight.
+- `mi-glass-cyan`: luminous edge and active glass tint.
+- `mi-glass-blue`: primary depth and action tint.
+- `mi-glass-violet`: creative overlay tint.
+- `mi-glass-surface`: translucent white readable panel surface.
+- Material: SwiftUI material or static frost gradients for bounded controls; avoid heavy live blur on repeated scrolling content.
+- Shape: large rounded rectangles for panels, capsules for actions and filter chips.
+- Shadow: soft blue depth shadow paired with a thin white/cyan border highlight.
 
 ## Layout Rules
 
@@ -40,12 +43,18 @@
 - Buttons: glass capsules with selected tint and shadow.
 - Inputs: higher opacity than decorative cards, clear focus ring.
 - Sheets: glass chrome is acceptable; body content may need stronger opacity.
+- Hero Preview: oversized frosted orb + reactive metric panel for layer count, blur strength, and focus state.
+- Home Card: translucent preview card with luminous edge, short description, and no dense text.
+- States: empty/loading/error/selected/disabled must use icon or text support in addition to tint.
 
 ## iOS / SwiftUI Notes
 
 - Prefer SwiftUI materials, rounded rectangles, overlays, and shadows.
 - Avoid custom blur stacks that become expensive in scrolling views.
 - Use scrims when text is placed over gradients or screenshots.
+- Runtime module path: `Mira/Features/Styles/Glassmorphism/`.
+- Keep Mira's Apple Liquid Glass app shell separate from the style demo; this style is broader frosted glass, not the system shell.
+- Use static frost surfaces for repeated content sections and reserve material effects for hero, controls, search, and inspector-like surfaces.
 
 ## Motion Rules
 

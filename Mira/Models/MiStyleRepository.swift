@@ -10,10 +10,12 @@ import Foundation
 enum MiStyleRepository {
     static let styles: [MiDesignStyle] = [
         appleLiquidGlass,
-        acidGraphic,
         glassmorphism,
         neumorphism,
-        neoBrutalism
+        claymorphism,
+        neoBrutalism,
+        minimalism,
+        material3
     ]
 
     static func style(id: String) -> MiDesignStyle? {
@@ -110,38 +112,29 @@ private extension MiStyleRepository {
         isImplementationReady: true
     )
 
-    static let acidGraphic = MiDesignStyle(
-        id: "acid-graphic",
-        name: "style_acid",
-        localizedName: "style_acid_native",
-        slug: "acid-graphic",
-        category: .experimentalVisual,
-        summary: "st_high_expr",
-        description: "st_backlog",
-        designDocumentPath: "docs/design-system/styles/acid-graphic/Design.md",
-        screenshotAssetName: nil,
-        accentHex: 0xC7F464,
-        visualTokens: [],
-        sections: [placeholderSection(for: "style_acid")],
-        demoSlots: standardDemoSlots,
-        isImplementationReady: false
-    )
-
     static let glassmorphism = MiDesignStyle(
-        id: "glassmorphism",
+        id: MiGlassmorphismModule.styleID,
         name: "style_glass",
         localizedName: "style_glass_native",
         slug: "glassmorphism",
         category: .materialSurface,
         summary: "st_glass_layers",
-        description: "st_glass_backlog",
-        designDocumentPath: "docs/design-system/styles/glassmorphism/Design.md",
+        description: "st_glass_desc",
+        designDocumentPath: MiGlassmorphismModule.designDocumentPath,
         screenshotAssetName: nil,
         accentHex: 0x00C7BE,
-        visualTokens: [],
-        sections: [placeholderSection(for: "style_glass")],
+        visualTokens: [
+            MiTokenSpec(name: "mi-glass-cyan", value: "#62E6F2", role: "glass_token_cyan"),
+            MiTokenSpec(name: "mi-glass-blue", value: "#6EA8FF", role: "glass_token_blue"),
+            MiTokenSpec(name: "mi-glass-violet", value: "#B8A2FF", role: "glass_token_violet"),
+            MiTokenSpec(name: "mi-glass-surface", value: "white 54%", role: "glass_token_surface")
+        ],
+        sections: [
+            MiStyleDetailSection(title: "ds_identity", summary: "st_glass_desc", bullets: ["glass_prompt_1", "glass_prompt_2", "glass_prompt_3"]),
+            MiStyleDetailSection(title: "ds_components", summary: "glass_components_body", bullets: ["glass_check_1", "glass_check_2"])
+        ],
         demoSlots: standardDemoSlots,
-        isImplementationReady: false
+        isImplementationReady: MiGlassmorphismModule.isImplemented
     )
 
     static let neumorphism = MiDesignStyle(
@@ -193,6 +186,34 @@ private extension MiStyleRepository {
         ],
         demoSlots: standardDemoSlots,
         isImplementationReady: MiNeumorphismModule.isImplemented
+    )
+
+    static let claymorphism = MiDesignStyle(
+        id: MiClaymorphismModule.styleID,
+        name: "style_clay",
+        localizedName: "style_clay_native",
+        slug: "claymorphism",
+        category: .materialSurface,
+        summary: "st_clay_summary",
+        description: "st_clay_desc",
+        designDocumentPath: MiClaymorphismModule.designDocumentPath,
+        screenshotAssetName: nil,
+        accentHex: 0xFFB08A,
+        visualTokens: [
+            MiTokenSpec(name: "mi-clay-peach", value: "#FFB08A", role: "clay_token_peach"),
+            MiTokenSpec(name: "mi-clay-lilac", value: "#C9B7FF", role: "clay_token_lilac"),
+            MiTokenSpec(name: "mi-clay-mint", value: "#A9E8D0", role: "clay_token_mint"),
+            MiTokenSpec(name: "mi-clay-sky", value: "#A8D8FF", role: "clay_token_sky"),
+            MiTokenSpec(name: "mi-clay-butter", value: "#FFE29A", role: "clay_token_butter"),
+            MiTokenSpec(name: "mi-clay-shadow", value: "#D09C8D", role: "clay_token_shadow")
+        ],
+        sections: [
+            MiStyleDetailSection(title: "ds_identity", summary: "st_clay_desc", bullets: ["clay_prompt_1", "clay_prompt_2", "clay_prompt_3"]),
+            MiStyleDetailSection(title: "ds_components", summary: "clay_components_body", bullets: ["clay_card_rule_one_body", "clay_card_rule_two_body"]),
+            MiStyleDetailSection(title: "ds_acceptance", summary: "clay_token_prompt_body", bullets: ["clay_check_1", "clay_check_2"])
+        ],
+        demoSlots: standardDemoSlots,
+        isImplementationReady: MiClaymorphismModule.isImplemented
     )
 
     static let neoBrutalism = MiDesignStyle(
@@ -274,6 +295,58 @@ private extension MiStyleRepository {
         ],
         demoSlots: standardDemoSlots,
         isImplementationReady: true
+    )
+
+    static let minimalism = MiDesignStyle(
+        id: MiMinimalismModule.styleID,
+        name: "style_min",
+        localizedName: "style_min_native",
+        slug: "minimalism",
+        category: .minimalSystematic,
+        summary: "st_min_summary",
+        description: "st_min_desc",
+        designDocumentPath: MiMinimalismModule.designDocumentPath,
+        screenshotAssetName: nil,
+        accentHex: 0x111111,
+        visualTokens: [
+            MiTokenSpec(name: "mi-min-paper", value: "#FCFCFA", role: "min_token_paper"),
+            MiTokenSpec(name: "mi-min-ink", value: "#111111", role: "min_token_ink"),
+            MiTokenSpec(name: "mi-min-hairline", value: "#D9D9D4", role: "min_token_hairline"),
+            MiTokenSpec(name: "mi-min-accent", value: "#0A84FF", role: "min_token_accent")
+        ],
+        sections: [
+            MiStyleDetailSection(title: "ds_identity", summary: "st_min_desc", bullets: ["min_prompt_1", "min_prompt_2", "min_prompt_3"]),
+            MiStyleDetailSection(title: "ds_acceptance", summary: "min_prompt_body", bullets: ["min_check_1", "min_check_2"])
+        ],
+        demoSlots: standardDemoSlots,
+        isImplementationReady: MiMinimalismModule.isImplemented
+    )
+
+    static let material3 = MiDesignStyle(
+        id: MiMaterial3Module.styleID,
+        name: "style_m3",
+        localizedName: "style_m3_native",
+        slug: "material-3",
+        category: .systemFramework,
+        summary: "st_m3_summary",
+        description: "st_m3_desc",
+        designDocumentPath: MiMaterial3Module.designDocumentPath,
+        screenshotAssetName: nil,
+        accentHex: 0x6750A4,
+        visualTokens: [
+            MiTokenSpec(name: "mi-m3-primary", value: "#6750A4", role: "m3_token_primary"),
+            MiTokenSpec(name: "mi-m3-primary-container", value: "#EADDFF", role: "m3_token_primary_container"),
+            MiTokenSpec(name: "mi-m3-secondary-container", value: "#E8DEF8", role: "m3_token_secondary_container"),
+            MiTokenSpec(name: "mi-m3-tertiary-container", value: "#FFD8E4", role: "m3_token_tertiary_container"),
+            MiTokenSpec(name: "mi-m3-surface-container", value: "#F3EDF7", role: "m3_token_surface_container"),
+            MiTokenSpec(name: "mi-m3-outline-variant", value: "#CAC4D0", role: "m3_token_outline_variant")
+        ],
+        sections: [
+            MiStyleDetailSection(title: "ds_identity", summary: "st_m3_desc", bullets: ["m3_prompt_1", "m3_prompt_2", "m3_prompt_3"]),
+            MiStyleDetailSection(title: "ds_acceptance", summary: "m3_prompt_body", bullets: ["m3_check_1", "m3_check_2"])
+        ],
+        demoSlots: standardDemoSlots,
+        isImplementationReady: MiMaterial3Module.isImplemented
     )
 
     static let standardDemoSlots: [MiDemoSlot] = [

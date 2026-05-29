@@ -46,6 +46,38 @@ struct MiStyleCardView: View {
                     cornerRadius: cornerRadius,
                     isDragging: isDragging
                 )
+            } else if style.id == MiClaymorphismModule.styleID {
+                MiClaymorphismHomePreview(
+                    style: style,
+                    focus: focus,
+                    cardSize: cardSize,
+                    cornerRadius: cornerRadius,
+                    isDragging: isDragging
+                )
+            } else if style.id == MiGlassmorphismModule.styleID {
+                MiGlassmorphismHomePreview(
+                    style: style,
+                    focus: focus,
+                    cardSize: cardSize,
+                    cornerRadius: cornerRadius,
+                    isDragging: isDragging
+                )
+            } else if style.id == MiMinimalismModule.styleID {
+                MiMinimalismHomePreview(
+                    style: style,
+                    focus: focus,
+                    cardSize: cardSize,
+                    cornerRadius: cornerRadius,
+                    isDragging: isDragging
+                )
+            } else if style.id == MiMaterial3Module.styleID {
+                MiMaterial3HomePreview(
+                    style: style,
+                    focus: focus,
+                    cardSize: cardSize,
+                    cornerRadius: cornerRadius,
+                    isDragging: isDragging
+                )
             } else {
                 standardCard
             }

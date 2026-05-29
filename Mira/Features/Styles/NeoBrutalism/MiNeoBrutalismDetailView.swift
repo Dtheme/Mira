@@ -92,7 +92,7 @@ struct MiNeoBrutalismDetailView: View {
 
     private func triggerReveal() {
         guard !isRevealed else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
+        DispatchQueue.main.async {
             isRevealed = true
         }
     }
@@ -176,72 +176,126 @@ private struct MiNeoBrutalismHeroView: View {
 }
 
 private struct MiNeoBrutalismPreviewStage: View {
+    @State private var isOn = true
+    @State private var tapCount = 3
+    @State private var isPressed = false
+
     var body: some View {
-        MiNeoBrutalismCard(fill: MiNeoBrutalismTokens.yellow, radius: MiNeoBrutalismTokens.radiusMD, shadow: MiNeoBrutalismTokens.shadowLarge, padding: 14) {
-            HStack(alignment: .top, spacing: 12) {
-                MiNeoBrutalismPreviewRail()
-                    .frame(width: 78)
-
-                MiNeoBrutalismCard(fill: MiNeoBrutalismTokens.blueSoft, radius: MiNeoBrutalismTokens.radiusSM, shadow: MiNeoBrutalismTokens.shadowSmall, padding: 12) {
-                    VStack(spacing: 10) {
-                        MiNeoBrutalismPreviewBar(fill: MiNeoBrutalismTokens.surface)
-                        MiNeoBrutalismPreviewTile(fill: MiNeoBrutalismTokens.surface)
-                        MiNeoBrutalismPreviewTile(fill: MiNeoBrutalismTokens.surface)
-                    }
-                }
-
-                MiNeoBrutalismPreviewRail()
-                    .frame(width: 82)
-            }
-        }
-    }
-}
-
-private struct MiNeoBrutalismPreviewRail: View {
-    var body: some View {
-        MiNeoBrutalismCard(fill: MiNeoBrutalismTokens.surface, radius: MiNeoBrutalismTokens.radiusSM, shadow: MiNeoBrutalismTokens.shadowSmall, padding: 10) {
-            VStack(alignment: .leading, spacing: 10) {
-                MiNeoBrutalismSurface(
-                    shape: Circle(),
-                    fill: MiNeoBrutalismTokens.green,
-                    lineWidth: MiNeoBrutalismTokens.thinLineWidth,
-                    shadow: CGSize(width: 3, height: 3)
+        MiNeoBrutalismCard(
+            fill: MiNeoBrutalismTokens.yellow,
+            radius: MiNeoBrutalismTokens.radiusMD,
+            shadow: MiNeoBrutalismTokens.shadowMedium,
+            padding: 16
+        ) {
+            HStack(alignment: .center, spacing: 16) {
+                MiNeoBrutalismHeroPunchButton(
+                    isOn: isOn,
+                    isPressed: isPressed
                 )
-                .frame(width: 38, height: 38)
+                .frame(width: 116, height: 116)
+                .contentShape(Rectangle())
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { _ in
+                            guard !isPressed else { return }
+                            withAnimation(MiNeoBrutalismTokens.motion) {
+                                isPressed = true
+                            }
+                        }
+                        .onEnded { _ in
+                            withAnimation(MiNeoBrutalismTokens.motion) {
+                                isPressed = false
+                                isOn.toggle()
+                                tapCount += 1
+                            }
+                        }
+                )
 
-                ForEach(0..<3, id: \.self) { index in
-                    MiNeoBrutalismPreviewBar(fill: index == 1 ? MiNeoBrutalismTokens.orangeSoft : MiNeoBrutalismTokens.surface)
+                VStack(alignment: .leading, spacing: 10) {
+                    MiNeoBrutalismHeroMetric(
+                        titleKey: "nb_hero_metric_status",
+                        value: MiL10n.text(isOn ? "nb_hero_state_on" : "nb_hero_state_off"),
+                        accent: isOn ? MiNeoBrutalismTokens.green : MiNeoBrutalismTokens.red
+                    )
+                    MiNeoBrutalismHeroMetric(
+                        titleKey: "nb_hero_metric_count",
+                        value: String(format: "%02d", tapCount),
+                        accent: MiNeoBrutalismTokens.blue
+                    )
+                    MiNeoBrutalismHeroMetric(
+                        titleKey: "nb_hero_metric_mode",
+                        value: MiL10n.text(isOn ? "nb_hero_mode_punch" : "nb_hero_mode_idle"),
+                        accent: isOn ? MiNeoBrutalismTokens.orange : MiNeoBrutalismTokens.paperBlue
+                    )
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
     }
 }
 
-private struct MiNeoBrutalismPreviewBar: View {
-    let fill: Color
+private struct MiNeoBrutalismHeroPunchButton: View {
+    let isOn: Bool
+    let isPressed: Bool
 
     var body: some View {
-        MiNeoBrutalismSurface(
-            shape: Capsule(style: .continuous),
-            fill: fill,
-            lineWidth: MiNeoBrutalismTokens.thinLineWidth,
-            shadow: CGSize(width: 3, height: 3)
-        )
-        .frame(height: 16)
+        let offset: CGSize = isPressed ? MiNeoBrutalismTokens.pressOffset : .zero
+        let shadow: CGSize = isPressed ? .zero : MiNeoBrutalismTokens.shadowLarge
+
+        ZStack {
+            MiNeoBrutalismSurface(
+                shape: RoundedRectangle(cornerRadius: MiNeoBrutalismTokens.radiusMD, style: .continuous),
+                fill: isOn ? MiNeoBrutalismTokens.green : MiNeoBrutalismTokens.surface,
+                lineWidth: MiNeoBrutalismTokens.lineWidth,
+                shadow: shadow
+            )
+
+            VStack(spacing: 6) {
+                Image(systemName: isOn ? "bolt.fill" : "bolt")
+                    .font(.system(size: 38, weight: .heavy))
+                    .foregroundStyle(MiNeoBrutalismTokens.ink)
+
+                Text(MiL10n.text(isOn ? "nb_hero_label_on" : "nb_hero_label_off"))
+                    .font(.system(size: 11, weight: .black, design: .default))
+                    .foregroundStyle(MiNeoBrutalismTokens.ink)
+                    .tracking(1.4)
+                    .textCase(.uppercase)
+            }
+        }
+        .offset(offset)
     }
 }
 
-private struct MiNeoBrutalismPreviewTile: View {
-    let fill: Color
+private struct MiNeoBrutalismHeroMetric: View {
+    let titleKey: String
+    let value: String
+    let accent: Color
 
     var body: some View {
-        MiNeoBrutalismSurface(
-            shape: RoundedRectangle(cornerRadius: MiNeoBrutalismTokens.radiusSM, style: .continuous),
-            fill: fill,
-            lineWidth: MiNeoBrutalismTokens.thinLineWidth,
-            shadow: CGSize(width: 3, height: 3)
-        )
-        .frame(height: 62)
+        HStack(spacing: 8) {
+            Text(MiL10n.text(titleKey))
+                .font(.system(size: 11, weight: .black, design: .default))
+                .foregroundStyle(MiNeoBrutalismTokens.ink)
+                .tracking(0.6)
+                .textCase(.uppercase)
+
+            Spacer(minLength: 6)
+
+            Text(value)
+                .font(.system(size: 12, weight: .black, design: .monospaced))
+                .foregroundStyle(MiNeoBrutalismTokens.ink)
+                .lineLimit(1)
+                .padding(.horizontal, 9)
+                .frame(height: 24)
+                .background {
+                    MiNeoBrutalismSurface(
+                        shape: RoundedRectangle(cornerRadius: MiNeoBrutalismTokens.radiusXS, style: .continuous),
+                        fill: accent,
+                        lineWidth: MiNeoBrutalismTokens.thinLineWidth,
+                        shadow: CGSize(width: 2.5, height: 2.5)
+                    )
+                }
+        }
     }
 }
 

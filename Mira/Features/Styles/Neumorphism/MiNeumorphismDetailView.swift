@@ -5,6 +5,7 @@
 //  Created on 2026/5/23.
 //
 
+import Foundation
 import SwiftUI
 
 struct MiNeumorphismDetailView: View {
@@ -25,58 +26,56 @@ struct MiNeumorphismDetailView: View {
     }
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             MiNeumorphismTokens.pageBackground
                 .ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                MiNeumorphismTopBar(style: style) {
-                    close()
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: MiNeumorphismTokens.sectionSpacing) {
+                    MiNeumorphismHeroView(style: style)
+                        .miStaggeredReveal(index: 0, isRevealed: isRevealed)
+
+                    styleCardSection
+                        .miStaggeredReveal(index: 1, isRevealed: isRevealed)
+
+                    surfaceStatesSection
+                        .miStaggeredReveal(index: 2, isRevealed: isRevealed)
+
+                    componentSection
+                        .miStaggeredReveal(index: 3, isRevealed: isRevealed)
+
+                    formSection
+                        .miStaggeredReveal(index: 4, isRevealed: isRevealed)
+
+                    sheetSection
+                        .miStaggeredReveal(index: 5, isRevealed: isRevealed)
+
+                    statesSection
+                        .miStaggeredReveal(index: 6, isRevealed: isRevealed)
+
+                    tokenSection
+                        .miStaggeredReveal(index: 7, isRevealed: isRevealed)
+
+                    motionAccessibilitySection
+                        .miStaggeredReveal(index: 8, isRevealed: isRevealed)
+
+                    promptSection
+                        .miStaggeredReveal(index: 9, isRevealed: isRevealed)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 2)
-                .padding(.bottom, 6)
-
-                ScrollView {
-                    LazyVStack(alignment: .leading, spacing: MiNeumorphismTokens.sectionSpacing) {
-                        MiNeumorphismHeroView(style: style)
-                            .miStaggeredReveal(index: 0, isRevealed: isRevealed)
-
-                        styleCardSection
-                            .miStaggeredReveal(index: 1, isRevealed: isRevealed)
-
-                        surfaceStatesSection
-                            .miStaggeredReveal(index: 2, isRevealed: isRevealed)
-
-                        componentSection
-                            .miStaggeredReveal(index: 3, isRevealed: isRevealed)
-
-                        formSection
-                            .miStaggeredReveal(index: 4, isRevealed: isRevealed)
-
-                        sheetSection
-                            .miStaggeredReveal(index: 5, isRevealed: isRevealed)
-
-                        statesSection
-                            .miStaggeredReveal(index: 6, isRevealed: isRevealed)
-
-                        tokenSection
-                            .miStaggeredReveal(index: 7, isRevealed: isRevealed)
-
-                        motionAccessibilitySection
-                            .miStaggeredReveal(index: 8, isRevealed: isRevealed)
-
-                        promptSection
-                            .miStaggeredReveal(index: 9, isRevealed: isRevealed)
-                    }
-                    .padding(.horizontal, 22)
-                    .padding(.top, 14)
-                    .padding(.bottom, 48)
-                    .frame(maxWidth: 780, alignment: .leading)
-                    .frame(maxWidth: .infinity)
-                }
-                .scrollIndicators(.hidden)
+                .padding(.horizontal, 22)
+                .padding(.top, 86)
+                .padding(.bottom, 48)
+                .frame(maxWidth: 780, alignment: .leading)
+                .frame(maxWidth: .infinity)
             }
+            .scrollIndicators(.hidden)
+
+            MiNeumorphismTopBar(style: style) {
+                close()
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 8)
+            .zIndex(20)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
@@ -89,7 +88,7 @@ struct MiNeumorphismDetailView: View {
 
     private func triggerReveal() {
         guard !isRevealed else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
+        DispatchQueue.main.async {
             isRevealed = true
         }
     }
@@ -245,7 +244,7 @@ private struct MiNeumorphismTopBar: View {
             HStack(spacing: 10) {
                 Button(action: onBack) {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 16, weight: .bold))
+                        .font(.system(size: 15, weight: .bold))
                         .foregroundStyle(MiNeumorphismTokens.ink)
                 }
                 .buttonStyle(MiNeumorphismNavigationButtonStyle())
@@ -261,16 +260,74 @@ private struct MiNeumorphismTopBar: View {
                     Text(MiL10n.text("neu_soft_ui"))
                         .font(.system(size: 10, weight: .semibold, design: .rounded))
                         .foregroundStyle(MiNeumorphismTokens.muted)
+                        .tracking(0.4)
                 }
                 .layoutPriority(1)
 
                 Spacer(minLength: 0)
 
-                MiNeumorphismStatusBadge(titleKey: "c_ready")
+                MiNeumorphismStatusIndicator(titleKey: "c_ready")
             }
+            .padding(.trailing, 6)
         }
         .frame(maxWidth: 780)
         .frame(height: 52)
+    }
+}
+
+private struct MiNeumorphismBrandGlyph: View {
+    var body: some View {
+        MiNeumorphismSoftSurface(
+            cornerRadius: 12,
+            depth: .inset,
+            fill: MiNeumorphismTokens.baseInset,
+            contentPadding: 0
+        ) {
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            MiNeumorphismTokens.baseLight,
+                            MiNeumorphismTokens.base
+                        ],
+                        center: .topLeading,
+                        startRadius: 0,
+                        endRadius: 22
+                    )
+                )
+                .frame(width: 18, height: 18)
+                .shadow(color: MiNeumorphismTokens.shadowDark.opacity(0.36), radius: 2, x: 1.2, y: 1.2)
+                .shadow(color: MiNeumorphismTokens.shadowLight.opacity(0.92), radius: 2, x: -1.2, y: -1.2)
+                .overlay {
+                    Circle()
+                        .fill(MiNeumorphismTokens.focusAccent.opacity(0.32))
+                        .frame(width: 6, height: 6)
+                        .offset(x: -1, y: -1)
+                }
+        }
+        .frame(width: 32, height: 32)
+    }
+}
+
+private struct MiNeumorphismStatusIndicator: View {
+    let titleKey: String
+
+    var body: some View {
+        HStack(spacing: 7) {
+            Circle()
+                .fill(MiNeumorphismTokens.success)
+                .frame(width: 7, height: 7)
+                .shadow(color: MiNeumorphismTokens.success.opacity(0.46), radius: 3, x: 0, y: 0)
+                .shadow(color: MiNeumorphismTokens.shadowLight.opacity(0.62), radius: 1.2, x: -0.6, y: -0.6)
+                .shadow(color: MiNeumorphismTokens.shadowDark.opacity(0.30), radius: 1.2, x: 0.6, y: 0.6)
+
+            Text(MiL10n.text(titleKey))
+                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .foregroundStyle(MiNeumorphismTokens.accentDeep)
+                .lineLimit(1)
+                .tracking(0.4)
+                .textCase(.uppercase)
+        }
     }
 }
 
@@ -292,52 +349,25 @@ private struct MiNeumorphismNavigationButtonStyle: ButtonStyle {
     }
 }
 
-private struct MiNeumorphismStatusBadge: View {
-    let titleKey: String
-
-    var body: some View {
-        Text(MiL10n.text(titleKey))
-            .font(.system(size: 12, weight: .bold, design: .rounded))
-            .foregroundStyle(MiNeumorphismTokens.accentDeep)
-            .lineLimit(1)
-            .padding(.horizontal, 12)
-            .frame(height: 34)
-            .background {
-                MiNeumorphismSoftSurface(cornerRadius: 17, depth: .inset, contentPadding: 0) {
-                    EmptyView()
-                }
-            }
-    }
-}
-
 private struct MiNeumorphismHeroView: View {
     let style: MiDesignStyle
 
     var body: some View {
-        MiNeumorphismSoftSurface(cornerRadius: 32, contentPadding: 22) {
-            VStack(alignment: .leading, spacing: 24) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(MiL10n.text("neu_soft_lab"))
-                        .font(.system(size: 12, weight: .bold, design: .rounded))
-                        .foregroundStyle(MiNeumorphismTokens.accentDeep)
-                        .padding(.horizontal, 12)
-                        .frame(height: 30)
-                        .background {
-                            Capsule(style: .continuous)
-                                .fill(MiNeumorphismTokens.focusSoft.opacity(0.74))
-                                .shadow(color: MiNeumorphismTokens.shadowDark.opacity(0.20), radius: 4, x: 2, y: 2)
-                                .shadow(color: MiNeumorphismTokens.shadowLight.opacity(0.82), radius: 4, x: -2, y: -2)
-                        }
+        MiNeumorphismSoftSurface(cornerRadius: 28, contentPadding: 22) {
+            VStack(alignment: .leading, spacing: 22) {
+                VStack(alignment: .leading, spacing: 10) {
+                    MiNeumorphismHeroEyebrow()
 
                     Text(MiL10n.text(style.name))
-                        .font(.system(size: 38, weight: .black, design: .rounded))
+                        .font(.system(size: 34, weight: .black, design: .rounded))
                         .foregroundStyle(MiNeumorphismTokens.ink)
                         .lineLimit(2)
                         .minimumScaleFactor(0.72)
-                        .padding(.top, 4)
+                        .tracking(-0.4)
+                        .padding(.top, 2)
 
                     Text(MiL10n.text("neu_hero_body"))
-                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                        .font(.system(size: 14.5, weight: .medium, design: .rounded))
                         .foregroundStyle(MiNeumorphismTokens.quietText)
                         .lineSpacing(4)
                         .frame(maxWidth: 560, alignment: .leading)
@@ -349,54 +379,249 @@ private struct MiNeumorphismHeroView: View {
     }
 }
 
-private struct MiNeumorphismHeroPreview: View {
+private struct MiNeumorphismHeroEyebrow: View {
     var body: some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(alignment: .center, spacing: 14) {
-                controlsPanel
-                    .frame(maxWidth: .infinity, minHeight: 142)
+        HStack(spacing: 6) {
+            Circle()
+                .fill(MiNeumorphismTokens.focusAccent)
+                .frame(width: 6, height: 6)
+                .shadow(color: MiNeumorphismTokens.shadowLight.opacity(0.72), radius: 1, x: -0.6, y: -0.6)
+                .shadow(color: MiNeumorphismTokens.shadowDark.opacity(0.28), radius: 1, x: 0.6, y: 0.6)
 
-                focusPanel
-                    .frame(width: 122, height: 142)
-            }
-
-            VStack(alignment: .leading, spacing: 14) {
-                controlsPanel
-                    .frame(maxWidth: .infinity, minHeight: 136)
-
-                focusPanel
-                    .frame(maxWidth: .infinity, minHeight: 116)
+            Text(MiL10n.text("neu_soft_lab"))
+                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .foregroundStyle(MiNeumorphismTokens.accentDeep)
+                .tracking(0.6)
+                .textCase(.uppercase)
+        }
+        .padding(.horizontal, 12)
+        .frame(height: 28)
+        .background {
+            MiNeumorphismSoftSurface(
+                cornerRadius: 14,
+                depth: .inset,
+                fill: MiNeumorphismTokens.baseInset,
+                contentPadding: 0
+            ) {
+                EmptyView()
             }
         }
     }
+}
 
-    private var controlsPanel: some View {
-        MiNeumorphismSoftSurface(cornerRadius: 24, contentPadding: 14) {
-            VStack(alignment: .leading, spacing: 12) {
-                MiNeumorphismPill(titleKey: "neu_raised", isSelected: false)
-                MiNeumorphismPill(titleKey: "neu_inset", isSelected: true)
-                MiNeumorphismPill(titleKey: "neu_pressed", isSelected: false)
+private struct MiNeumorphismHeroPreview: View {
+    @State private var isOn = true
+
+    var body: some View {
+        MiNeumorphismSoftSurface(cornerRadius: 22, depth: .inset, contentPadding: 16) {
+            HStack(alignment: .center, spacing: 18) {
+                MiNeumorphismHeroPowerControl(isOn: $isOn)
+                    .frame(width: 128, height: 128)
+
+                MiNeumorphismHeroStatusPanel(isOn: isOn)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
     }
+}
 
-    private var focusPanel: some View {
-        MiNeumorphismSoftSurface(cornerRadius: 24, depth: .inset, contentPadding: 16) {
-            VStack(spacing: 14) {
+private struct MiNeumorphismHeroPowerControl: View {
+    @Binding var isOn: Bool
+
+    @State private var isPressed = false
+    @GestureState private var dragInside = true
+
+    var body: some View {
+        ZStack {
+            insetTrack
+
+            centerButton
+        }
+        .contentShape(Circle())
+        .gesture(
+            DragGesture(minimumDistance: 0)
+                .updating($dragInside) { value, state, _ in
+                    let distance = hypot(value.location.x - 64, value.location.y - 64)
+                    state = distance <= 64
+                }
+                .onChanged { _ in
+                    guard !isPressed else { return }
+                    withAnimation(.spring(response: 0.18, dampingFraction: 0.82)) {
+                        isPressed = true
+                    }
+                }
+                .onEnded { _ in
+                    let wasInside = dragInside
+                    withAnimation(.spring(response: 0.26, dampingFraction: 0.78)) {
+                        isPressed = false
+                    }
+                    if wasInside {
+                        withAnimation(.spring(response: 0.36, dampingFraction: 0.74)) {
+                            isOn.toggle()
+                        }
+                    }
+                }
+        )
+    }
+
+    private var insetTrack: some View {
+        Circle()
+            .fill(
+                LinearGradient(
+                    colors: [
+                        MiNeumorphismTokens.baseLight.opacity(0.78),
+                        MiNeumorphismTokens.baseInset,
+                        MiNeumorphismTokens.basePressed.opacity(0.58)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .overlay {
                 Circle()
-                    .fill(MiNeumorphismTokens.focusAccent.opacity(0.72))
-                    .frame(width: 48, height: 48)
-                    .shadow(color: MiNeumorphismTokens.shadowDark.opacity(0.42), radius: 7, x: 4, y: 4)
-                    .shadow(color: MiNeumorphismTokens.shadowLight.opacity(0.90), radius: 7, x: -4, y: -4)
-
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(MiNeumorphismTokens.muted.opacity(0.18))
-                    .frame(height: 8)
-
-                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                    .fill(MiNeumorphismTokens.focusAccent.opacity(0.35))
-                    .frame(width: 74, height: 8)
+                    .stroke(MiNeumorphismTokens.shadowDark.opacity(0.34), lineWidth: 3)
+                    .blur(radius: 5)
+                    .offset(x: 5, y: 5)
+                    .mask {
+                        Circle()
+                            .fill(
+                                LinearGradient(
+                                    colors: [.clear, .black.opacity(0.86)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                    }
             }
+            .overlay {
+                Circle()
+                    .stroke(MiNeumorphismTokens.shadowLight.opacity(0.88), lineWidth: 3)
+                    .blur(radius: 5)
+                    .offset(x: -5, y: -5)
+                    .mask {
+                        Circle()
+                            .fill(
+                                LinearGradient(
+                                    colors: [.black.opacity(0.86), .clear],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                    }
+            }
+    }
+
+    private var centerButton: some View {
+        MiNeumorphismSoftSurface(
+            cornerRadius: 44,
+            depth: isPressed ? .pressed : .raised,
+            fill: isOn ? MiNeumorphismTokens.base : MiNeumorphismTokens.basePressed,
+            contentPadding: 0
+        ) {
+            ZStack {
+                Image(systemName: stateIconName)
+                    .font(.system(size: 28, weight: .heavy))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: isOn
+                                ? [MiNeumorphismTokens.focusAccent, MiNeumorphismTokens.accentDeep]
+                                : [MiNeumorphismTokens.muted, MiNeumorphismTokens.accent.opacity(0.62)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .shadow(
+                        color: isOn ? MiNeumorphismTokens.focusAccent.opacity(0.22) : .clear,
+                        radius: 3.5,
+                        x: 0, y: 0
+                    )
+                    .id(stateIconName)
+                    .transition(.scale(scale: 0.72).combined(with: .opacity))
+            }
+            .animation(.spring(response: 0.28, dampingFraction: 0.76), value: stateIconName)
+        }
+        .frame(width: 84, height: 84)
+        .scaleEffect(isPressed ? 0.94 : 1.0)
+        .offset(x: isPressed ? 1 : 0, y: isPressed ? 1 : 0)
+    }
+
+    private var stateIconName: String {
+        isOn ? "checkmark" : "power"
+    }
+}
+
+private struct MiNeumorphismHeroStatusPanel: View {
+    let isOn: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 8) {
+                Circle()
+                    .fill(isOn ? MiNeumorphismTokens.success : MiNeumorphismTokens.muted.opacity(0.46))
+                    .frame(width: 7, height: 7)
+                    .overlay {
+                        Circle()
+                            .strokeBorder(Color.white.opacity(0.42), lineWidth: 0.6)
+                    }
+
+                Text(MiL10n.text(isOn ? "neu_hero_state_active" : "neu_hero_state_idle"))
+                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                    .foregroundStyle(MiNeumorphismTokens.ink)
+                    .tracking(0.5)
+                    .textCase(.uppercase)
+            }
+
+            VStack(alignment: .leading, spacing: 9) {
+                MiNeumorphismHeroMetric(
+                    titleKey: "neu_hero_metric_depth",
+                    value: isOn ? "+12 dp" : "0 dp",
+                    isHighlighted: isOn
+                )
+                MiNeumorphismHeroMetric(
+                    titleKey: "neu_hero_metric_glow",
+                    value: isOn ? "On" : "Idle",
+                    isHighlighted: isOn
+                )
+                MiNeumorphismHeroMetric(
+                    titleKey: "neu_hero_metric_tap",
+                    value: MiL10n.text("neu_hero_tap_hint"),
+                    isHighlighted: false
+                )
+            }
+        }
+    }
+}
+
+private struct MiNeumorphismHeroMetric: View {
+    let titleKey: String
+    let value: String
+    let isHighlighted: Bool
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Text(MiL10n.text(titleKey))
+                .font(.system(size: 10.5, weight: .semibold, design: .rounded))
+                .foregroundStyle(MiNeumorphismTokens.muted)
+                .tracking(0.5)
+                .textCase(.uppercase)
+
+            Spacer(minLength: 6)
+
+            Text(value)
+                .font(.system(size: 11, weight: .bold, design: .monospaced))
+                .foregroundStyle(isHighlighted ? MiNeumorphismTokens.accentDeep : MiNeumorphismTokens.ink)
+                .padding(.horizontal, 8)
+                .frame(height: 22)
+                .background {
+                    MiNeumorphismSoftSurface(
+                        cornerRadius: 7,
+                        depth: .inset,
+                        fill: MiNeumorphismTokens.baseInset,
+                        contentPadding: 0
+                    ) {
+                        EmptyView()
+                    }
+                }
         }
     }
 }
@@ -484,23 +709,42 @@ private struct MiNeumorphismSurfaceStateCard: View {
             fill: depth == .pressed ? MiNeumorphismTokens.basePressed : MiNeumorphismTokens.base,
             contentPadding: 14
         ) {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 10) {
+            VStack(alignment: .leading, spacing: 14) {
+                HStack(alignment: .center, spacing: 12) {
                     MiNeumorphismDepthGlyph(depth: depth)
 
-                    Text(MiL10n.text(titleKey))
-                        .font(.system(size: 15, weight: .bold, design: .rounded))
-                        .foregroundStyle(MiNeumorphismTokens.ink)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(MiL10n.text(titleKey))
+                            .font(.system(size: 15, weight: .bold, design: .rounded))
+                            .foregroundStyle(MiNeumorphismTokens.ink)
+                            .lineLimit(1)
+
+                        Text(depthMnemonic)
+                            .font(.system(size: 10, weight: .bold, design: .monospaced))
+                            .foregroundStyle(MiNeumorphismTokens.accentDeep)
+                            .tracking(0.4)
+                    }
+
+                    Spacer(minLength: 0)
                 }
 
                 Text(MiL10n.text(bodyKey))
-                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                    .font(.system(size: 12.5, weight: .medium, design: .rounded))
                     .foregroundStyle(MiNeumorphismTokens.quietText)
                     .lineSpacing(3)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
-        .frame(minHeight: 138)
+        .frame(minHeight: 144)
+    }
+
+    private var depthMnemonic: String {
+        switch depth {
+        case .raised: return "+ Z"
+        case .inset: return "− Z"
+        case .pressed: return "↓ Z"
+        }
     }
 }
 
@@ -509,26 +753,89 @@ private struct MiNeumorphismDepthGlyph: View {
 
     var body: some View {
         MiNeumorphismSoftSurface(
-            cornerRadius: 14,
-            depth: depth,
-            fill: depth == .pressed ? MiNeumorphismTokens.basePressed : MiNeumorphismTokens.base,
+            cornerRadius: 13,
+            depth: outerDepth,
+            fill: outerFill,
             contentPadding: 0
         ) {
-            Circle()
-                .fill(glyphFill)
-                .frame(width: 14, height: 14)
+            ZStack {
+                if depth == .inset {
+                    MiNeumorphismInsetOverlay(cornerRadius: 9)
+                        .frame(width: 22, height: 22)
+                }
+
+                RoundedRectangle(cornerRadius: 9, style: .continuous)
+                    .fill(coreFill)
+                    .frame(width: 22, height: 22)
+                    .modifier(MiNeumorphismDepthGlyphShadow(depth: depth))
+            }
         }
-        .frame(width: 34, height: 34)
+        .frame(width: 38, height: 38)
     }
 
-    private var glyphFill: Color {
+    private var outerDepth: MiNeumorphismSurfaceDepth {
+        depth == .pressed ? .pressed : .raised
+    }
+
+    private var outerFill: Color {
+        switch depth {
+        case .raised: return MiNeumorphismTokens.base
+        case .inset: return MiNeumorphismTokens.baseInset
+        case .pressed: return MiNeumorphismTokens.basePressed
+        }
+    }
+
+    private var coreFill: LinearGradient {
         switch depth {
         case .raised:
-            return MiNeumorphismTokens.focusAccent.opacity(0.54)
+            return LinearGradient(
+                colors: [MiNeumorphismTokens.focusAccent, MiNeumorphismTokens.accentDeep],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         case .inset:
-            return MiNeumorphismTokens.accentDeep.opacity(0.50)
+            return LinearGradient(
+                colors: [MiNeumorphismTokens.basePressed, MiNeumorphismTokens.baseInset],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
         case .pressed:
-            return MiNeumorphismTokens.shadowDark.opacity(0.42)
+            return LinearGradient(
+                colors: [MiNeumorphismTokens.muted.opacity(0.42), MiNeumorphismTokens.shadowDark.opacity(0.52)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
+    }
+}
+
+private struct MiNeumorphismDepthGlyphShadow: ViewModifier {
+    let depth: MiNeumorphismSurfaceDepth
+
+    func body(content: Content) -> some View {
+        switch depth {
+        case .raised:
+            content
+                .shadow(color: MiNeumorphismTokens.accentDeep.opacity(0.36), radius: 3, x: 1.5, y: 1.5)
+                .shadow(color: MiNeumorphismTokens.shadowLight.opacity(0.72), radius: 2, x: -1, y: -1)
+        case .inset:
+            content
+                .overlay {
+                    RoundedRectangle(cornerRadius: 9, style: .continuous)
+                        .stroke(MiNeumorphismTokens.shadowDark.opacity(0.36), lineWidth: 1)
+                        .blur(radius: 1.4)
+                        .offset(x: 1, y: 1)
+                        .mask {
+                            RoundedRectangle(cornerRadius: 9, style: .continuous)
+                        }
+                }
+        case .pressed:
+            content
+                .overlay {
+                    RoundedRectangle(cornerRadius: 9, style: .continuous)
+                        .stroke(MiNeumorphismTokens.shadowLight.opacity(0.78), lineWidth: 0.6)
+                        .offset(x: -0.5, y: -0.5)
+                }
         }
     }
 }
@@ -620,28 +927,37 @@ private struct MiNeumorphismDemoStateCard: View {
             contentPadding: 14
         ) {
             VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 10) {
-                    Image(systemName: symbolName)
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundStyle(accent)
-                        .frame(width: 34, height: 34)
-                        .background {
-                            Circle()
-                                .fill(accent.opacity(0.14))
-                        }
+                HStack(alignment: .center, spacing: 12) {
+                    MiNeumorphismSoftSurface(
+                        cornerRadius: 12,
+                        depth: .inset,
+                        fill: MiNeumorphismTokens.baseInset,
+                        contentPadding: 0
+                    ) {
+                        Image(systemName: symbolName)
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundStyle(accent)
+                            .frame(width: 34, height: 34)
+                    }
+                    .fixedSize()
 
                     Text(MiL10n.text(titleKey))
-                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                        .font(.system(size: 14.5, weight: .bold, design: .rounded))
                         .foregroundStyle(MiNeumorphismTokens.ink)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+
+                    Spacer(minLength: 0)
                 }
 
                 if isLoading {
                     MiNeumorphismSkeletonLines()
                 } else {
                     Text(MiL10n.text(bodyKey))
-                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .font(.system(size: 12.5, weight: .medium, design: .rounded))
                         .foregroundStyle(MiNeumorphismTokens.quietText)
                         .lineSpacing(3)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -714,22 +1030,30 @@ private struct MiNeumorphismListPanel: View {
 
     var body: some View {
         MiNeumorphismSoftSurface(cornerRadius: 22, contentPadding: 16) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text(MiL10n.text(titleKey))
-                    .font(.system(size: 15, weight: .bold, design: .rounded))
-                    .foregroundStyle(MiNeumorphismTokens.ink)
+            VStack(alignment: .leading, spacing: 14) {
+                HStack(spacing: 8) {
+                    RoundedRectangle(cornerRadius: 1.5, style: .continuous)
+                        .fill(MiNeumorphismTokens.focusAccent)
+                        .frame(width: 3, height: 14)
 
-                ForEach(items) { item in
-                    HStack(alignment: .top, spacing: 10) {
-                        Circle()
-                            .fill(MiNeumorphismTokens.focusAccent.opacity(0.74))
-                            .frame(width: 8, height: 8)
-                            .padding(.top, 6)
+                    Text(MiL10n.text(titleKey))
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                        .foregroundStyle(MiNeumorphismTokens.ink)
+                        .tracking(-0.1)
+                }
 
-                        Text(MiL10n.text(item.key))
-                            .font(.system(size: 14, weight: .medium, design: .rounded))
-                            .foregroundStyle(MiNeumorphismTokens.quietText)
-                            .lineSpacing(3)
+                VStack(alignment: .leading, spacing: 10) {
+                    ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+                        HStack(alignment: .top, spacing: 12) {
+                            MiNeumorphismListIndex(number: index + 1)
+
+                            Text(MiL10n.text(item.key))
+                                .font(.system(size: 13.5, weight: .medium, design: .rounded))
+                                .foregroundStyle(MiNeumorphismTokens.quietText)
+                                .lineSpacing(3)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.top, 4)
+                        }
                     }
                 }
             }
@@ -737,3 +1061,23 @@ private struct MiNeumorphismListPanel: View {
         }
     }
 }
+
+private struct MiNeumorphismListIndex: View {
+    let number: Int
+
+    var body: some View {
+        MiNeumorphismSoftSurface(
+            cornerRadius: 9,
+            depth: .inset,
+            fill: MiNeumorphismTokens.baseInset,
+            contentPadding: 0
+        ) {
+            Text("\(number)")
+                .font(.system(size: 11, weight: .bold, design: .monospaced))
+                .foregroundStyle(MiNeumorphismTokens.accentDeep)
+        }
+        .frame(width: 24, height: 24)
+        .fixedSize()
+    }
+}
+

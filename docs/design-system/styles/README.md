@@ -12,8 +12,10 @@ Examples:
 
 ```text
 docs/design-system/styles/apple-liquid-glass/Design.md
-docs/design-system/styles/acid-graphic/Design.md
+docs/design-system/styles/claymorphism/Design.md
 docs/design-system/styles/glassmorphism/Design.md
+docs/design-system/styles/minimalism/Design.md
+docs/design-system/styles/material-3/Design.md
 docs/design-system/styles/neo-brutalism/Design.md
 ```
 

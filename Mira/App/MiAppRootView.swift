@@ -18,9 +18,8 @@ struct MiAppRootView: View {
     var body: some View {
         ZStack {
             homeLayer
-                .opacity(homeOpacity)
-                .scaleEffect(homeScale)
-                .blur(radius: homeBlur)
+                .opacity(selectedStyle == nil ? 1 : 0)
+                .scaleEffect(selectedStyle == nil ? 1 : 0.96)
                 .allowsHitTesting(selectedStyle == nil)
 
             if let selectedStyle {
@@ -60,7 +59,13 @@ struct MiAppRootView: View {
             activeTitleTransitionStyleID: nil,
             transitionNamespace: dummyNamespace
         ) { style, _ in
-            if MiAppleLiquidGlassModule.canOpen(style) || MiNeumorphismModule.canOpen(style) || MiNeoBrutalismModule.canOpen(style) {
+            if MiAppleLiquidGlassModule.canOpen(style)
+                || MiGlassmorphismModule.canOpen(style)
+                || MiNeumorphismModule.canOpen(style)
+                || MiClaymorphismModule.canOpen(style)
+                || MiNeoBrutalismModule.canOpen(style)
+                || MiMinimalismModule.canOpen(style)
+                || MiMaterial3Module.canOpen(style) {
                 openDetail(for: style)
             } else {
                 unavailableStyle = style
@@ -83,12 +88,28 @@ struct MiAppRootView: View {
                 MiAppleLiquidGlassModule.detailView(for: style) {
                     closeDetail()
                 }
+            } else if MiGlassmorphismModule.canOpen(style) {
+                MiGlassmorphismModule.detailView(for: style) {
+                    closeDetail()
+                }
             } else if MiNeumorphismModule.canOpen(style) {
                 MiNeumorphismModule.detailView(for: style) {
                     closeDetail()
                 }
+            } else if MiClaymorphismModule.canOpen(style) {
+                MiClaymorphismModule.detailView(for: style) {
+                    closeDetail()
+                }
             } else if MiNeoBrutalismModule.canOpen(style) {
                 MiNeoBrutalismModule.detailView(for: style) {
+                    closeDetail()
+                }
+            } else if MiMinimalismModule.canOpen(style) {
+                MiMinimalismModule.detailView(for: style) {
+                    closeDetail()
+                }
+            } else if MiMaterial3Module.canOpen(style) {
+                MiMaterial3Module.detailView(for: style) {
                     closeDetail()
                 }
             } else {
@@ -102,26 +123,20 @@ struct MiAppRootView: View {
     }
 
     private var homeScale: CGFloat {
-        selectedStyle == nil ? 1 : 0.985
-    }
-
-    private var homeBlur: CGFloat {
-        guard !reduceMotion else { return 0 }
-        return selectedStyle == nil ? 0 : 4
+        selectedStyle == nil ? 1 : 0.96
     }
 
     private var detailTransition: AnyTransition {
         if reduceMotion {
             return .opacity
         }
-        return .asymmetric(
-            insertion: .opacity.combined(with: .scale(scale: 1.018)),
-            removal: .opacity.combined(with: .scale(scale: 1.012))
-        )
+        return .opacity.combined(with: .scale(scale: 1.02, anchor: .center))
     }
 
     private var dissolveAnimation: Animation {
-        reduceMotion ? .easeInOut(duration: 0.22) : .easeInOut(duration: 0.48)
+        reduceMotion
+            ? .easeInOut(duration: 0.20)
+            : .spring(response: 0.32, dampingFraction: 0.88, blendDuration: 0)
     }
 
     private func openDetail(for style: MiDesignStyle) {

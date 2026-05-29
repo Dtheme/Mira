@@ -11,6 +11,8 @@ enum MiStyleCategory: String, CaseIterable, Identifiable {
     case materialSurface = "cat_material"
     case experimentalVisual = "cat_experimental"
     case antiDesignStructural = "cat_antidesign"
+    case minimalSystematic = "cat_minimal"
+    case systemFramework = "cat_system"
 
     var id: String { rawValue }
 

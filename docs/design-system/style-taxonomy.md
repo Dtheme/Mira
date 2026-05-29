@@ -29,7 +29,7 @@ High-expression styles that rely on unusual color, typography, distortion, colla
 
 Typical styles:
 
-- Acid Graphic / 酸性美学
+- Acid Graphic / 酸性美学 (moved out of Mira's first implementation batch)
 - Y2K Futurism
 - Cyberpunk
 - Glitch
@@ -52,6 +52,16 @@ Typical styles:
 
 Use carefully in iOS: map effects to SwiftUI materials, shadows, overlays, and depth hierarchy without sacrificing contrast.
 
+### System Framework / 系统框架
+
+Styles or demos that translate an official platform framework into inspectable UI patterns.
+
+Typical styles:
+
+- Material 3 / Material You
+
+Use carefully in iOS: preserve the framework's real concepts, runtime boundaries, component semantics, and platform accessibility requirements instead of turning it into a purely visual skin.
+
 ### Anti-design & Structural / 反设计与结构表达
 
 Styles that expose layout structure, hard edges, intentional imbalance, raw typography, or visible interaction affordances.
@@ -72,7 +82,7 @@ Styles that emphasize restraint, hierarchy, spacing, and product utility.
 
 Typical styles:
 
-- Minimalism
+- Minimalism / 极简主义
 - Swiss International
 - Bento Grid
 - Calm Productivity
@@ -124,7 +134,9 @@ Each style may include tags from these dimensions:
 | Style | Primary Category | Expression | Accessibility Risk | Implementation Risk | Design.md |
 | --- | --- | --- | --- | --- | --- |
 | Apple Liquid Glass | Material & Surface | Expressive | Medium | Medium | `docs/design-system/styles/apple-liquid-glass/Design.md` |
-| Acid Graphic | Experimental Visual | Extreme | High | Medium | `docs/design-system/styles/acid-graphic/Design.md` |
 | Glassmorphism | Material & Surface | Balanced | Medium | Medium | `docs/design-system/styles/glassmorphism/Design.md` |
 | Neumorphism | Material & Surface | Balanced | Medium | Medium | `docs/design-system/styles/neumorphism/Design.md` |
+| Claymorphism | Material & Surface | Expressive | Medium | Medium | `docs/design-system/styles/claymorphism/Design.md` |
 | Neo-Brutalism | Anti-design & Structural | Expressive | Medium | Low | `docs/design-system/styles/neo-brutalism/Design.md` |
+| Minimalism | Minimal & Systematic | Quiet | Low | Low | `docs/design-system/styles/minimalism/Design.md` |
+| Material 3 | System Framework | Balanced | Low | Medium | `docs/design-system/styles/material-3/Design.md` |

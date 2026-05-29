@@ -76,7 +76,9 @@ The first batch is a backlog for authoring. Each style must receive a dedicated 
 | Style | 中文名 | Category | Required Design.md |
 | --- | --- | --- | --- |
 | Apple Liquid Glass | 苹果液态玻璃 | Material / Surface | `docs/design-system/styles/apple-liquid-glass/Design.md` |
-| Acid Graphic | 酸性美学 / 酸性图形 | Experimental Visual | `docs/design-system/styles/acid-graphic/Design.md` |
 | Glassmorphism | 玻璃拟物化设计 | Material / Surface | `docs/design-system/styles/glassmorphism/Design.md` |
 | Neumorphism | 新拟态 / Soft UI | Material / Surface | `docs/design-system/styles/neumorphism/Design.md` |
+| Claymorphism | 黏土形态 | Material / Surface | `docs/design-system/styles/claymorphism/Design.md` |
 | Neo-Brutalism | 新粗野主义 | Anti-design / Structural | `docs/design-system/styles/neo-brutalism/Design.md` |
+| Minimalism | 极简主义 | Minimal / Systematic | `docs/design-system/styles/minimalism/Design.md` |
+| Material 3 | Material You | System Framework | `docs/design-system/styles/material-3/Design.md` |
