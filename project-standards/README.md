@@ -34,5 +34,6 @@ Future app work should keep mapping design-system knowledge into product screens
 - Keep AI knowledge docs and app runtime code decoupled.
 - Prefer small, reviewable changes with explicit acceptance checks.
 - Do not add decorative visual effects unless they improve the selected design style and preserve usability.
+- Do not force every style detail page into the same page template; page composition, navigation chrome, scroll behavior, and section rhythm are part of the selected design style.
 - Treat accessibility, Dynamic Type, safe areas, and touch targets as baseline requirements.
 - Every implementation-ready style demo must satisfy `design-demo-standard.md`.

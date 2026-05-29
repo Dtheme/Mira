@@ -24,8 +24,8 @@ struct MiMaterial3DetailView: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: MiMaterial3Tokens.sectionSpacing) {
                     hero
-                    styleCard
                     roleFoundation
+                    styleCard
                     componentLab
                     inputNavigation
                     stateGuidance

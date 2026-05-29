@@ -13,6 +13,7 @@ enum MiStyleRepository {
         glassmorphism,
         neumorphism,
         claymorphism,
+        softSkeuomorphism,
         neoBrutalism,
         minimalism,
         material3
@@ -214,6 +215,34 @@ private extension MiStyleRepository {
         ],
         demoSlots: standardDemoSlots,
         isImplementationReady: MiClaymorphismModule.isImplemented
+    )
+
+    static let softSkeuomorphism = MiDesignStyle(
+        id: MiSoftSkeuomorphismModule.styleID,
+        name: "style_softsk",
+        localizedName: "style_softsk_native",
+        slug: "soft-skeuomorphism",
+        category: .materialSurface,
+        summary: "st_softsk_summary",
+        description: "st_softsk_desc",
+        designDocumentPath: MiSoftSkeuomorphismModule.designDocumentPath,
+        screenshotAssetName: nil,
+        accentHex: 0x88A58E,
+        visualTokens: [
+            MiTokenSpec(name: "mi-softsk-cream", value: "#F8EAD8", role: "softsk_token_cream"),
+            MiTokenSpec(name: "mi-softsk-surface", value: "#FFF7EA", role: "softsk_token_surface"),
+            MiTokenSpec(name: "mi-softsk-moss", value: "#88A58E", role: "softsk_token_moss"),
+            MiTokenSpec(name: "mi-softsk-teal", value: "#6EAFA7", role: "softsk_token_teal"),
+            MiTokenSpec(name: "mi-softsk-peach", value: "#F6B08A", role: "softsk_token_peach"),
+            MiTokenSpec(name: "mi-softsk-butter", value: "#F5D38B", role: "softsk_token_butter")
+        ],
+        sections: [
+            MiStyleDetailSection(title: "ds_identity", summary: "st_softsk_desc", bullets: ["softsk_prompt_1", "softsk_prompt_2", "softsk_prompt_3"]),
+            MiStyleDetailSection(title: "ds_components", summary: "softsk_components_body", bullets: ["softsk_selected_body", "softsk_empty_body", "softsk_error_body"]),
+            MiStyleDetailSection(title: "ds_acceptance", summary: "softsk_tokens_body", bullets: ["softsk_prompt_1", "softsk_prompt_2"])
+        ],
+        demoSlots: standardDemoSlots,
+        isImplementationReady: MiSoftSkeuomorphismModule.isImplemented
     )
 
     static let neoBrutalism = MiDesignStyle(

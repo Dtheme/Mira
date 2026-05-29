@@ -17,6 +17,7 @@ docs/design-system/styles/glassmorphism/Design.md
 docs/design-system/styles/minimalism/Design.md
 docs/design-system/styles/material-3/Design.md
 docs/design-system/styles/neo-brutalism/Design.md
+docs/design-system/styles/soft-skeuomorphism/Design.md
 ```
 
 Mira's own app shell style is `docs/design-system/styles/apple-liquid-glass/Design.md`.

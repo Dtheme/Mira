@@ -48,6 +48,7 @@ Typical styles:
 - Neumorphism
 - Skeuomorphism
 - Claymorphism
+- Soft Skeuomorphism / 柔和有机拟物
 - Liquid Metal
 
 Use carefully in iOS: map effects to SwiftUI materials, shadows, overlays, and depth hierarchy without sacrificing contrast.
@@ -137,6 +138,7 @@ Each style may include tags from these dimensions:
 | Glassmorphism | Material & Surface | Balanced | Medium | Medium | `docs/design-system/styles/glassmorphism/Design.md` |
 | Neumorphism | Material & Surface | Balanced | Medium | Medium | `docs/design-system/styles/neumorphism/Design.md` |
 | Claymorphism | Material & Surface | Expressive | Medium | Medium | `docs/design-system/styles/claymorphism/Design.md` |
+| Soft Skeuomorphism | Material & Surface | Balanced | Medium | Medium | `docs/design-system/styles/soft-skeuomorphism/Design.md` |
 | Neo-Brutalism | Anti-design & Structural | Expressive | Medium | Low | `docs/design-system/styles/neo-brutalism/Design.md` |
 | Minimalism | Minimal & Systematic | Quiet | Low | Low | `docs/design-system/styles/minimalism/Design.md` |
 | Material 3 | System Framework | Balanced | Low | Medium | `docs/design-system/styles/material-3/Design.md` |

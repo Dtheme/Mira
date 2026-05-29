@@ -63,6 +63,7 @@ struct MiAppRootView: View {
                 || MiGlassmorphismModule.canOpen(style)
                 || MiNeumorphismModule.canOpen(style)
                 || MiClaymorphismModule.canOpen(style)
+                || MiSoftSkeuomorphismModule.canOpen(style)
                 || MiNeoBrutalismModule.canOpen(style)
                 || MiMinimalismModule.canOpen(style)
                 || MiMaterial3Module.canOpen(style) {
@@ -98,6 +99,10 @@ struct MiAppRootView: View {
                 }
             } else if MiClaymorphismModule.canOpen(style) {
                 MiClaymorphismModule.detailView(for: style) {
+                    closeDetail()
+                }
+            } else if MiSoftSkeuomorphismModule.canOpen(style) {
+                MiSoftSkeuomorphismModule.detailView(for: style) {
                     closeDetail()
                 }
             } else if MiNeoBrutalismModule.canOpen(style) {

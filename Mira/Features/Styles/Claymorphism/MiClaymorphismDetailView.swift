@@ -26,8 +26,8 @@ struct MiClaymorphismDetailView: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: MiClaymorphismTokens.sectionSpacing) {
                     hero
-                    styleCard
                     surfaceSystem
+                    styleCard
                     componentLab
                     inputNavigation
                     states

@@ -89,6 +89,11 @@
         <td>Implemented</td>
         <td>Puffy matte pastel surfaces, soft 3D shadows, inset inputs, and springy press feedback.</td>
       </tr>
+      <tr>
+        <td><strong>Soft Skeuomorphism</strong></td>
+        <td>Implemented</td>
+        <td>Warm cream surfaces, organic lamp-like objects, moss and peach accents, soft gauges, and calm tactile controls.</td>
+      </tr>
     </tbody>
   </table>
 
@@ -104,7 +109,7 @@
   <ul>
     <li><strong>Target screen</strong>: subscription page, dashboard, search, onboarding, settings, etc.</li>
     <li><strong>User scenario</strong>: what the user is trying to do and what must stay clear.</li>
-    <li><strong>Selected style</strong>: Apple Liquid Glass, Glassmorphism, Neumorphism, Claymorphism, Neo-Brutalism, Minimalism, Material 3, or another future style.</li>
+    <li><strong>Selected style</strong>: Apple Liquid Glass, Glassmorphism, Neumorphism, Claymorphism, Soft Skeuomorphism, Neo-Brutalism, Minimalism, Material 3, or another future style.</li>
     <li><strong>Platform constraints</strong>: iOS / SwiftUI, Dynamic Type, VoiceOver, Reduced Motion, safe areas, and performance.</li>
   </ul>
 
@@ -202,6 +207,11 @@ Output: visual direction, tokens, layout rules, component guidance, SwiftUI note
         <td>已实现</td>
         <td>蓬松哑光粉彩表面、柔和 3D 阴影、凹槽输入和弹性按压反馈，已有独立详情页。</td>
       </tr>
+      <tr>
+        <td><strong>Soft Skeuomorphism / 柔和有机拟物</strong></td>
+        <td>已实现</td>
+        <td>暖奶油表面、有机灯具物件、苔绿色与蜜桃色强调、柔和仪表和安静触感控件，已有独立详情页。</td>
+      </tr>
     </tbody>
   </table>
 
@@ -217,7 +227,7 @@ Output: visual direction, tokens, layout rules, component guidance, SwiftUI note
   <ul>
     <li><strong>目标界面</strong>：订阅页、首页卡片、搜索页、设置页、引导页等。</li>
     <li><strong>用户场景</strong>：用户正在做什么，哪些内容必须清楚可见。</li>
-    <li><strong>选定风格</strong>：Apple Liquid Glass、玻璃拟物化、新拟态、黏土形态、新粗野主义、极简主义、Material 3，或后续新增风格。</li>
+    <li><strong>选定风格</strong>：Apple Liquid Glass、玻璃拟物化、新拟态、黏土形态、柔和有机拟物、新粗野主义、极简主义、Material 3，或后续新增风格。</li>
     <li><strong>平台约束</strong>：iOS / SwiftUI、动态字体、VoiceOver、减少动态效果、安全区和性能。</li>
   </ul>
 

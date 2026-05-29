@@ -35,10 +35,10 @@ struct MiNeumorphismDetailView: View {
                     MiNeumorphismHeroView(style: style)
                         .miStaggeredReveal(index: 0, isRevealed: isRevealed)
 
-                    styleCardSection
+                    surfaceStatesSection
                         .miStaggeredReveal(index: 1, isRevealed: isRevealed)
 
-                    surfaceStatesSection
+                    styleCardSection
                         .miStaggeredReveal(index: 2, isRevealed: isRevealed)
 
                     componentSection
@@ -1080,4 +1080,3 @@ private struct MiNeumorphismListIndex: View {
         .fixedSize()
     }
 }
-

@@ -35,7 +35,7 @@ struct MiMinimalismDetailView: View {
                 .padding(.horizontal, 22)
                 .padding(.top, 88)
                 .padding(.bottom, 50)
-                .frame(maxWidth: 780, alignment: .leading)
+                .frame(maxWidth: 720, alignment: .leading)
                 .frame(maxWidth: .infinity)
             }
             .scrollIndicators(.hidden)

@@ -54,6 +54,14 @@ struct MiStyleCardView: View {
                     cornerRadius: cornerRadius,
                     isDragging: isDragging
                 )
+            } else if style.id == MiSoftSkeuomorphismModule.styleID {
+                MiSoftSkeuomorphismHomePreview(
+                    style: style,
+                    focus: focus,
+                    cardSize: cardSize,
+                    cornerRadius: cornerRadius,
+                    isDragging: isDragging
+                )
             } else if style.id == MiGlassmorphismModule.styleID {
                 MiGlassmorphismHomePreview(
                     style: style,

@@ -26,6 +26,7 @@ For implemented style modules:
 - `docs/design-system/styles/glassmorphism/Design.md`
 - `docs/design-system/styles/neumorphism/Design.md`
 - `docs/design-system/styles/claymorphism/Design.md`
+- `docs/design-system/styles/soft-skeuomorphism/Design.md`
 - `docs/design-system/styles/neo-brutalism/Design.md`
 - `docs/design-system/styles/neo-brutalism/component-spec.md`
 - `docs/design-system/styles/minimalism/Design.md`
@@ -41,6 +42,7 @@ For implemented style modules:
 - Neo-Brutalism implementation uses `Mira/Features/Styles/NeoBrutalism/` and must not reuse the Apple Liquid Glass detail template.
 - Neumorphism / Soft UI uses `docs/design-system/styles/neumorphism/Design.md` and `Mira/Features/Styles/Neumorphism/`; translate web shadow recipes into iOS raised/inset surface states instead of copying CSS literally.
 - Claymorphism uses `docs/design-system/styles/claymorphism/Design.md` and `Mira/Features/Styles/Claymorphism/`; use matte pastel puffy surfaces, huge radii, dual outer shadows, masked inner shadows, inset inputs, and springy press feedback.
+- Soft Skeuomorphism uses `docs/design-system/styles/soft-skeuomorphism/Design.md` and `Mira/Features/Styles/SoftSkeuomorphism/`; use warm cream surfaces, organic product-object controls, moss/peach accents, soft gauges, and readable tactile depth.
 - Glassmorphism uses `docs/design-system/styles/glassmorphism/Design.md` and `Mira/Features/Styles/Glassmorphism/`; keep it distinct from Apple Liquid Glass by defining layer roles and readable opacity limits.
 - Minimalism uses `docs/design-system/styles/minimalism/Design.md` and `Mira/Features/Styles/Minimalism/`; use grid, typography, whitespace, and hairline rules instead of decoration.
 - Material 3 uses `docs/design-system/styles/material-3/Design.md` and `Mira/Features/Styles/Material3/`; adapt semantic color roles, tonal containers, shape scale, and state layers to iOS.

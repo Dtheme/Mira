@@ -31,6 +31,7 @@ For implemented style modules:
 - Glassmorphism: `docs/design-system/styles/glassmorphism/Design.md`
 - Neumorphism / Soft UI: `docs/design-system/styles/neumorphism/Design.md`
 - Claymorphism: `docs/design-system/styles/claymorphism/Design.md`
+- Soft Skeuomorphism: `docs/design-system/styles/soft-skeuomorphism/Design.md`
 - Neo-Brutalism: `docs/design-system/styles/neo-brutalism/Design.md`
 - Neo-Brutalism component spec: `docs/design-system/styles/neo-brutalism/component-spec.md`
 - Minimalism: `docs/design-system/styles/minimalism/Design.md`
@@ -57,6 +58,7 @@ When the user asks for a style direction, UI plan, or SwiftUI implementation:
 - For Neo-Brutalism implementation, follow `docs/design-system/styles/neo-brutalism/Design.md` and `docs/design-system/styles/neo-brutalism/component-spec.md`; do not reuse the Apple Liquid Glass detail template.
 - For Neumorphism implementation, follow `docs/design-system/styles/neumorphism/Design.md`; translate paired light/dark CSS shadows into accessible raised and inset SwiftUI surface states, and keep runtime code under `Mira/Features/Styles/Neumorphism/`.
 - For Claymorphism implementation, follow `docs/design-system/styles/claymorphism/Design.md`; use matte pastel puffy surfaces, large radii, dual outer shadows, masked inner shadows, inset inputs, and springy press feedback. Runtime code lives under `Mira/Features/Styles/Claymorphism/`.
+- For Soft Skeuomorphism implementation, follow `docs/design-system/styles/soft-skeuomorphism/Design.md`; use warm cream surfaces, organic product objects, moss/peach accents, soft gauges, tactile pills, and low-contrast but readable depth. Runtime code lives under `Mira/Features/Styles/SoftSkeuomorphism/`.
 - For Glassmorphism implementation, follow `docs/design-system/styles/glassmorphism/Design.md`; keep it distinct from Apple Liquid Glass by defining background, shell glass, content glass, overlay glass, and readable opacity boundaries. Runtime code lives under `Mira/Features/Styles/Glassmorphism/`.
 - For Minimalism implementation, follow `docs/design-system/styles/minimalism/Design.md`; use grid, type scale, whitespace, hairlines, and explicit states instead of decorative effects. Runtime code lives under `Mira/Features/Styles/Minimalism/`.
 - For Material 3 implementation, follow `docs/design-system/styles/material-3/Design.md`; define semantic color roles, tonal containers, shape scale, state layers, and iOS adaptation boundaries. Runtime code lives under `Mira/Features/Styles/Material3/`.
