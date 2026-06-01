@@ -141,6 +141,10 @@
 "glass_error_body" = "使用错误色和就近清晰文案。";
 "glass_selected" = "已选";
 "glass_selected_body" = "选中态加强色染、边框和标签字重。";
+"glass_retry" = "重试";
+"glass_recovered" = "已恢复";
+"glass_recovered_body" = "重试后亮起青色边缘回到清晰可读的玻璃面板。";
+"glass_layer_readable" = "重要文字放在最不透明的前景层。";
 "glass_tokens" = "Tokens";
 "glass_tokens_body" = "少量玻璃 token 保持模糊、色染、边框和可读性一致。";
 "glass_prompt" = "Prompt 指导";
@@ -202,6 +206,9 @@
 "min_loading_body" = "用安静线条预留空间。";
 "min_error" = "错误";
 "min_error_body" = "使用直接文案和明确恢复路径。";
+"min_retry" = "重试";
+"min_recovered" = "已恢复";
+"min_recovered_body" = "重试后回到就绪状态，仅用填充与文字确认。";
 "min_selected_body" = "选中态使用填充和对比，而不只靠颜色。";
 "min_tokens" = "Tokens";
 "min_tokens_body" = "调色保持很小：纸张、墨色、细线和一个强调色。";
@@ -307,6 +314,9 @@
 "m3_loading_body" = "使用色调骨架块预留空间。";
 "m3_error" = "错误";
 "m3_error_body" = "使用错误角色和就近直接文案。";
+"m3_retry" = "重试";
+"m3_recovered" = "已恢复";
+"m3_recovered_body" = "重试用 tonal 按钮触发 state layer，恢复后切换到容器填充与对勾。";
 "m3_selected" = "已选";
 "m3_selected_body" = "选中态使用容器填充、图标和标签字重。";
 "m3_tokens" = "Tokens";
@@ -389,6 +399,9 @@
 "clay_error_body" = "保持形态友好，同时明确说明问题。";
 "clay_selected" = "已选中";
 "clay_selected_body" = "选中态结合薄荷色填充、勾选图标和按下深度。";
+"clay_retry" = "重试";
+"clay_recovered" = "已恢复";
+"clay_recovered_body" = "重试后回到蓬松的就绪状态，弹性回弹给出柔软反馈。";
 "clay_token_prompt" = "Tokens 与 Prompt";
 "clay_token_prompt_body" = "将粉彩 token、阴影规则、按压行为和 AI Prompt 约束放在一起。";
 "clay_prompt_1" = "使用哑光粉彩表面、巨大圆角和蓬松几何。";
@@ -469,6 +482,9 @@
 "neu_state_loading_body" = "用柔和骨架线预留空间，避免内容跳动。";
 "neu_state_error" = "错误";
 "neu_state_error_body" = "使用低饱和红色强调，并提供可读的恢复说明。";
+"neu_retry" = "重试";
+"neu_recovered" = "已恢复";
+"neu_recovered_body" = "重试后凸起回到平静的就绪状态，文字与图标一并确认。";
 "neu_state_selected_body" = "选中态结合内凹深度、更强文字和强调色。";
 "neu_state_disabled_body" = "禁用控件降低对比，但不能消失。";
 "neu_tokens" = "Tokens";
@@ -671,6 +687,9 @@
 "algc_resolving" = "解析中";
 "algc_error" = "错误";
 "algc_contrast" = "对比度";
+"algc_retry" = "重试";
+"algc_recovered" = "已恢复";
+"algc_recovered_caption" = "已就绪";
 
 /* Neo-Brutalism detail */
 "nb_badge" = "设计系统 / 新粗野主义";
@@ -853,6 +872,9 @@
 "softsk_selected_body" = "苔绿填充、对勾图标和文字标签共同确认状态。";
 "softsk_disabled_state" = "禁用";
 "softsk_disabled_body" = "降低深度和透明度，但标签仍保持可读。";
+"softsk_retry" = "重试";
+"softsk_recovered" = "已恢复";
+"softsk_recovered_body" = "重试后亮起暖色光晕回到就绪状态，柔和缓动给出反馈。";
 "softsk_tokens_prompt" = "Tokens 与 Prompt";
 "softsk_tokens_body" = "要求 AI 输出奶油表面、有机物件控件、苔绿/蜜桃强调和可读的柔和深度。";
 "softsk_prompt_line" = "Prompt 指导";

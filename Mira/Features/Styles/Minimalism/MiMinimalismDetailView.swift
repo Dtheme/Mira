@@ -151,8 +151,8 @@ struct MiMinimalismDetailView: View {
         MiMinimalismSection(index: "05", titleKey: "min_states", bodyKey: "min_states_body") {
             LazyVGrid(columns: columns, spacing: 14) {
                 MiMinimalismStateCard(titleKey: "min_empty", bodyKey: "min_empty_body", symbol: "00")
-                MiMinimalismStateCard(titleKey: "min_loading", bodyKey: "min_loading_body", symbol: "--")
-                MiMinimalismStateCard(titleKey: "min_error", bodyKey: "min_error_body", symbol: "!")
+                MiMinimalismLoadingCard()
+                MiMinimalismErrorCard()
                 MiMinimalismStateCard(titleKey: "min_selected", bodyKey: "min_selected_body", symbol: "01")
             }
         }
@@ -447,6 +447,91 @@ private struct MiMinimalismDetailCard: View {
                     .foregroundStyle(MiMinimalismTokens.muted)
                     .lineSpacing(3)
                     .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+}
+
+/// Loading state as a crisp, structural indeterminate bar: an ink segment slides
+/// across a quiet track. No blur, gradient, or rounding. Reduce Motion stays static.
+private struct MiMinimalismLoadingCard: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var slide = false
+
+    var body: some View {
+        MiMinimalismPanel {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("--")
+                    .font(.system(size: 24, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(MiMinimalismTokens.ink)
+                Text(MiL10n.text("min_loading"))
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(MiMinimalismTokens.ink)
+
+                GeometryReader { geo in
+                    let width = geo.size.width
+                    Rectangle()
+                        .fill(MiMinimalismTokens.quiet)
+                        .overlay(alignment: .leading) {
+                            Rectangle()
+                                .fill(MiMinimalismTokens.ink)
+                                .frame(width: width * 0.34)
+                                .offset(x: reduceMotion ? 0 : (slide ? width * 0.66 : 0))
+                        }
+                        .clipShape(Rectangle())
+                        .overlay {
+                            Rectangle().stroke(MiMinimalismTokens.ink, lineWidth: 0.75)
+                        }
+                }
+                .frame(height: 8)
+
+                Text(MiL10n.text("min_loading_body"))
+                    .font(.system(size: 12.5, weight: .regular))
+                    .foregroundStyle(MiMinimalismTokens.muted)
+                    .lineSpacing(3)
+            }
+        }
+        .onAppear {
+            guard !reduceMotion else { return }
+            withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
+                slide = true
+            }
+        }
+    }
+}
+
+/// Error state with a minimal recovery action: a rectangular Retry button switches
+/// the card to a ready/recovered state using fill and text only.
+private struct MiMinimalismErrorCard: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var recovered = false
+
+    var body: some View {
+        MiMinimalismPanel {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(recovered ? "01" : "!")
+                    .font(.system(size: 24, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(recovered ? MiMinimalismTokens.ink : MiColorTokens.rose500)
+                Text(MiL10n.text(recovered ? "min_recovered" : "min_error"))
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(MiMinimalismTokens.ink)
+                Text(MiL10n.text(recovered ? "min_recovered_body" : "min_error_body"))
+                    .font(.system(size: 12.5, weight: .regular))
+                    .foregroundStyle(MiMinimalismTokens.muted)
+                    .lineSpacing(3)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Button {
+                    withAnimation(.easeOut(duration: reduceMotion ? 0.01 : 0.14)) {
+                        recovered.toggle()
+                    }
+                } label: {
+                    Text(MiL10n.text(recovered ? "min_recovered" : "min_retry"))
+                        .font(.system(size: 13, weight: .semibold))
+                        .frame(maxWidth: .infinity)
+                        .frame(minHeight: 44)
+                }
+                .buttonStyle(MiMinimalismButtonStyle(isPrimary: recovered, isDisabled: false))
             }
         }
     }

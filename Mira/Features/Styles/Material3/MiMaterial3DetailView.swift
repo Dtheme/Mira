@@ -214,8 +214,8 @@ struct MiMaterial3DetailView: View {
             VStack(spacing: 14) {
                 LazyVGrid(columns: columns, spacing: 14) {
                     MiMaterial3StateCard(titleKey: "m3_empty", bodyKey: "m3_empty_body", systemImage: "inbox")
-                    MiMaterial3StateCard(titleKey: "m3_loading", bodyKey: "m3_loading_body", systemImage: "hourglass", fill: MiMaterial3Tokens.primaryContainer)
-                    MiMaterial3StateCard(titleKey: "m3_error", bodyKey: "m3_error_body", systemImage: "exclamationmark.circle", fill: MiMaterial3Tokens.tertiaryContainer, iconColor: MiMaterial3Tokens.error)
+                    MiMaterial3LoadingCard()
+                    MiMaterial3ErrorCard()
                     MiMaterial3StateCard(titleKey: "m3_selected", bodyKey: "m3_selected_body", systemImage: "checkmark.circle.fill", fill: MiMaterial3Tokens.secondaryContainer)
                 }
 
@@ -856,6 +856,101 @@ private struct MiMaterial3GuidanceCard: View {
                     .foregroundStyle(MiMaterial3Tokens.muted)
                     .lineSpacing(2.5)
                     .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+}
+
+/// Material 3 indeterminate linear progress indicator: a track with a primary
+/// segment that slides back and forth. Reduce Motion shows a determinate segment.
+private struct MiMaterial3LinearProgress: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var slide = false
+
+    var body: some View {
+        GeometryReader { geo in
+            let width = geo.size.width
+            Capsule(style: .continuous)
+                .fill(MiMaterial3Tokens.surfaceContainerHighest)
+                .overlay(alignment: .leading) {
+                    Capsule(style: .continuous)
+                        .fill(MiMaterial3Tokens.primary)
+                        .frame(width: width * 0.4)
+                        .offset(x: reduceMotion ? 0 : (slide ? width * 0.6 : 0))
+                }
+                .clipShape(Capsule(style: .continuous))
+        }
+        .frame(height: 6)
+        .onAppear {
+            guard !reduceMotion else { return }
+            withAnimation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true)) {
+                slide = true
+            }
+        }
+    }
+}
+
+/// Loading state using the Material 3 linear progress indicator instead of a
+/// static icon.
+private struct MiMaterial3LoadingCard: View {
+    var body: some View {
+        MiMaterial3Panel(fill: MiMaterial3Tokens.primaryContainer, radius: 22) {
+            VStack(alignment: .leading, spacing: 12) {
+                Image(systemName: "hourglass")
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundStyle(MiMaterial3Tokens.primary)
+                Text(MiL10n.text("m3_loading"))
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                    .foregroundStyle(MiMaterial3Tokens.ink)
+
+                MiMaterial3LinearProgress()
+
+                Text(MiL10n.text("m3_loading_body"))
+                    .font(.system(size: 12.5, weight: .medium, design: .rounded))
+                    .foregroundStyle(MiMaterial3Tokens.muted)
+                    .lineSpacing(2.5)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+}
+
+/// Error state with an in-style recovery action. The retry button is a tonal
+/// Material 3 button, so its press fires the standard state-layer overlay; recovery
+/// switches the card from the error role to the secondary container role.
+private struct MiMaterial3ErrorCard: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var recovered = false
+
+    var body: some View {
+        MiMaterial3Panel(fill: recovered ? MiMaterial3Tokens.secondaryContainer : MiMaterial3Tokens.errorContainer, radius: 22) {
+            VStack(alignment: .leading, spacing: 12) {
+                Image(systemName: recovered ? "checkmark.circle.fill" : "exclamationmark.circle")
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundStyle(recovered ? MiMaterial3Tokens.primary : MiMaterial3Tokens.error)
+                Text(MiL10n.text(recovered ? "m3_recovered" : "m3_error"))
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                    .foregroundStyle(MiMaterial3Tokens.ink)
+                Text(MiL10n.text(recovered ? "m3_recovered_body" : "m3_error_body"))
+                    .font(.system(size: 12.5, weight: .medium, design: .rounded))
+                    .foregroundStyle(MiMaterial3Tokens.muted)
+                    .lineSpacing(2.5)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Button {
+                    withAnimation(reduceMotion ? .easeOut(duration: 0.01) : .spring(response: 0.3, dampingFraction: 0.86)) {
+                        recovered.toggle()
+                    }
+                } label: {
+                    Label(
+                        MiL10n.text(recovered ? "m3_recovered" : "m3_retry"),
+                        systemImage: recovered ? "checkmark" : "arrow.clockwise"
+                    )
+                    .font(.system(size: 12.5, weight: .bold, design: .rounded))
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: 44)
+                }
+                .buttonStyle(MiMaterial3ButtonStyle(role: recovered ? .filled : .tonal))
             }
         }
     }

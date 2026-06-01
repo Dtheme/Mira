@@ -172,7 +172,7 @@ struct MiNeumorphismDetailView: View {
             LazyVGrid(columns: adaptiveColumns, spacing: 16) {
                 MiNeumorphismDemoStateCard(titleKey: "neu_state_empty", bodyKey: "neu_state_empty_body", symbolName: "tray")
                 MiNeumorphismDemoStateCard(titleKey: "neu_state_loading", bodyKey: "neu_state_loading_body", symbolName: "clock", isLoading: true)
-                MiNeumorphismDemoStateCard(titleKey: "neu_state_error", bodyKey: "neu_state_error_body", symbolName: "exclamationmark.triangle", accent: MiNeumorphismTokens.error)
+                MiNeumorphismErrorStateCard()
                 MiNeumorphismDemoStateCard(titleKey: "neu_selected", bodyKey: "neu_state_selected_body", symbolName: "checkmark.circle", depth: .inset)
                 MiNeumorphismDemoStateCard(titleKey: "neu_disabled", bodyKey: "neu_state_disabled_body", symbolName: "slash.circle", isDisabled: true)
             }
@@ -967,16 +967,89 @@ private struct MiNeumorphismDemoStateCard: View {
     }
 }
 
+private struct MiNeumorphismErrorStateCard: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var recovered = false
+
+    var body: some View {
+        MiNeumorphismSoftSurface(
+            cornerRadius: 22,
+            depth: .raised,
+            fill: MiNeumorphismTokens.base,
+            contentPadding: 14
+        ) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(alignment: .center, spacing: 12) {
+                    MiNeumorphismSoftSurface(
+                        cornerRadius: 12,
+                        depth: .inset,
+                        fill: MiNeumorphismTokens.baseInset,
+                        contentPadding: 0
+                    ) {
+                        Image(systemName: recovered ? "checkmark.circle" : "exclamationmark.triangle")
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundStyle(recovered ? MiNeumorphismTokens.success : MiNeumorphismTokens.error)
+                            .frame(width: 34, height: 34)
+                    }
+                    .fixedSize()
+
+                    Text(MiL10n.text(recovered ? "neu_recovered" : "neu_state_error"))
+                        .font(.system(size: 14.5, weight: .bold, design: .rounded))
+                        .foregroundStyle(MiNeumorphismTokens.ink)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+
+                    Spacer(minLength: 0)
+                }
+
+                Text(MiL10n.text(recovered ? "neu_recovered_body" : "neu_state_error_body"))
+                    .font(.system(size: 12.5, weight: .medium, design: .rounded))
+                    .foregroundStyle(MiNeumorphismTokens.quietText)
+                    .lineSpacing(3)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Button {
+                    withAnimation(reduceMotion ? .easeOut(duration: 0.01) : .spring(response: 0.24, dampingFraction: 0.8)) {
+                        recovered.toggle()
+                    }
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: recovered ? "checkmark" : "arrow.clockwise")
+                            .font(.system(size: 13, weight: .bold))
+                        Text(MiL10n.text(recovered ? "neu_recovered" : "neu_retry"))
+                            .font(.system(size: 13, weight: .semibold, design: .rounded))
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(MiNeumorphismButtonStyle(role: recovered ? .primary : .secondary))
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(minHeight: 144)
+    }
+}
+
 private struct MiNeumorphismSkeletonLines: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var pulse = false
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             RoundedRectangle(cornerRadius: 5, style: .continuous)
                 .fill(MiNeumorphismTokens.muted.opacity(0.14))
                 .frame(height: 8)
+                .opacity(reduceMotion ? 1 : (pulse ? 0.5 : 1))
 
             RoundedRectangle(cornerRadius: 5, style: .continuous)
                 .fill(MiNeumorphismTokens.focusAccent.opacity(0.20))
                 .frame(width: 94, height: 8)
+                .opacity(reduceMotion ? 1 : (pulse ? 1 : 0.55))
+        }
+        .onAppear {
+            guard !reduceMotion else { return }
+            withAnimation(.easeInOut(duration: 0.95).repeatForever(autoreverses: true)) {
+                pulse = true
+            }
         }
     }
 }

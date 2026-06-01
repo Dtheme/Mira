@@ -78,10 +78,14 @@ struct MiGlassmorphismDetailView: View {
 
     private var surfaces: some View {
         MiGlassmorphismSection(titleKey: "glass_surface_lab", bodyKey: "glass_surface_body") {
-            LazyVGrid(columns: columns, spacing: 14) {
-                MiGlassmorphismSurfaceSample(titleKey: "glass_surface_shell", bodyKey: "glass_surface_shell_body", tint: MiGlassmorphismTokens.blue)
-                MiGlassmorphismSurfaceSample(titleKey: "glass_surface_content", bodyKey: "glass_surface_content_body", tint: MiGlassmorphismTokens.mint)
-                MiGlassmorphismSurfaceSample(titleKey: "glass_surface_overlay", bodyKey: "glass_surface_overlay_body", tint: MiGlassmorphismTokens.violet)
+            VStack(alignment: .leading, spacing: 16) {
+                MiGlassmorphismLayerStack()
+
+                LazyVGrid(columns: columns, spacing: 14) {
+                    MiGlassmorphismSurfaceSample(titleKey: "glass_surface_shell", bodyKey: "glass_surface_shell_body", tint: MiGlassmorphismTokens.blue)
+                    MiGlassmorphismSurfaceSample(titleKey: "glass_surface_content", bodyKey: "glass_surface_content_body", tint: MiGlassmorphismTokens.mint)
+                    MiGlassmorphismSurfaceSample(titleKey: "glass_surface_overlay", bodyKey: "glass_surface_overlay_body", tint: MiGlassmorphismTokens.violet)
+                }
             }
         }
     }
@@ -145,8 +149,8 @@ struct MiGlassmorphismDetailView: View {
         MiGlassmorphismSection(titleKey: "glass_states", bodyKey: "glass_states_body") {
             LazyVGrid(columns: columns, spacing: 14) {
                 MiGlassmorphismStateCard(titleKey: "glass_empty", bodyKey: "glass_empty_body", systemImage: "tray")
-                MiGlassmorphismStateCard(titleKey: "glass_loading", bodyKey: "glass_loading_body", systemImage: "clock", isLoading: true)
-                MiGlassmorphismStateCard(titleKey: "glass_error", bodyKey: "glass_error_body", systemImage: "exclamationmark.triangle", tint: MiColorTokens.rose500)
+                MiGlassmorphismLoadingCard()
+                MiGlassmorphismErrorCard()
                 MiGlassmorphismStateCard(titleKey: "glass_selected", bodyKey: "glass_selected_body", systemImage: "checkmark.circle", tint: MiGlassmorphismTokens.cyan)
             }
         }
@@ -501,6 +505,177 @@ private struct MiGlassmorphismGuidanceCard: View {
                     .foregroundStyle(MiGlassmorphismTokens.muted)
                     .lineSpacing(2.5)
                     .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+}
+
+/// A cascading depth demo that distinguishes Glassmorphism from Apple Liquid Glass:
+/// three frosted layers at increasing opacity (background → midground → foreground),
+/// with the most opaque foreground layer carrying readable text.
+private struct MiGlassmorphismLayerStack: View {
+    var body: some View {
+        ZStack(alignment: .top) {
+            MiGlassmorphismDepthLayer(roleKey: "glass_surface_overlay", depthLabel: "BG · 20%", fillOpacity: 0.20, tint: MiGlassmorphismTokens.violet, readable: false)
+                .padding(.horizontal, 34)
+                .zIndex(0)
+
+            MiGlassmorphismDepthLayer(roleKey: "glass_surface_shell", depthLabel: "MID · 44%", fillOpacity: 0.44, tint: MiGlassmorphismTokens.blue, readable: false)
+                .padding(.horizontal, 17)
+                .offset(y: 40)
+                .zIndex(1)
+
+            MiGlassmorphismDepthLayer(roleKey: "glass_surface_content", depthLabel: "FG · 76%", fillOpacity: 0.76, tint: MiGlassmorphismTokens.cyan, readable: true)
+                .offset(y: 84)
+                .zIndex(2)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 210)
+    }
+}
+
+private struct MiGlassmorphismDepthLayer: View {
+    let roleKey: String
+    let depthLabel: String
+    let fillOpacity: Double
+    let tint: Color
+    let readable: Bool
+
+    var body: some View {
+        let shape = RoundedRectangle(cornerRadius: 22, style: .continuous)
+
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
+                Text(MiL10n.text(roleKey))
+                    .font(.system(size: 12.5, weight: .bold, design: .rounded))
+                    .foregroundStyle(MiGlassmorphismTokens.ink)
+                    .lineLimit(1)
+
+                Spacer(minLength: 6)
+
+                Text(depthLabel)
+                    .font(.system(size: 10, weight: .black, design: .rounded))
+                    .foregroundStyle(MiGlassmorphismTokens.muted)
+                    .padding(.horizontal, 8)
+                    .frame(height: 21)
+                    .background {
+                        Capsule(style: .continuous)
+                            .fill(Color.white.opacity(0.62))
+                            .overlay {
+                                Capsule(style: .continuous)
+                                    .strokeBorder(Color.white.opacity(0.8), lineWidth: 1)
+                            }
+                    }
+            }
+
+            if readable {
+                Text(MiL10n.text("glass_layer_readable"))
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .foregroundStyle(MiGlassmorphismTokens.ink)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.85)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            shape
+                .fill(.ultraThinMaterial)
+                .overlay { shape.fill(Color.white.opacity(fillOpacity)) }
+                .overlay { shape.fill(tint.opacity(0.10)) }
+                .overlay {
+                    shape.strokeBorder(
+                        LinearGradient(
+                            colors: [Color.white.opacity(0.95), tint.opacity(0.5), Color.white.opacity(0.3)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1.1
+                    )
+                }
+        }
+        .shadow(color: MiGlassmorphismTokens.blue.opacity(0.16), radius: 16, x: 0, y: 10)
+    }
+}
+
+/// Loading state as a translucent frosted skeleton (Design.md: reserve space with
+/// translucent skeleton structure). Bars gently shimmer; Reduce Motion stays static.
+private struct MiGlassmorphismLoadingCard: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var shimmer = false
+
+    var body: some View {
+        MiGlassmorphismPanel(radius: 22, padding: 14) {
+            VStack(alignment: .leading, spacing: 10) {
+                Image(systemName: "hourglass")
+                    .font(.system(size: 22, weight: .bold))
+                    .foregroundStyle(MiGlassmorphismTokens.blue)
+                Text(MiL10n.text("glass_loading"))
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                    .foregroundStyle(MiGlassmorphismTokens.ink)
+
+                VStack(alignment: .leading, spacing: 7) {
+                    skeletonBar(width: nil)
+                    skeletonBar(width: 96)
+                }
+                .opacity(reduceMotion ? 1 : (shimmer ? 0.5 : 1))
+            }
+        }
+        .onAppear {
+            guard !reduceMotion else { return }
+            withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
+                shimmer = true
+            }
+        }
+    }
+
+    private func skeletonBar(width: CGFloat?) -> some View {
+        Capsule(style: .continuous)
+            .fill(Color.white.opacity(0.5))
+            .frame(width: width, height: 9)
+            .overlay {
+                Capsule(style: .continuous)
+                    .strokeBorder(Color.white.opacity(0.7), lineWidth: 0.7)
+            }
+    }
+}
+
+/// Error state with an in-style recovery action: a glass retry pill lights the cyan
+/// edge back to a clear, readable panel.
+private struct MiGlassmorphismErrorCard: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var recovered = false
+
+    var body: some View {
+        MiGlassmorphismPanel(radius: 22, padding: 14) {
+            VStack(alignment: .leading, spacing: 10) {
+                Image(systemName: recovered ? "checkmark.circle" : "exclamationmark.triangle")
+                    .font(.system(size: 22, weight: .bold))
+                    .foregroundStyle(recovered ? MiGlassmorphismTokens.cyan : MiColorTokens.rose500)
+                Text(MiL10n.text(recovered ? "glass_recovered" : "glass_error"))
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                    .foregroundStyle(MiGlassmorphismTokens.ink)
+                Text(MiL10n.text(recovered ? "glass_recovered_body" : "glass_error_body"))
+                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                    .foregroundStyle(MiGlassmorphismTokens.muted)
+                    .lineSpacing(2)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Button {
+                    withAnimation(reduceMotion ? .easeOut(duration: 0.01) : .spring(response: 0.3, dampingFraction: 0.8)) {
+                        recovered.toggle()
+                    }
+                } label: {
+                    Label(
+                        MiL10n.text(recovered ? "glass_recovered" : "glass_retry"),
+                        systemImage: recovered ? "checkmark" : "arrow.clockwise"
+                    )
+                    .font(.system(size: 12.5, weight: .bold, design: .rounded))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 38)
+                }
+                .buttonStyle(MiGlassSegmentButtonStyle(isSelected: recovered))
             }
         }
     }

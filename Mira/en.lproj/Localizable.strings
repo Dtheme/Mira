@@ -141,6 +141,10 @@
 "glass_error_body" = "Use error color plus direct nearby copy.";
 "glass_selected" = "Selected";
 "glass_selected_body" = "Selection strengthens tint, border, and label weight.";
+"glass_retry" = "Retry";
+"glass_recovered" = "Recovered";
+"glass_recovered_body" = "Retry lights the cyan edge back to a clear, readable glass panel.";
+"glass_layer_readable" = "Put important text on the most opaque foreground layer.";
 "glass_tokens" = "Tokens";
 "glass_tokens_body" = "A small glass token set keeps blur, tint, border, and readability consistent.";
 "glass_prompt" = "Prompt guidance";
@@ -202,6 +206,9 @@
 "min_loading_body" = "Reserve space with quiet lines.";
 "min_error" = "Error";
 "min_error_body" = "Use direct copy and a clear recovery path.";
+"min_retry" = "Retry";
+"min_recovered" = "Recovered";
+"min_recovered_body" = "Back to a ready state, confirmed with fill and text only.";
 "min_selected_body" = "Selected state uses fill and contrast, not color alone.";
 "min_tokens" = "Tokens";
 "min_tokens_body" = "The palette stays small: paper, ink, hairline, and one accent.";
@@ -307,6 +314,9 @@
 "m3_loading_body" = "Reserve space with tonal skeleton blocks.";
 "m3_error" = "Error";
 "m3_error_body" = "Use error role plus direct local copy.";
+"m3_retry" = "Retry";
+"m3_recovered" = "Recovered";
+"m3_recovered_body" = "Retry fires the tonal state layer, then recovery switches to a container fill and check.";
 "m3_selected" = "Selected";
 "m3_selected_body" = "Selection uses container fill, icon, and label weight.";
 "m3_tokens" = "Tokens";
@@ -389,6 +399,9 @@
 "clay_error_body" = "Keep the shape friendly while making the problem explicit.";
 "clay_selected" = "Selected";
 "clay_selected_body" = "Selected state combines mint fill, check icon, and pressed depth.";
+"clay_retry" = "Retry";
+"clay_recovered" = "Recovered";
+"clay_recovered_body" = "Retry springs the card back to a puffy ready state with a soft jelly rebound.";
 "clay_token_prompt" = "Tokens and prompt";
 "clay_token_prompt_body" = "Keep pastel tokens, shadow rules, press behavior, and AI prompt constraints together.";
 "clay_prompt_1" = "Use matte pastel surfaces, very large radius, and puffy geometry.";
@@ -469,6 +482,9 @@
 "neu_state_loading_body" = "Reserve space with soft skeleton lines instead of jumping content.";
 "neu_state_error" = "Error";
 "neu_state_error_body" = "Use a muted red accent plus readable recovery text.";
+"neu_retry" = "Retry";
+"neu_recovered" = "Recovered";
+"neu_recovered_body" = "Retry lifts the surface back to a calm ready state, confirmed by text and icon.";
 "neu_state_selected_body" = "Selection combines inset depth with stronger text and accent.";
 "neu_state_disabled_body" = "Disabled controls reduce contrast without disappearing.";
 "neu_tokens" = "Tokens";
@@ -671,6 +687,9 @@
 "algc_resolving" = "Resolving";
 "algc_error" = "Error";
 "algc_contrast" = "Contrast";
+"algc_retry" = "Retry";
+"algc_recovered" = "Recovered";
+"algc_recovered_caption" = "Ready";
 
 /* Neo-Brutalism detail */
 "nb_badge" = "Design System / Neo-Brutalism";
@@ -853,6 +872,9 @@
 "softsk_selected_body" = "Moss fill, check icon, and text label confirm the state.";
 "softsk_disabled_state" = "Disabled";
 "softsk_disabled_body" = "Lower depth and opacity, but keep labels readable.";
+"softsk_retry" = "Retry";
+"softsk_recovered" = "Recovered";
+"softsk_recovered_body" = "Retry warms the glow back to a ready state with a calm ease.";
 "softsk_tokens_prompt" = "Tokens & prompt";
 "softsk_tokens_body" = "Ask AI for cream surfaces, organic object controls, moss/peach accents, and readable soft depth.";
 "softsk_prompt_line" = "Prompt guidance";

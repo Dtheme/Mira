@@ -760,37 +760,161 @@ private struct MiAppleLiquidGlassInspectorRow: View {
 private struct MiAppleLiquidGlassStateShowcase: View {
     let accent: Color
 
-    private let states: [(String, String, String, Color)] = [
-        ("algc_empty", "doc.text.magnifyingglass", "algc_no_match", MiColorTokens.contentMuted),
-        ("algc_loading", "arrow.triangle.2.circlepath", "algc_resolving", MiColorTokens.appleBlue500),
-        ("c_selected", "checkmark.seal.fill", "c_ready", MiColorTokens.lime400),
-        ("algc_error", "exclamationmark.triangle.fill", "algc_contrast", MiColorTokens.rose500)
-    ]
+    private let columns = [GridItem(.adaptive(minimum: 124), spacing: MiSpacingTokens.sm)]
 
     var body: some View {
         MiAppleLiquidGlassSubsection(title: "algc_feedback_states", systemImage: "checkmark.seal", accent: accent) {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 124), spacing: MiSpacingTokens.sm)], spacing: MiSpacingTokens.sm) {
-                ForEach(states, id: \.0) { state in
-                    VStack(alignment: .leading, spacing: MiSpacingTokens.xs) {
-                        Image(systemName: state.1)
-                            .font(.system(size: 15, weight: .semibold))
-                            .foregroundStyle(state.3)
+            LazyVGrid(columns: columns, spacing: MiSpacingTokens.sm) {
+                MiAppleLiquidGlassSimpleStateTile(
+                    titleKey: "algc_empty",
+                    captionKey: "algc_no_match",
+                    systemImage: "doc.text.magnifyingglass",
+                    tint: MiColorTokens.contentMuted
+                )
 
-                        Text(MiL10n.text(state.0))
-                            .font(.system(size: 13, weight: .semibold, design: .rounded))
-                            .foregroundStyle(MiColorTokens.contentPrimary)
+                MiAppleLiquidGlassLoadingStateTile()
 
-                        Text(MiL10n.text(state.2))
-                            .font(.system(size: 11, weight: .medium, design: .rounded))
-                            .foregroundStyle(MiColorTokens.contentSecondary)
-                    }
-                    .padding(MiSpacingTokens.sm)
-                    .frame(maxWidth: .infinity, minHeight: 88, alignment: .topLeading)
-                    .background {
-                        MiAppleLiquidGlassStaticSurface(cornerRadius: 18, accent: state.3.opacity(0.08))
-                    }
-                }
+                MiAppleLiquidGlassSimpleStateTile(
+                    titleKey: "c_selected",
+                    captionKey: "c_ready",
+                    systemImage: "checkmark.seal.fill",
+                    tint: MiColorTokens.lime400
+                )
+
+                MiAppleLiquidGlassErrorStateTile(accent: accent)
             }
+        }
+    }
+}
+
+private struct MiAppleLiquidGlassSimpleStateTile: View {
+    let titleKey: String
+    let captionKey: String
+    let systemImage: String
+    let tint: Color
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: MiSpacingTokens.xs) {
+            Image(systemName: systemImage)
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(tint)
+
+            Text(MiL10n.text(titleKey))
+                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .foregroundStyle(MiColorTokens.contentPrimary)
+
+            Text(MiL10n.text(captionKey))
+                .font(.system(size: 11, weight: .medium, design: .rounded))
+                .foregroundStyle(MiColorTokens.contentSecondary)
+        }
+        .padding(MiSpacingTokens.sm)
+        .frame(maxWidth: .infinity, minHeight: 88, alignment: .topLeading)
+        .background {
+            MiAppleLiquidGlassStaticSurface(cornerRadius: 18, accent: tint.opacity(0.08))
+        }
+    }
+}
+
+/// Loading state as a progressive skeleton reveal (Design.md: skeleton or
+/// progressive reveal for cards). Reduce Motion shows a steady skeleton.
+private struct MiAppleLiquidGlassLoadingStateTile: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var shimmer = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: MiSpacingTokens.xs) {
+            Image(systemName: "arrow.triangle.2.circlepath")
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(MiColorTokens.appleBlue500)
+
+            Text(MiL10n.text("algc_loading"))
+                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .foregroundStyle(MiColorTokens.contentPrimary)
+
+            VStack(alignment: .leading, spacing: 5) {
+                skeletonBar(width: nil)
+                skeletonBar(width: 52)
+            }
+            .opacity(reduceMotion ? 1 : (shimmer ? 0.45 : 1))
+        }
+        .padding(MiSpacingTokens.sm)
+        .frame(maxWidth: .infinity, minHeight: 88, alignment: .topLeading)
+        .background {
+            MiAppleLiquidGlassStaticSurface(cornerRadius: 18, accent: MiColorTokens.appleBlue500.opacity(0.08))
+        }
+        .onAppear {
+            guard !reduceMotion else { return }
+            withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
+                shimmer = true
+            }
+        }
+    }
+
+    private func skeletonBar(width: CGFloat?) -> some View {
+        Capsule(style: .continuous)
+            .fill(Color.white.opacity(0.62))
+            .frame(width: width, height: 8)
+            .overlay {
+                Capsule(style: .continuous)
+                    .strokeBorder(Color.white.opacity(0.7), lineWidth: 0.6)
+            }
+    }
+}
+
+/// Error state with a glass primary recovery action (Design.md: quiet surface
+/// plus a glass primary action). The retry button reuses the glass button chrome.
+private struct MiAppleLiquidGlassErrorStateTile: View {
+    let accent: Color
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var recovered = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: MiSpacingTokens.xs) {
+            Image(systemName: recovered ? "checkmark.seal.fill" : "exclamationmark.triangle.fill")
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(recovered ? MiColorTokens.lime400 : MiColorTokens.rose500)
+
+            Text(MiL10n.text(recovered ? "algc_recovered" : "algc_error"))
+                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .foregroundStyle(MiColorTokens.contentPrimary)
+
+            Text(MiL10n.text(recovered ? "algc_recovered_caption" : "algc_contrast"))
+                .font(.system(size: 11, weight: .medium, design: .rounded))
+                .foregroundStyle(MiColorTokens.contentSecondary)
+
+            Button {
+                withAnimation(reduceMotion ? .easeOut(duration: 0.01) : .easeOut(duration: 0.22)) {
+                    recovered.toggle()
+                }
+            } label: {
+                HStack(spacing: 5) {
+                    Image(systemName: recovered ? "checkmark" : "arrow.clockwise")
+                        .font(.system(size: 11, weight: .semibold))
+                    Text(MiL10n.text(recovered ? "algc_recovered" : "algc_retry"))
+                        .font(.system(size: 11.5, weight: .semibold, design: .rounded))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                }
+                .foregroundStyle(MiColorTokens.obsidian950)
+                .frame(maxWidth: .infinity)
+                .frame(height: 44)
+                .modifier(
+                    MiAppleLiquidGlassButtonChrome(
+                        variant: .primary,
+                        accent: accent,
+                        fill: accent,
+                        stroke: Color.white.opacity(0.72)
+                    )
+                )
+            }
+            .buttonStyle(MiAppleLiquidGlassPressButtonStyle(isEnabled: true))
+            .padding(.top, 2)
+        }
+        .padding(MiSpacingTokens.sm)
+        .frame(maxWidth: .infinity, minHeight: 88, alignment: .topLeading)
+        .background {
+            MiAppleLiquidGlassStaticSurface(cornerRadius: 18, accent: (recovered ? MiColorTokens.lime400 : MiColorTokens.rose500).opacity(0.08))
         }
     }
 }

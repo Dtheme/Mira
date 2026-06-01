@@ -638,7 +638,14 @@ private struct MiNeoBrutalismStatesSection: View {
         ) {
             LazyVGrid(columns: columns, spacing: 14) {
                 ForEach(MiNeoBrutalismDemoContent.states) { state in
-                    MiNeoBrutalismStateCard(title: state.title, detail: state.detail, systemImage: state.systemImage, fill: state.fill)
+                    switch state.title {
+                    case "algc_loading":
+                        MiNeoBrutalismLoadingStateCard()
+                    case "algc_error":
+                        MiNeoBrutalismErrorStateCard()
+                    default:
+                        MiNeoBrutalismStateCard(title: state.title, detail: state.detail, systemImage: state.systemImage, fill: state.fill)
+                    }
                 }
             }
         }
@@ -682,6 +689,101 @@ private struct MiNeoBrutalismPromptSection: View {
                         ForEach(MiNeoBrutalismDemoContent.acceptance, id: \.self) { item in
                             MiNeoBrutalismBulletRow(text: item, fill: MiNeoBrutalismTokens.green)
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+private struct MiNeoBrutalismStateIcon: View {
+    let systemImage: String
+
+    var body: some View {
+        Image(systemName: systemImage)
+            .font(.system(size: 18, weight: .black))
+            .foregroundStyle(MiNeoBrutalismTokens.ink)
+            .frame(width: 38, height: 38)
+            .background { Circle().fill(MiNeoBrutalismTokens.surface) }
+            .overlay { Circle().strokeBorder(MiNeoBrutalismTokens.ink, lineWidth: MiNeoBrutalismTokens.thinLineWidth) }
+    }
+}
+
+/// Loading state as a chunky block bar (Design.md: chunky blocks or simple progress,
+/// never soft shimmer). A solid blue block slides inside a hard-bordered track.
+private struct MiNeoBrutalismLoadingStateCard: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var slide = false
+
+    var body: some View {
+        MiNeoBrutalismCard(fill: MiNeoBrutalismTokens.blueSoft, radius: MiNeoBrutalismTokens.radiusSM, shadow: MiNeoBrutalismTokens.shadowSmall, padding: 12) {
+            VStack(alignment: .leading, spacing: 10) {
+                MiNeoBrutalismStateIcon(systemImage: "arrow.triangle.2.circlepath")
+
+                Text(MiL10n.text("algc_loading"))
+                    .font(MiNeoBrutalismTokens.label)
+                    .foregroundStyle(MiNeoBrutalismTokens.ink)
+
+                GeometryReader { geo in
+                    let width = geo.size.width
+                    let shape = RoundedRectangle(cornerRadius: 4, style: .continuous)
+                    shape
+                        .fill(MiNeoBrutalismTokens.surface)
+                        .overlay(alignment: .leading) {
+                            Rectangle()
+                                .fill(MiNeoBrutalismTokens.blue)
+                                .frame(width: width * 0.4)
+                                .offset(x: reduceMotion ? 0 : (slide ? width * 0.6 : 0))
+                        }
+                        .clipShape(shape)
+                        .overlay {
+                            shape.strokeBorder(MiNeoBrutalismTokens.ink, lineWidth: MiNeoBrutalismTokens.thinLineWidth)
+                        }
+                }
+                .frame(height: 18)
+
+                Text(MiL10n.text("nbd_chunky_blocks_soft"))
+                    .font(.system(size: 12, weight: .bold, design: .default))
+                    .foregroundStyle(MiNeoBrutalismTokens.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .onAppear {
+            guard !reduceMotion else { return }
+            withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) {
+                slide = true
+            }
+        }
+    }
+}
+
+/// Error state with a hard recovery action: a Retry button (offset + shadow collapse)
+/// flips the card to a recovered/complete state. Reduce Motion keeps state, drops travel.
+private struct MiNeoBrutalismErrorStateCard: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var recovered = false
+
+    var body: some View {
+        MiNeoBrutalismCard(fill: recovered ? MiNeoBrutalismTokens.greenSoft : Color(hex: 0xFFE0E0), radius: MiNeoBrutalismTokens.radiusSM, shadow: MiNeoBrutalismTokens.shadowSmall, padding: 12) {
+            VStack(alignment: .leading, spacing: 10) {
+                MiNeoBrutalismStateIcon(systemImage: recovered ? "checkmark.seal.fill" : "exclamationmark.triangle.fill")
+
+                Text(MiL10n.text(recovered ? "nbd_complete" : "algc_error"))
+                    .font(MiNeoBrutalismTokens.label)
+                    .foregroundStyle(MiNeoBrutalismTokens.ink)
+
+                Text(MiL10n.text(recovered ? "nbd_green_status_short" : "nbd_red_fill_explicit"))
+                    .font(.system(size: 12, weight: .bold, design: .default))
+                    .foregroundStyle(MiNeoBrutalismTokens.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                MiNeoBrutalismButton(
+                    recovered ? "algc_recovered" : "algc_retry",
+                    systemImage: recovered ? "checkmark" : "arrow.clockwise",
+                    variant: recovered ? .primary : .destructive
+                ) {
+                    withAnimation(reduceMotion ? .easeOut(duration: 0.01) : MiNeoBrutalismTokens.motion) {
+                        recovered.toggle()
                     }
                 }
             }

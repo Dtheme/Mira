@@ -133,15 +133,18 @@ struct MiNeumorphismInsetOverlay: View {
     let cornerRadius: CGFloat
 
     var body: some View {
+        // Canonical inset: dark inner shadow on the TOP-LEFT inner edge, light inner
+        // highlight on the BOTTOM-RIGHT — the inverse of a raised surface, so the
+        // shape reads as carved/concave (matches the CSS inset box-shadow recipe).
         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
             .stroke(MiNeumorphismTokens.shadowDark.opacity(0.50), lineWidth: 2.5)
             .blur(radius: 5)
-            .offset(x: 4.5, y: 4.5)
+            .offset(x: -4.5, y: -4.5)
             .mask {
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                     .fill(
                         LinearGradient(
-                            colors: [.clear, .black.opacity(0.88)],
+                            colors: [.black.opacity(0.88), .clear],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
@@ -151,12 +154,12 @@ struct MiNeumorphismInsetOverlay: View {
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                     .stroke(MiNeumorphismTokens.shadowLight.opacity(0.96), lineWidth: 2.5)
                     .blur(radius: 5)
-                    .offset(x: -4.5, y: -4.5)
+                    .offset(x: 4.5, y: 4.5)
                     .mask {
                         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                             .fill(
                                 LinearGradient(
-                                    colors: [.black.opacity(0.88), .clear],
+                                    colors: [.clear, .black.opacity(0.88)],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 )
