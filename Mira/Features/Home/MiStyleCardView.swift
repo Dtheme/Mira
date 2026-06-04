@@ -86,6 +86,30 @@ struct MiStyleCardView: View {
                     cornerRadius: cornerRadius,
                     isDragging: isDragging
                 )
+            } else if style.id == MiBentoGridModule.styleID {
+                MiBentoGridHomePreview(
+                    style: style,
+                    focus: focus,
+                    cardSize: cardSize,
+                    cornerRadius: cornerRadius,
+                    isDragging: isDragging
+                )
+            } else if style.id == MiRefinedDarkModule.styleID {
+                MiRefinedDarkHomePreview(
+                    style: style,
+                    focus: focus,
+                    cardSize: cardSize,
+                    cornerRadius: cornerRadius,
+                    isDragging: isDragging
+                )
+            } else if style.id == MiEditorialLuxeModule.styleID {
+                MiEditorialLuxeHomePreview(
+                    style: style,
+                    focus: focus,
+                    cardSize: cardSize,
+                    cornerRadius: cornerRadius,
+                    isDragging: isDragging
+                )
             } else {
                 standardCard
             }

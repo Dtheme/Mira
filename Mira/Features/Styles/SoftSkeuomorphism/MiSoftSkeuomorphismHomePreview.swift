@@ -59,7 +59,7 @@ struct MiSoftSkeuomorphismHomePreview: View {
 
                 Spacer(minLength: 0)
 
-                MiSoftSkeuomorphismLampObject(isBlooming: isPressed, scale: cardSize.width < 185 ? 0.78 : 0.86)
+                MiSoftSkeuomorphismLampObject(isBlooming: isPressed, scale: cardSize.width < 185 ? 0.78 : 0.86, isDragging: isDragging)
                     .frame(maxWidth: .infinity)
                     .frame(height: 92)
 
@@ -117,6 +117,7 @@ struct MiSoftSkeuomorphismHomePreview: View {
 struct MiSoftSkeuomorphismLampObject: View {
     let isBlooming: Bool
     let scale: CGFloat
+    var isDragging: Bool = false
 
     var body: some View {
         ZStack {
@@ -151,11 +152,14 @@ struct MiSoftSkeuomorphismLampObject: View {
                     )
                     .frame(width: 112, height: 66)
                     .overlay(alignment: .bottom) {
-                        Capsule(style: .continuous)
-                            .fill(MiSoftSkeuomorphismTokens.glow.opacity(isBlooming ? 0.56 : 0.26))
-                            .frame(width: 84, height: 10)
-                            .blur(radius: 5)
-                            .offset(y: -2)
+                        // Blurred shade glow — skip while panning (blur re-rasterizes per frame).
+                        if !isDragging {
+                            Capsule(style: .continuous)
+                                .fill(MiSoftSkeuomorphismTokens.glow.opacity(isBlooming ? 0.56 : 0.26))
+                                .frame(width: 84, height: 10)
+                                .blur(radius: 5)
+                                .offset(y: -2)
+                        }
                     }
                     .shadow(color: MiSoftSkeuomorphismTokens.warmShadow.opacity(isBlooming ? 0.30 : 0.18), radius: 12, x: 0, y: 8)
 
@@ -173,11 +177,14 @@ struct MiSoftSkeuomorphismLampObject: View {
                     )
                     .frame(width: 52, height: 66)
                     .overlay(alignment: .topLeading) {
-                        Capsule(style: .continuous)
-                            .fill(MiSoftSkeuomorphismTokens.highlight.opacity(0.42))
-                            .frame(width: 16, height: 38)
-                            .blur(radius: 3)
-                            .offset(x: 9, y: 7)
+                        // Blurred specular highlight — skip while panning.
+                        if !isDragging {
+                            Capsule(style: .continuous)
+                                .fill(MiSoftSkeuomorphismTokens.highlight.opacity(0.42))
+                                .frame(width: 16, height: 38)
+                                .blur(radius: 3)
+                                .offset(x: 9, y: 7)
+                        }
                     }
                     .shadow(color: MiSoftSkeuomorphismTokens.shadow.opacity(0.28), radius: 10, x: 0, y: 8)
             }

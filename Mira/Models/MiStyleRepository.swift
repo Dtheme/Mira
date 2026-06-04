@@ -16,7 +16,10 @@ enum MiStyleRepository {
         softSkeuomorphism,
         neoBrutalism,
         minimalism,
-        material3
+        material3,
+        bentoGrid,
+        refinedDark,
+        editorialLuxe
     ]
 
     static func style(id: String) -> MiDesignStyle? {
@@ -376,6 +379,87 @@ private extension MiStyleRepository {
         ],
         demoSlots: standardDemoSlots,
         isImplementationReady: MiMaterial3Module.isImplemented
+    )
+
+    static let bentoGrid = MiDesignStyle(
+        id: MiBentoGridModule.styleID,
+        name: "style_bento",
+        localizedName: "style_bento_native",
+        slug: "bento-grid",
+        category: .minimalSystematic,
+        summary: "st_bento_summary",
+        description: "st_bento_desc",
+        designDocumentPath: MiBentoGridModule.designDocumentPath,
+        screenshotAssetName: nil,
+        accentHex: 0x5B6CFF,
+        visualTokens: [
+            MiTokenSpec(name: "mi-bento-canvas", value: "#EEF0F4", role: "bento_token_canvas"),
+            MiTokenSpec(name: "mi-bento-surface", value: "#FFFFFF", role: "bento_token_surface"),
+            MiTokenSpec(name: "mi-bento-ink", value: "#1A1D24", role: "bento_token_ink"),
+            MiTokenSpec(name: "mi-bento-accent", value: "#5B6CFF", role: "bento_token_accent"),
+            MiTokenSpec(name: "mi-bento-accent-2", value: "#15C39A", role: "bento_token_accent2")
+        ],
+        sections: [
+            MiStyleDetailSection(title: "ds_identity", summary: "st_bento_desc", bullets: ["bento_prompt_1", "bento_prompt_2", "bento_prompt_3"]),
+            MiStyleDetailSection(title: "ds_components", summary: "bento_components_body", bullets: ["bento_mosaic_body", "bento_states_body"]),
+            MiStyleDetailSection(title: "ds_acceptance", summary: "bento_prompt_body", bullets: ["bento_check_1", "bento_check_2"])
+        ],
+        demoSlots: standardDemoSlots,
+        isImplementationReady: MiBentoGridModule.isImplemented
+    )
+
+    static let refinedDark = MiDesignStyle(
+        id: MiRefinedDarkModule.styleID,
+        name: "style_rd",
+        localizedName: "style_rd_native",
+        slug: "refined-dark",
+        category: .minimalSystematic,
+        summary: "st_rd_summary",
+        description: "st_rd_desc",
+        designDocumentPath: MiRefinedDarkModule.designDocumentPath,
+        screenshotAssetName: nil,
+        accentHex: 0x7C8CFF,
+        visualTokens: [
+            MiTokenSpec(name: "mi-rd-base", value: "#0E0E11", role: "rd_token_base"),
+            MiTokenSpec(name: "mi-rd-surface", value: "#161619", role: "rd_token_surface"),
+            MiTokenSpec(name: "mi-rd-ink", value: "#F4F4F7", role: "rd_token_ink"),
+            MiTokenSpec(name: "mi-rd-accent", value: "#7C8CFF", role: "rd_token_accent"),
+            MiTokenSpec(name: "mi-rd-hairline", value: "white 8%", role: "rd_token_hairline")
+        ],
+        sections: [
+            MiStyleDetailSection(title: "ds_identity", summary: "st_rd_desc", bullets: ["rd_prompt_1", "rd_prompt_2", "rd_prompt_3"]),
+            MiStyleDetailSection(title: "ds_components", summary: "rd_components_body", bullets: ["rd_surfaces_body", "rd_states_body"]),
+            MiStyleDetailSection(title: "ds_acceptance", summary: "rd_prompt_body", bullets: ["rd_check_1", "rd_check_2"])
+        ],
+        demoSlots: standardDemoSlots,
+        isImplementationReady: MiRefinedDarkModule.isImplemented
+    )
+
+    static let editorialLuxe = MiDesignStyle(
+        id: MiEditorialLuxeModule.styleID,
+        name: "style_ed",
+        localizedName: "style_ed_native",
+        slug: "editorial-luxe",
+        category: .minimalSystematic,
+        summary: "st_ed_summary",
+        description: "st_ed_desc",
+        designDocumentPath: MiEditorialLuxeModule.designDocumentPath,
+        screenshotAssetName: nil,
+        accentHex: 0xAD8A52,
+        visualTokens: [
+            MiTokenSpec(name: "mi-ed-paper", value: "#F6F1E9", role: "ed_token_paper"),
+            MiTokenSpec(name: "mi-ed-ink", value: "#211C16", role: "ed_token_ink"),
+            MiTokenSpec(name: "mi-ed-gold", value: "#AD8A52", role: "ed_token_gold"),
+            MiTokenSpec(name: "mi-ed-muted", value: "#756B5E", role: "ed_token_muted"),
+            MiTokenSpec(name: "mi-ed-hairline", value: "#E5DDCF", role: "ed_token_hairline")
+        ],
+        sections: [
+            MiStyleDetailSection(title: "ds_identity", summary: "st_ed_desc", bullets: ["ed_prompt_1", "ed_prompt_2", "ed_prompt_3"]),
+            MiStyleDetailSection(title: "ds_components", summary: "ed_components_body", bullets: ["ed_surfaces_body", "ed_states_body"]),
+            MiStyleDetailSection(title: "ds_acceptance", summary: "ed_prompt_body", bullets: ["ed_check_1", "ed_check_2"])
+        ],
+        demoSlots: standardDemoSlots,
+        isImplementationReady: MiEditorialLuxeModule.isImplemented
     )
 
     static let standardDemoSlots: [MiDemoSlot] = [

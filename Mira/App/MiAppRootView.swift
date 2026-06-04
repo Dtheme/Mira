@@ -66,7 +66,10 @@ struct MiAppRootView: View {
                 || MiSoftSkeuomorphismModule.canOpen(style)
                 || MiNeoBrutalismModule.canOpen(style)
                 || MiMinimalismModule.canOpen(style)
-                || MiMaterial3Module.canOpen(style) {
+                || MiMaterial3Module.canOpen(style)
+                || MiBentoGridModule.canOpen(style)
+                || MiRefinedDarkModule.canOpen(style)
+                || MiEditorialLuxeModule.canOpen(style) {
                 openDetail(for: style)
             } else {
                 unavailableStyle = style
@@ -115,6 +118,18 @@ struct MiAppRootView: View {
                 }
             } else if MiMaterial3Module.canOpen(style) {
                 MiMaterial3Module.detailView(for: style) {
+                    closeDetail()
+                }
+            } else if MiBentoGridModule.canOpen(style) {
+                MiBentoGridModule.detailView(for: style) {
+                    closeDetail()
+                }
+            } else if MiRefinedDarkModule.canOpen(style) {
+                MiRefinedDarkModule.detailView(for: style) {
+                    closeDetail()
+                }
+            } else if MiEditorialLuxeModule.canOpen(style) {
+                MiEditorialLuxeModule.detailView(for: style) {
                     closeDetail()
                 }
             } else {

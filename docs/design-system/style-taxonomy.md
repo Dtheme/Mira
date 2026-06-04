@@ -142,3 +142,6 @@ Each style may include tags from these dimensions:
 | Neo-Brutalism | Anti-design & Structural | Expressive | Medium | Low | `docs/design-system/styles/neo-brutalism/Design.md` |
 | Minimalism | Minimal & Systematic | Quiet | Low | Low | `docs/design-system/styles/minimalism/Design.md` |
 | Material 3 | System Framework | Balanced | Low | Medium | `docs/design-system/styles/material-3/Design.md` |
+| Bento Grid | Minimal & Systematic | Balanced | Low | Low | `docs/design-system/styles/bento-grid/Design.md` |
+| Refined Dark | Minimal & Systematic | Balanced | Medium | Medium | `docs/design-system/styles/refined-dark/Design.md` |
+| Editorial Luxe | Minimal & Systematic | Balanced | Medium | Low | `docs/design-system/styles/editorial-luxe/Design.md` |

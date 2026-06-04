@@ -83,3 +83,6 @@ The first batch is a backlog for authoring. Each style must receive a dedicated 
 | Neo-Brutalism | 新粗野主义 | Anti-design / Structural | `docs/design-system/styles/neo-brutalism/Design.md` |
 | Minimalism | 极简主义 | Minimal / Systematic | `docs/design-system/styles/minimalism/Design.md` |
 | Material 3 | Material You | System Framework | `docs/design-system/styles/material-3/Design.md` |
+| Bento Grid | 便当网格 | Minimal / Systematic | `docs/design-system/styles/bento-grid/Design.md` |
+| Refined Dark | 精致暗色 | Minimal / Systematic | `docs/design-system/styles/refined-dark/Design.md` |
+| Editorial Luxe | 轻奢编辑 | Minimal / Systematic | `docs/design-system/styles/editorial-luxe/Design.md` |

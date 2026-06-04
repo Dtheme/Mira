@@ -36,6 +36,9 @@ For implemented style modules:
 - Neo-Brutalism component spec: `docs/design-system/styles/neo-brutalism/component-spec.md`
 - Minimalism: `docs/design-system/styles/minimalism/Design.md`
 - Material 3: `docs/design-system/styles/material-3/Design.md`
+- Bento Grid: `docs/design-system/styles/bento-grid/Design.md`
+- Refined Dark: `docs/design-system/styles/refined-dark/Design.md`
+- Editorial Luxe: `docs/design-system/styles/editorial-luxe/Design.md`
 
 ## Core Workflow
 
@@ -62,6 +65,9 @@ When the user asks for a style direction, UI plan, or SwiftUI implementation:
 - For Glassmorphism implementation, follow `docs/design-system/styles/glassmorphism/Design.md`; keep it distinct from Apple Liquid Glass by defining background, shell glass, content glass, overlay glass, and readable opacity boundaries. Runtime code lives under `Mira/Features/Styles/Glassmorphism/`.
 - For Minimalism implementation, follow `docs/design-system/styles/minimalism/Design.md`; use grid, type scale, whitespace, hairlines, and explicit states instead of decorative effects. Runtime code lives under `Mira/Features/Styles/Minimalism/`.
 - For Material 3 implementation, follow `docs/design-system/styles/material-3/Design.md`; define semantic color roles, tonal containers, shape scale, state layers, and iOS adaptation boundaries. Runtime code lives under `Mira/Features/Styles/Material3/`.
+- For Bento Grid implementation, follow `docs/design-system/styles/bento-grid/Design.md`; build a modular mosaic with spanning cells (`Grid` + `gridCellColumns`), one hero tile, consistent radius and gutters, neutral elevated surfaces, and hierarchy from cell size — not decoration. Runtime code lives under `Mira/Features/Styles/BentoGrid/`.
+- For Refined Dark implementation, follow `docs/design-system/styles/refined-dark/Design.md`; a precise dark product UI (Linear-style) with a deep base, 1 pt hairline borders, subtle gradients, one restrained indigo accent with a soft glow, crisp type, and fast micro-motion. Separation comes from contrast and borders, not heavy shadows. Runtime code lives under `Mira/Features/Styles/RefinedDark/`.
+- For Editorial Luxe implementation, follow `docs/design-system/styles/editorial-luxe/Design.md`; elegant magazine-style luxury with serif headlines (`design: .serif`), ivory paper, generous whitespace, thin gold/ink hairline rules, large imagery, and one restrained gold accent. Elegance comes from type and space, not effects; keep gold an accent and body text high-contrast. Runtime code lives under `Mira/Features/Styles/EditorialLuxe/`.
 - Do not duplicate full design style content inside this skill.
 - Do not treat web CSS effects as direct iOS implementation instructions.
 - Do not reduce a style to one visual trick, such as "blur equals glass" or "thick border equals brutalism".

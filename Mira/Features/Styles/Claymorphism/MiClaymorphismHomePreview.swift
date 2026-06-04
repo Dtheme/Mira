@@ -58,7 +58,7 @@ struct MiClaymorphismHomePreview: View {
 
                 Spacer(minLength: 0)
 
-                MiClaymorphismPuffyButtonPreview(isPressed: isPressed, compact: cardSize.width < 185)
+                MiClaymorphismPuffyButtonPreview(isPressed: isPressed, compact: cardSize.width < 185, isDragging: isDragging)
                     .frame(maxWidth: .infinity, alignment: .center)
 
                 HStack(spacing: 7) {
@@ -157,10 +157,13 @@ private struct MiClaymorphismHomeBadge: View {
 private struct MiClaymorphismPuffyButtonPreview: View {
     let isPressed: Bool
     let compact: Bool
+    let isDragging: Bool
+
+    private var radius: CGFloat { compact ? 24 : 30 }
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: compact ? 24 : 30, style: .continuous)
+            RoundedRectangle(cornerRadius: radius, style: .continuous)
                 .fill(
                     LinearGradient(
                         colors: [
@@ -175,26 +178,36 @@ private struct MiClaymorphismPuffyButtonPreview: View {
                 .frame(width: compact ? 116 : 132, height: compact ? 64 : 72)
                 .shadow(color: MiClaymorphismTokens.shadowLight.opacity(isPressed ? 0.24 : 0.88), radius: isPressed ? 5 : 14, x: isPressed ? -2 : -8, y: isPressed ? -2 : -8)
                 .shadow(color: MiClaymorphismTokens.shadowDark.opacity(isPressed ? 0.22 : 0.56), radius: isPressed ? 6 : 18, x: isPressed ? 4 : 10, y: isPressed ? 5 : 14)
-                .overlay {
-                    RoundedRectangle(cornerRadius: compact ? 24 : 30, style: .continuous)
-                        .stroke(Color.white.opacity(isPressed ? 0.16 : 0.46), lineWidth: 5)
-                        .blur(radius: 4)
-                        .offset(x: -3, y: -4)
-                        .mask(RoundedRectangle(cornerRadius: compact ? 24 : 30, style: .continuous))
-                }
-                .overlay {
-                    RoundedRectangle(cornerRadius: compact ? 24 : 30, style: .continuous)
-                        .stroke(MiClaymorphismTokens.shadowDark.opacity(isPressed ? 0.24 : 0.12), lineWidth: 4)
-                        .blur(radius: 5)
-                        .offset(x: 4, y: 5)
-                        .mask(RoundedRectangle(cornerRadius: compact ? 24 : 30, style: .continuous))
-                }
+                .overlay { puffyInnerShadow }
 
             Image(systemName: isPressed ? "hand.tap.fill" : "sparkles")
                 .font(.system(size: compact ? 20 : 23, weight: .black))
                 .foregroundStyle(MiClaymorphismTokens.ink.opacity(0.86))
         }
         .scaleEffect(isPressed ? 0.96 : 1)
+    }
+
+    // Dual masked inner shadows make the clay look puffy, but blur+mask is GPU heavy.
+    // Skip it while the home canvas is panning — the gradient + outer shadows still
+    // read as a clay button, and the blur is imperceptible during motion.
+    @ViewBuilder
+    private var puffyInnerShadow: some View {
+        if !isDragging {
+            let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
+            ZStack {
+                shape
+                    .stroke(Color.white.opacity(isPressed ? 0.16 : 0.46), lineWidth: 5)
+                    .blur(radius: 4)
+                    .offset(x: -3, y: -4)
+                    .mask(shape)
+
+                shape
+                    .stroke(MiClaymorphismTokens.shadowDark.opacity(isPressed ? 0.24 : 0.12), lineWidth: 4)
+                    .blur(radius: 5)
+                    .offset(x: 4, y: 5)
+                    .mask(shape)
+            }
+        }
     }
 }
 

@@ -94,6 +94,21 @@
         <td>Implemented</td>
         <td>Warm cream surfaces, organic lamp-like objects, moss and peach accents, soft gauges, and calm tactile controls.</td>
       </tr>
+      <tr>
+        <td><strong>Bento Grid</strong></td>
+        <td>Implemented</td>
+        <td>Modular mosaic of varied-size rounded cells with one hero tile, consistent gutters, spanning Grid layout, and per-cell states.</td>
+      </tr>
+      <tr>
+        <td><strong>Refined Dark</strong></td>
+        <td>Implemented</td>
+        <td>A precise dark product UI (Linear-style): deep base, hairline borders, subtle gradients, one restrained indigo accent with soft glow, and a status-control signature.</td>
+      </tr>
+      <tr>
+        <td><strong>Editorial Luxe</strong></td>
+        <td>Implemented</td>
+        <td>Elegant magazine-style luxury: serif headlines, ivory paper, generous whitespace, thin gold rules, a feature-story signature, and refined states.</td>
+      </tr>
     </tbody>
   </table>
 
@@ -109,7 +124,7 @@
   <ul>
     <li><strong>Target screen</strong>: subscription page, dashboard, search, onboarding, settings, etc.</li>
     <li><strong>User scenario</strong>: what the user is trying to do and what must stay clear.</li>
-    <li><strong>Selected style</strong>: Apple Liquid Glass, Glassmorphism, Neumorphism, Claymorphism, Soft Skeuomorphism, Neo-Brutalism, Minimalism, Material 3, or another future style.</li>
+    <li><strong>Selected style</strong>: Apple Liquid Glass, Glassmorphism, Neumorphism, Claymorphism, Soft Skeuomorphism, Neo-Brutalism, Minimalism, Material 3, Bento Grid, Refined Dark, Editorial Luxe, or another future style.</li>
     <li><strong>Platform constraints</strong>: iOS / SwiftUI, Dynamic Type, VoiceOver, Reduced Motion, safe areas, and performance.</li>
   </ul>
 
@@ -212,6 +227,21 @@ Output: visual direction, tokens, layout rules, component guidance, SwiftUI note
         <td>已实现</td>
         <td>暖奶油表面、有机灯具物件、苔绿色与蜜桃色强调、柔和仪表和安静触感控件，已有独立详情页。</td>
       </tr>
+      <tr>
+        <td><strong>Bento Grid / 便当网格</strong></td>
+        <td>已实现</td>
+        <td>不同尺寸圆角模块拼成马赛克、一个 hero 大格、统一间距、跨度 Grid 布局和逐格状态，已有独立详情页。</td>
+      </tr>
+      <tr>
+        <td><strong>Refined Dark / 精致暗色</strong></td>
+        <td>已实现</td>
+        <td>精密的暗色产品界面（Linear 风）：深色基底、极细边框、微妙渐变、一个克制靛蓝强调与柔和发光，以及状态控件签名交互，已有独立详情页。</td>
+      </tr>
+      <tr>
+        <td><strong>Editorial Luxe / 轻奢编辑</strong></td>
+        <td>已实现</td>
+        <td>优雅的杂志式轻奢：衬线大标题、象牙纸面、充裕留白、纤细金线、特稿签名交互和精致状态，已有独立详情页。</td>
+      </tr>
     </tbody>
   </table>
 
@@ -227,7 +257,7 @@ Output: visual direction, tokens, layout rules, component guidance, SwiftUI note
   <ul>
     <li><strong>目标界面</strong>：订阅页、首页卡片、搜索页、设置页、引导页等。</li>
     <li><strong>用户场景</strong>：用户正在做什么，哪些内容必须清楚可见。</li>
-    <li><strong>选定风格</strong>：Apple Liquid Glass、玻璃拟物化、新拟态、黏土形态、柔和有机拟物、新粗野主义、极简主义、Material 3，或后续新增风格。</li>
+    <li><strong>选定风格</strong>：Apple Liquid Glass、玻璃拟物化、新拟态、黏土形态、柔和有机拟物、新粗野主义、极简主义、Material 3、便当网格、精致暗色（Refined Dark）、轻奢编辑（Editorial Luxe），或后续新增风格。</li>
     <li><strong>平台约束</strong>：iOS / SwiftUI、动态字体、VoiceOver、减少动态效果、安全区和性能。</li>
   </ul>
 

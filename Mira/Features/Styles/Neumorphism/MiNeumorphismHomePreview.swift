@@ -49,7 +49,7 @@ struct MiNeumorphismHomePreview: View {
 
                 Spacer(minLength: 0)
 
-                MiNeumorphismInsetInputPreview(shadowScale: shadowScale)
+                MiNeumorphismInsetInputPreview(shadowScale: shadowScale, isDragging: isDragging)
 
                 MiNeumorphismControlStrip(shadowScale: shadowScale, isPressed: isPressed)
             }
@@ -197,6 +197,7 @@ private struct MiNeumorphismBadge: View {
 
 private struct MiNeumorphismInsetInputPreview: View {
     let shadowScale: CGFloat
+    let isDragging: Bool
 
     var body: some View {
         RoundedRectangle(cornerRadius: MiNeumorphismTokens.smallRadius, style: .continuous)
@@ -222,38 +223,49 @@ private struct MiNeumorphismInsetInputPreview: View {
                 }
                 .padding(.horizontal, 15)
             }
-            .overlay {
-                RoundedRectangle(cornerRadius: MiNeumorphismTokens.smallRadius, style: .continuous)
+            .overlay { insetCarving }
+    }
+
+    // Inner-shadow carving uses blur + mask (GPU heavy). Render it only at rest;
+    // while the constellation is panning, drop it for a cheap flat inset stroke so
+    // many simultaneously-visible cards never re-rasterize blur per frame.
+    @ViewBuilder
+    private var insetCarving: some View {
+        let shape = RoundedRectangle(cornerRadius: MiNeumorphismTokens.smallRadius, style: .continuous)
+
+        if isDragging {
+            shape.strokeBorder(MiNeumorphismTokens.shadowDark.opacity(0.16), lineWidth: 1.5)
+        } else {
+            ZStack {
+                shape
                     .stroke(MiNeumorphismTokens.shadowDark.opacity(0.50), lineWidth: 2)
                     .blur(radius: 3)
                     .offset(x: 3, y: 3)
                     .mask {
-                        RoundedRectangle(cornerRadius: MiNeumorphismTokens.smallRadius, style: .continuous)
-                            .fill(
-                                LinearGradient(
-                                    colors: [.clear, .black.opacity(0.84)],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
+                        shape.fill(
+                            LinearGradient(
+                                colors: [.clear, .black.opacity(0.84)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
                             )
+                        )
                     }
-            }
-            .overlay {
-                RoundedRectangle(cornerRadius: MiNeumorphismTokens.smallRadius, style: .continuous)
+
+                shape
                     .stroke(MiNeumorphismTokens.shadowLight.opacity(0.92), lineWidth: 2)
                     .blur(radius: 3)
                     .offset(x: -3, y: -3)
                     .mask {
-                        RoundedRectangle(cornerRadius: MiNeumorphismTokens.smallRadius, style: .continuous)
-                            .fill(
-                                LinearGradient(
-                                    colors: [.black.opacity(0.86), .clear],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
+                        shape.fill(
+                            LinearGradient(
+                                colors: [.black.opacity(0.86), .clear],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
                             )
+                        )
                     }
             }
+        }
     }
 }
 
