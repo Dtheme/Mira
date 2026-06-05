@@ -110,6 +110,14 @@ struct MiStyleCardView: View {
                     cornerRadius: cornerRadius,
                     isDragging: isDragging
                 )
+            } else if style.id == MiHanddrawnVlogModule.styleID {
+                MiHanddrawnVlogHomePreview(
+                    style: style,
+                    focus: focus,
+                    cardSize: cardSize,
+                    cornerRadius: cornerRadius,
+                    isDragging: isDragging
+                )
             } else {
                 standardCard
             }

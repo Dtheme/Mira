@@ -19,7 +19,8 @@ enum MiStyleRepository {
         material3,
         bentoGrid,
         refinedDark,
-        editorialLuxe
+        editorialLuxe,
+        handdrawnVlog
     ]
 
     static func style(id: String) -> MiDesignStyle? {
@@ -460,6 +461,33 @@ private extension MiStyleRepository {
         ],
         demoSlots: standardDemoSlots,
         isImplementationReady: MiEditorialLuxeModule.isImplemented
+    )
+
+    static let handdrawnVlog = MiDesignStyle(
+        id: MiHanddrawnVlogModule.styleID,
+        name: "style_hv",
+        localizedName: "style_hv_native",
+        slug: "handdrawn-vlog",
+        category: .culturalEditorial,
+        summary: "st_hv_summary",
+        description: "st_hv_desc",
+        designDocumentPath: MiHanddrawnVlogModule.designDocumentPath,
+        screenshotAssetName: nil,
+        accentHex: 0xE0A79C,
+        visualTokens: [
+            MiTokenSpec(name: "mi-hv-cream", value: "#F6EFE1", role: "hv_token_cream"),
+            MiTokenSpec(name: "mi-hv-ink", value: "#4B4138", role: "hv_token_ink"),
+            MiTokenSpec(name: "mi-hv-rose", value: "#E0A79C", role: "hv_token_rose"),
+            MiTokenSpec(name: "mi-hv-butter", value: "#EAD6A0", role: "hv_token_butter"),
+            MiTokenSpec(name: "mi-hv-matcha", value: "#A9B795", role: "hv_token_matcha")
+        ],
+        sections: [
+            MiStyleDetailSection(title: "ds_identity", summary: "st_hv_desc", bullets: ["hv_prompt_1", "hv_prompt_2", "hv_prompt_3"]),
+            MiStyleDetailSection(title: "ds_components", summary: "hv_components_body", bullets: ["hv_surfaces_body", "hv_states_body"]),
+            MiStyleDetailSection(title: "ds_acceptance", summary: "hv_prompt_body", bullets: ["hv_check_1", "hv_check_2"])
+        ],
+        demoSlots: standardDemoSlots,
+        isImplementationReady: MiHanddrawnVlogModule.isImplemented
     )
 
     static let standardDemoSlots: [MiDemoSlot] = [

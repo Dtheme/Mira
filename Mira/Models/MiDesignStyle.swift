@@ -13,6 +13,7 @@ enum MiStyleCategory: String, CaseIterable, Identifiable {
     case antiDesignStructural = "cat_antidesign"
     case minimalSystematic = "cat_minimal"
     case systemFramework = "cat_system"
+    case culturalEditorial = "cat_cultural"
 
     var id: String { rawValue }
 

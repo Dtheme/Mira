@@ -34,6 +34,7 @@ For implemented style modules:
 - `docs/design-system/styles/bento-grid/Design.md`
 - `docs/design-system/styles/refined-dark/Design.md`
 - `docs/design-system/styles/editorial-luxe/Design.md`
+- `docs/design-system/styles/handdrawn-vlog/Design.md`
 
 ## Rules
 
@@ -52,6 +53,7 @@ For implemented style modules:
 - Bento Grid uses `docs/design-system/styles/bento-grid/Design.md` and `Mira/Features/Styles/BentoGrid/`; build a modular mosaic with spanning cells (`Grid` + `gridCellColumns`), one hero tile, consistent radius/gutters, and hierarchy from cell size, not decoration.
 - Refined Dark uses `docs/design-system/styles/refined-dark/Design.md` and `Mira/Features/Styles/RefinedDark/`; a precise dark product UI (Linear-style) — deep base, 1pt hairline borders, subtle gradients, one restrained indigo accent with soft glow, crisp type, and fast micro-motion; separation from contrast/borders, not heavy shadows.
 - Editorial Luxe uses `docs/design-system/styles/editorial-luxe/Design.md` and `Mira/Features/Styles/EditorialLuxe/`; elegant magazine luxury — serif (`design: .serif`) headlines, ivory paper, generous whitespace, thin gold/ink hairline rules, large imagery, and one restrained gold accent; elegance from type and space, not effects.
+- Hand-drawn Vlog uses `docs/design-system/styles/handdrawn-vlog/Design.md` and `Mira/Features/Styles/HanddrawnVlog/`; Korean film-diary cute — warm cream paper, faded film tones (not candy pastels), polaroid framing, handwriting, washi tape, and `Path`/`Canvas` hand-drawn doodles with one dried-rose accent. Home preview card + bespoke detail page implemented (a diary/scrapbook feed with a tap-to-flip polaroid memory-board signature); it must not reuse another style's detail template.
 - Keep style guidance iOS / SwiftUI first.
 - For new Mira app code, every newly created Swift type and matching Swift file must use the `Mi` prefix, for example `MiStyleListView.swift` or `MiDesignStyle.swift`.
 - Do not duplicate long style content in tool-specific adapter files.

@@ -114,6 +114,7 @@ Typical styles:
 - Luxury Editorial
 - Magazine Layout
 - Kawaii
+- Hand-drawn Vlog / Vlog 手绘风 (Korean film-diary cute)
 - Streetwear
 - Art Museum
 
@@ -145,3 +146,4 @@ Each style may include tags from these dimensions:
 | Bento Grid | Minimal & Systematic | Balanced | Low | Low | `docs/design-system/styles/bento-grid/Design.md` |
 | Refined Dark | Minimal & Systematic | Balanced | Medium | Medium | `docs/design-system/styles/refined-dark/Design.md` |
 | Editorial Luxe | Minimal & Systematic | Balanced | Medium | Low | `docs/design-system/styles/editorial-luxe/Design.md` |
+| Hand-drawn Vlog | Cultural & Editorial | Expressive | Medium | Medium | `docs/design-system/styles/handdrawn-vlog/Design.md` |

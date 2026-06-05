@@ -69,7 +69,8 @@ struct MiAppRootView: View {
                 || MiMaterial3Module.canOpen(style)
                 || MiBentoGridModule.canOpen(style)
                 || MiRefinedDarkModule.canOpen(style)
-                || MiEditorialLuxeModule.canOpen(style) {
+                || MiEditorialLuxeModule.canOpen(style)
+                || MiHanddrawnVlogModule.canOpen(style) {
                 openDetail(for: style)
             } else {
                 unavailableStyle = style
@@ -130,6 +131,10 @@ struct MiAppRootView: View {
                 }
             } else if MiEditorialLuxeModule.canOpen(style) {
                 MiEditorialLuxeModule.detailView(for: style) {
+                    closeDetail()
+                }
+            } else if MiHanddrawnVlogModule.canOpen(style) {
+                MiHanddrawnVlogModule.detailView(for: style) {
                     closeDetail()
                 }
             } else {
