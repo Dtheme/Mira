@@ -21,6 +21,7 @@ docs/design-system/styles/soft-skeuomorphism/Design.md
 docs/design-system/styles/bento-grid/Design.md
 docs/design-system/styles/refined-dark/Design.md
 docs/design-system/styles/editorial-luxe/Design.md
+docs/design-system/styles/handdrawn-vlog/Design.md
 ```
 
 Mira's own app shell style is `docs/design-system/styles/apple-liquid-glass/Design.md`.

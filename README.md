@@ -109,6 +109,11 @@
         <td>Implemented</td>
         <td>Elegant magazine-style luxury: serif headlines, ivory paper, generous whitespace, thin gold rules, a feature-story signature, and refined states.</td>
       </tr>
+      <tr>
+        <td><strong>Hand-drawn Vlog</strong></td>
+        <td>Implemented</td>
+        <td>Korean film-diary cute: warm cream paper, faded film tones, polaroid framing, handwriting, washi tape, and hand-drawn doodles with a tap-to-flip polaroid memory-board signature.</td>
+      </tr>
     </tbody>
   </table>
 
@@ -124,7 +129,7 @@
   <ul>
     <li><strong>Target screen</strong>: subscription page, dashboard, search, onboarding, settings, etc.</li>
     <li><strong>User scenario</strong>: what the user is trying to do and what must stay clear.</li>
-    <li><strong>Selected style</strong>: Apple Liquid Glass, Glassmorphism, Neumorphism, Claymorphism, Soft Skeuomorphism, Neo-Brutalism, Minimalism, Material 3, Bento Grid, Refined Dark, Editorial Luxe, or another future style.</li>
+    <li><strong>Selected style</strong>: Apple Liquid Glass, Glassmorphism, Neumorphism, Claymorphism, Soft Skeuomorphism, Neo-Brutalism, Minimalism, Material 3, Bento Grid, Refined Dark, Editorial Luxe, Hand-drawn Vlog, or another future style.</li>
     <li><strong>Platform constraints</strong>: iOS / SwiftUI, Dynamic Type, VoiceOver, Reduced Motion, safe areas, and performance.</li>
   </ul>
 
@@ -242,6 +247,11 @@ Output: visual direction, tokens, layout rules, component guidance, SwiftUI note
         <td>已实现</td>
         <td>优雅的杂志式轻奢：衬线大标题、象牙纸面、充裕留白、纤细金线、特稿签名交互和精致状态，已有独立详情页。</td>
       </tr>
+      <tr>
+        <td><strong>Hand-drawn Vlog / Vlog 手绘风</strong></td>
+        <td>已实现</td>
+        <td>韩系胶片日记可爱风：奶油纸面、褪色胶片色、拍立得相框、手写字、和纸胶带和手绘涂鸦，以拍立得「记忆板」点击翻页为签名交互，已有独立详情页。</td>
+      </tr>
     </tbody>
   </table>
 
@@ -257,7 +267,7 @@ Output: visual direction, tokens, layout rules, component guidance, SwiftUI note
   <ul>
     <li><strong>目标界面</strong>：订阅页、首页卡片、搜索页、设置页、引导页等。</li>
     <li><strong>用户场景</strong>：用户正在做什么，哪些内容必须清楚可见。</li>
-    <li><strong>选定风格</strong>：Apple Liquid Glass、玻璃拟物化、新拟态、黏土形态、柔和有机拟物、新粗野主义、极简主义、Material 3、便当网格、精致暗色（Refined Dark）、轻奢编辑（Editorial Luxe），或后续新增风格。</li>
+    <li><strong>选定风格</strong>：Apple Liquid Glass、玻璃拟物化、新拟态、黏土形态、柔和有机拟物、新粗野主义、极简主义、Material 3、便当网格、精致暗色（Refined Dark）、轻奢编辑（Editorial Luxe）、Vlog 手绘风（Hand-drawn Vlog），或后续新增风格。</li>
     <li><strong>平台约束</strong>：iOS / SwiftUI、动态字体、VoiceOver、减少动态效果、安全区和性能。</li>
   </ul>
 
