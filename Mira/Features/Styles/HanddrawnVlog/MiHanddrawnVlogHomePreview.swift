@@ -3,11 +3,11 @@
 //  Mira
 //
 //  Hand-drawn Vlog / Vlog 手绘风 — home style card.
-//  Signature: a hand-placed polaroid (warm film-photo + handwritten date) with a
-//  procedural hand-drawn doodle, a washi-tape strip, a wavy underline, and one
-//  corner sticker. Doodles are drawn with Path/Canvas (the brief explicitly asks
-//  for hand-drawn expression); real photo / illustration assets can drop into the
-//  photo slot later. One locked accent (dried rose). Warm-tinted shadows only.
+//  One oversized tilted polaroid taped to a cream diary page: faded-film photo
+//  window with a hand-drawn sun / star / sea-horizon wave inside it, and the
+//  style title handwritten on the mat as the caption (dried-rose heart at its
+//  end — the single rose moment). A pencil date note sits on the empty page
+//  below. Press flattens the print (-2.5° -> 0°, 1 pt nudge, tighter shadow).
 //
 
 import SwiftUI
@@ -24,160 +24,173 @@ struct MiHanddrawnVlogHomePreview: View {
 
     private typealias HV = MiHanddrawnVlogTokens
     private var isPressed: Bool { pressedStyleID == style.id && !isDragging }
+    private var scale: CGFloat { cardSize.width / 174 }
 
-    private var polaroidWidth: CGFloat { min(cardSize.width * 0.60, cardSize.width - 46) }
-    private var photoHeight: CGFloat { polaroidWidth * 0.66 }
+    // Reduced motion keeps the static idle tilt (layout, not motion) and skips
+    // the spatial press response; only the shadow still softens as feedback.
+    private var pressStraightens: Bool { isPressed && !reduceMotion }
+
+    private var matWidth: CGFloat { cardSize.width * 0.80 }
+    private var matPadding: CGFloat { 8 * scale }
+    private var photoWidth: CGFloat { matWidth - matPadding * 2 }
+    private var photoHeight: CGFloat { photoWidth * 0.90 }
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
 
-        ZStack(alignment: .topLeading) {
+        ZStack(alignment: .top) {
             shape.fill(HV.cream)
 
-            // Soft warm paper sheen, top-down — replaces heavy grain for performance.
-            shape
-                .fill(
-                    LinearGradient(
-                        colors: [HV.paper.opacity(0.9), .clear, HV.shadow.opacity(0.16)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
-                .blendMode(.softLight)
+            paperSheen(in: shape)
 
-            VStack(alignment: .leading, spacing: 9) {
-                polaroid
-                    .padding(.leading, 4)
-
-                Spacer(minLength: 0)
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(MiL10n.text(style.name))
-                        .font(HV.hand(16, .semibold))
-                        .italic()
-                        .foregroundStyle(HV.ink)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.6)
-                        .miStyleTitleTransition(style.id)
-
-                    MiHVWave()
-                        .stroke(HV.rose, style: StrokeStyle(lineWidth: 2.2, lineCap: .round, lineJoin: .round))
-                        .frame(width: polaroidWidth * 0.78, height: 6)
-                        .opacity(0.9)
-                }
-
-                Text(MiL10n.text("home_hv_short"))
-                    .font(HV.rounded(10.5, .medium))
-                    .foregroundStyle(HV.pencil)
-                    .lineSpacing(1.5)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(.horizontal, 15)
-            .padding(.top, 15)
-            .padding(.bottom, 14)
-            .offset(y: isPressed ? 1 : 0)
+            polaroid
+                .padding(.top, cardSize.height * 0.10)
         }
         .frame(width: cardSize.width, height: cardSize.height)
+        .overlay(alignment: .bottomLeading) { pageNote }
         .clipShape(shape)
-        .overlay(alignment: .topTrailing) {
-            cornerSticker
-                .padding(.top, 12)
-                .padding(.trailing, 13)
-        }
         .overlay {
             shape.strokeBorder(
-                LinearGradient(
-                    colors: [
-                        HV.rose.opacity(0.30 + focus.borderOpacity * 0.28),
-                        HV.shadow.opacity(0.5)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
+                HV.shadow.opacity(0.45 + focus.borderOpacity * 0.3),
                 lineWidth: 1
             )
         }
         .animation(reduceMotion ? .easeOut(duration: 0.01) : .easeOut(duration: 0.2), value: isPressed)
     }
 
+    // MARK: Paper sheen
+
+    // Soft-light blend is the one offscreen pass on this card; while the home
+    // canvas pans it falls back to a plain non-blended gradient overlay.
+    @ViewBuilder
+    private func paperSheen(in shape: RoundedRectangle) -> some View {
+        let gradient = LinearGradient(
+            colors: [HV.paper.opacity(0.9), .clear, HV.shadow.opacity(0.16)],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        if isDragging {
+            shape.fill(gradient).opacity(0.35)
+        } else {
+            shape.fill(gradient).blendMode(.softLight)
+        }
+    }
+
     // MARK: Polaroid
 
     private var polaroid: some View {
-        ZStack(alignment: .top) {
-            VStack(spacing: 6) {
-                // Film-photo placeholder: warm gradient + a hand-drawn sun + sparkles.
-                RoundedRectangle(cornerRadius: HV.photoRadius, style: .continuous)
-                    .fill(HV.photoGradient(0))
-                    .frame(width: polaroidWidth, height: photoHeight)
-                    .overlay(alignment: .topLeading) {
-                        MiHVSun()
-                            .stroke(HV.ink.opacity(0.8), style: StrokeStyle(lineWidth: 1.6, lineCap: .round, lineJoin: .round))
-                            .frame(width: 22, height: 22)
-                            .padding(.leading, 11)
-                            .padding(.top, 10)
-                    }
-                    .overlay(alignment: .bottomTrailing) {
-                        MiHVStar()
-                            .fill(HV.paper.opacity(0.95))
-                            .overlay {
-                                MiHVStar().stroke(HV.ink.opacity(0.65), lineWidth: 1.1)
-                            }
-                            .frame(width: 13, height: 13)
-                            .padding(.trailing, 12)
-                            .padding(.bottom, 9)
-                    }
-                    .clipShape(RoundedRectangle(cornerRadius: HV.photoRadius, style: .continuous))
+        let matShape = RoundedRectangle(cornerRadius: HV.photoRadius + 2, style: .continuous)
 
-                // Handwritten mat: date + heart.
-                HStack(spacing: 4) {
-                    Text("5.24")
-                        .font(HV.hand(10, .semibold))
-                        .italic()
-                        .foregroundStyle(HV.pencil)
-                    Spacer(minLength: 0)
-                    MiHVHeart()
-                        .fill(HV.rose)
-                        .frame(width: 9, height: 9)
-                }
-                .frame(width: polaroidWidth)
+        return ZStack(alignment: .top) {
+            VStack(spacing: 0) {
+                photoWindow
+                captionStrip
             }
-            .padding(.horizontal, 7)
-            .padding(.top, 7)
-            .padding(.bottom, 9)
-            .background(
-                RoundedRectangle(cornerRadius: HV.photoRadius + 3, style: .continuous)
-                    .fill(HV.paper)
-            )
+            .padding([.horizontal, .top], matPadding)
+            .background(matShape.fill(HV.paper))
             .overlay {
-                RoundedRectangle(cornerRadius: HV.photoRadius + 3, style: .continuous)
-                    .strokeBorder(HV.shadow.opacity(0.55), lineWidth: 1)
+                matShape.strokeBorder(HV.shadow.opacity(0.55), lineWidth: 1)
             }
-            .shadow(color: HV.clay.opacity(0.22), radius: 6, x: 0, y: 4)
-            .rotationEffect(.degrees(isPressed ? 0 : HV.photoTilt))
+            .shadow(
+                color: HV.clay.opacity(focus.shadowOpacity * (isDragging ? 0.43 : (isPressed ? 0.64 : 0.79))),
+                radius: (isDragging ? 3 : (isPressed ? 5 : 7)) * scale,
+                x: 0,
+                y: (isDragging ? 3 : (isPressed ? 4 : 5)) * scale
+            )
 
-            // Washi tape across the top edge.
-            Capsule(style: .continuous)
-                .fill(HV.butter.opacity(0.72))
-                .frame(width: 34, height: 13)
-                .overlay {
-                    Capsule(style: .continuous).strokeBorder(HV.butter.opacity(0.4), lineWidth: 1)
-                }
-                .rotationEffect(.degrees(-9))
-                .offset(x: polaroidWidth * 0.18, y: -5)
+            washiTape
+                .offset(x: 10 * scale, y: -8 * scale)
         }
-        .frame(width: polaroidWidth + 24, alignment: .leading)
+        .rotationEffect(.degrees(pressStraightens ? 0 : HV.homePolaroidTilt))
+        .offset(y: pressStraightens ? 1 : 0)
     }
 
-    // MARK: Corner sticker
+    // Faded-film photo whose content is a tiny hand-drawn postcard scene:
+    // sun over a drawn sea horizon, one sparkle in the sky.
+    private var photoWindow: some View {
+        let photoShape = RoundedRectangle(cornerRadius: HV.photoRadius, style: .continuous)
 
-    private var cornerSticker: some View {
-        MiHVStar()
-            .fill(HV.rose)
-            .overlay { MiHVStar().stroke(HV.ink.opacity(0.7), lineWidth: 1.2) }
-            .frame(width: 18, height: 18)
-            .rotationEffect(.degrees(HV.stickerTilt))
-            .shadow(color: HV.clay.opacity(0.18), radius: 2, x: 0, y: 1)
+        return photoShape
+            .fill(HV.photoGradient(0))
+            .frame(width: photoWidth, height: photoHeight)
+            .overlay(alignment: .topLeading) {
+                MiHVSun()
+                    .stroke(HV.ink.opacity(0.75), style: StrokeStyle(lineWidth: 1.6 * scale, lineCap: .round, lineJoin: .round))
+                    .frame(width: 24 * scale, height: 24 * scale)
+                    .padding(.leading, 12 * scale)
+                    .padding(.top, 12 * scale)
+            }
+            .overlay(alignment: .topTrailing) {
+                MiHVStar()
+                    .fill(HV.paper.opacity(0.95))
+                    .overlay {
+                        MiHVStar().stroke(HV.ink.opacity(0.6), lineWidth: 1.1 * scale)
+                    }
+                    .frame(width: 11 * scale, height: 11 * scale)
+                    .padding(.trailing, 14 * scale)
+                    .padding(.top, 16 * scale)
+            }
+            .overlay {
+                MiHVWave()
+                    .stroke(HV.ink.opacity(0.5), style: StrokeStyle(lineWidth: 1.4 * scale, lineCap: .round))
+                    .frame(width: photoWidth * 0.90, height: 5 * scale)
+                    .offset(y: photoHeight * 0.14)
+            }
+            .clipShape(photoShape)
+    }
+
+    // The mat caption: the style title as diary handwriting, one rose heart.
+    private var captionStrip: some View {
+        HStack(spacing: 0) {
+            Text(MiL10n.text(style.name))
+                .font(HV.hand(15 * scale, .semibold))
+                .italic()
+                .foregroundStyle(HV.ink)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
+                .miStyleTitleTransition(style.id)
+
+            Spacer(minLength: 5 * scale)
+
+            MiHVHeart()
+                .fill(HV.rose)
+                .frame(width: 9 * scale, height: 9 * scale)
+        }
+        .padding(.top, 7 * scale)
+        .padding(.bottom, 10 * scale)
+        .padding(.horizontal, 2 * scale)
+        .frame(width: photoWidth)
+    }
+
+    private var washiTape: some View {
+        let tapeShape = RoundedRectangle(cornerRadius: 2, style: .continuous)
+
+        return tapeShape
+            .fill(HV.butter.opacity(0.75))
+            .overlay {
+                tapeShape.strokeBorder(HV.butter.opacity(0.4), lineWidth: 1)
+            }
+            .frame(width: 44 * scale, height: 16 * scale)
+            .rotationEffect(.degrees(-8))
+    }
+
+    // MARK: Page note
+
+    private var pageNote: some View {
+        HStack(spacing: 5 * scale) {
+            Text("5.24")
+                .font(HV.hand(10.5 * scale, .semibold))
+                .italic()
+                .foregroundStyle(HV.pencil)
+
+            Text(MiL10n.text("hv_mem_cap_1"))
+                .font(HV.hand(10.5 * scale, .medium))
+                .italic()
+                .foregroundStyle(HV.pencil.opacity(0.9))
+                .lineLimit(1)
+        }
+        .padding(.leading, 18 * scale)
+        .padding(.bottom, 14 * scale)
     }
 }
 

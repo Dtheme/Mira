@@ -35,6 +35,7 @@ enum MiNeoBrutalismTokens {
     static let shadowMedium = CGSize(width: 6, height: 6)
     static let shadowLarge = CGSize(width: 10, height: 10)
     static let pressOffset = CGSize(width: 4, height: 4)
+    static let homeSlabShadow = CGSize(width: 7, height: 7)
 
     static let motion: Animation = .spring(response: 0.18, dampingFraction: 0.72)
 

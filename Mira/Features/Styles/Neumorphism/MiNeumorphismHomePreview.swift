@@ -21,83 +21,222 @@ struct MiNeumorphismHomePreview: View {
         ZStack {
             MiNeumorphismRaisedSurface(
                 cornerRadius: cornerRadius,
-                shadowScale: shadowScale,
+                shadowScale: boardShadowScale,
+                borderOpacity: focus.borderOpacity,
                 isPressed: isPressed
             )
 
-            VStack(alignment: .leading, spacing: verticalSpacing) {
-                HStack(alignment: .center, spacing: 10) {
-                    MiNeumorphismBadge(shadowScale: shadowScale, isPressed: isPressed)
-
-                    Text(MiL10n.text(style.name))
-                        .font(.system(size: titleSize, weight: .semibold, design: .rounded))
-                        .foregroundStyle(MiNeumorphismTokens.ink)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.62)
-                        .miStyleTitleTransition(style.id)
-
-                    Spacer(minLength: 0)
-                }
-
-                Text(MiL10n.text("neu_card_summary"))
-                    .font(.system(size: summarySize, weight: .medium, design: .rounded))
-                    .foregroundStyle(MiNeumorphismTokens.muted)
-                    .lineSpacing(2.0)
-                    .lineLimit(4)
-                    .minimumScaleFactor(0.72)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                Spacer(minLength: 0)
-
-                MiNeumorphismInsetInputPreview(shadowScale: shadowScale, isDragging: isDragging)
-
-                MiNeumorphismControlStrip(shadowScale: shadowScale, isPressed: isPressed)
+            ZStack {
+                knob
+                textBlock
             }
-            .padding(cardPadding)
-            .offset(pressedOffset)
+            .frame(width: cardSize.width, height: cardSize.height)
+            .offset(pressedContentOffset)
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
         }
         .frame(width: cardSize.width, height: cardSize.height)
-        .animation(reduceMotion ? .easeOut(duration: 0.01) : .spring(response: 0.18, dampingFraction: 0.82), value: isPressed)
+        .animation(
+            reduceMotion ? .easeOut(duration: 0.01) : .spring(response: 0.18, dampingFraction: 0.82),
+            value: isPressed
+        )
     }
 
-    private var shadowScale: CGFloat {
-        let focusScale = 0.64 + CGFloat(focus.shadowOpacity) * 1.12
-        let dragScale = isDragging ? MiNeumorphismTokens.dragShadowScale : 1
-        let pressScale: CGFloat = isPressed ? 0.42 : 1
-        return focusScale * dragScale * pressScale
+    // MARK: - Signature knob
+
+    private var knob: some View {
+        ZStack {
+            groove
+            dial.offset(pressedDialOffset)
+        }
+        .position(x: cardSize.width * 0.5, y: cardSize.height * 0.40)
     }
+
+    private var groove: some View {
+        Circle()
+            .fill(MiNeumorphismTokens.baseInset)
+            .frame(width: grooveDiameter, height: grooveDiameter)
+            .overlay { grooveCarving }
+    }
+
+    // Inner-shadow carving uses blur + mask (GPU heavy). Render it only at rest;
+    // while the constellation is panning, drop it for a cheap flat inset stroke.
+    @ViewBuilder
+    private var grooveCarving: some View {
+        let circle = Circle()
+
+        if isDragging {
+            circle.strokeBorder(MiNeumorphismTokens.shadowDark.opacity(0.16), lineWidth: 1.5)
+        } else {
+            ZStack {
+                circle
+                    .stroke(MiNeumorphismTokens.shadowDark.opacity(0.50), lineWidth: 2)
+                    .blur(radius: 3)
+                    .offset(x: 3, y: 3)
+                    .mask {
+                        circle.fill(
+                            LinearGradient(
+                                colors: [.clear, .black.opacity(0.84)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                    }
+
+                circle
+                    .stroke(MiNeumorphismTokens.shadowLight.opacity(0.92), lineWidth: 2)
+                    .blur(radius: 3)
+                    .offset(x: -3, y: -3)
+                    .mask {
+                        circle.fill(
+                            LinearGradient(
+                                colors: [.black.opacity(0.86), .clear],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                    }
+            }
+        }
+    }
+
+    private var dial: some View {
+        Circle()
+            .fill(
+                LinearGradient(
+                    colors: [
+                        isPressed ? MiNeumorphismTokens.base : MiNeumorphismTokens.baseLight,
+                        isPressed ? MiNeumorphismTokens.basePressed : MiNeumorphismTokens.base
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .frame(width: dialDiameter, height: dialDiameter)
+            .shadow(
+                color: MiNeumorphismTokens.shadowDark.opacity(0.62),
+                radius: max(2, 12 * knobShadowScale),
+                x: 7 * knobShadowScale,
+                y: 7 * knobShadowScale
+            )
+            .shadow(
+                color: MiNeumorphismTokens.shadowLight.opacity(0.95),
+                radius: max(2, 11 * knobShadowScale),
+                x: -7 * knobShadowScale,
+                y: -7 * knobShadowScale
+            )
+            .overlay {
+                Circle()
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [Color.white.opacity(0.55), .clear],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1
+                    )
+            }
+            .overlay { indicatorDot }
+    }
+
+    private var indicatorDot: some View {
+        Circle()
+            .fill(MiNeumorphismTokens.focusAccent)
+            .frame(width: dotSize, height: dotSize)
+            .shadow(color: MiNeumorphismTokens.shadowDark.opacity(0.30), radius: 2, x: 1.5, y: 1.5)
+            .shadow(color: Color.white.opacity(0.70), radius: 2, x: -1.5, y: -1.5)
+            .offset(x: dotOffset, y: dotOffset)
+    }
+
+    // MARK: - Text block
+
+    private var textBlock: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(MiL10n.text("neu_soft_ui"))
+                .font(.system(size: kickerSize, weight: .medium, design: .rounded))
+                .foregroundStyle(MiNeumorphismTokens.quietText)
+                .tracking(1.4)
+                .textCase(.uppercase)
+
+            Text(MiL10n.text(style.name))
+                .font(.system(size: titleSize, weight: .semibold, design: .rounded))
+                .foregroundStyle(MiNeumorphismTokens.ink)
+                .lineLimit(1)
+                .minimumScaleFactor(0.62)
+                .miStyleTitleTransition(style.id)
+        }
+        .padding(textPadding)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+    }
+
+    // MARK: - State
 
     private var isPressed: Bool {
         pressedStyleID == style.id && !isDragging
     }
 
-    private var pressedOffset: CGSize {
+    private var baseShadowScale: CGFloat {
+        let focusScale = 0.64 + CGFloat(focus.shadowOpacity) * 1.12
+        let dragScale = isDragging ? MiNeumorphismTokens.dragShadowScale : 1
+        return focusScale * dragScale
+    }
+
+    private var boardShadowScale: CGFloat {
+        baseShadowScale * (isPressed ? 0.42 : 1)
+    }
+
+    private var knobShadowScale: CGFloat {
+        baseShadowScale * (isPressed ? 0.30 : 1)
+    }
+
+    private var pressedContentOffset: CGSize {
         guard isPressed, !reduceMotion else {
             return .zero
         }
         return CGSize(width: 1.5, height: 1.5)
     }
 
-    private var cardPadding: CGFloat {
-        cardSize.width < 180 ? 14 : 16
+    private var pressedDialOffset: CGSize {
+        guard isPressed, !reduceMotion else {
+            return .zero
+        }
+        return CGSize(width: 1, height: 1)
     }
 
-    private var verticalSpacing: CGFloat {
-        cardSize.height < 230 ? 10 : 12
+    // MARK: - Metrics
+
+    private var dialDiameter: CGFloat {
+        cardSize.width * 0.58
+    }
+
+    private var grooveDiameter: CGFloat {
+        dialDiameter + 18
+    }
+
+    private var dotSize: CGFloat {
+        7 * cardSize.width / 174
+    }
+
+    private var dotOffset: CGFloat {
+        -0.707 * 0.62 * dialDiameter * 0.5
+    }
+
+    private var textPadding: CGFloat {
+        cardSize.width < 180 ? 16 : 18
+    }
+
+    private var kickerSize: CGFloat {
+        cardSize.width < 180 ? 10.5 : 11
     }
 
     private var titleSize: CGFloat {
-        cardSize.width < 180 ? 17 : 18.5
-    }
-
-    private var summarySize: CGFloat {
-        cardSize.width < 180 ? 12.4 : 13.1
+        cardSize.width < 180 ? 17 : 19
     }
 }
 
 private struct MiNeumorphismRaisedSurface: View {
     let cornerRadius: CGFloat
     let shadowScale: CGFloat
+    let borderOpacity: Double
     let isPressed: Bool
 
     var body: some View {
@@ -113,45 +252,46 @@ private struct MiNeumorphismRaisedSurface: View {
                 )
             )
             .shadow(
-                color: MiNeumorphismTokens.shadowDark.opacity(isPressed ? 0.42 : 0.82),
+                color: MiNeumorphismTokens.shadowDark.opacity(isPressed ? 0.40 : 0.80),
                 radius: max(4, MiNeumorphismTokens.outerShadow * shadowScale),
-                x: (isPressed ? 4 : 11) * shadowScale,
-                y: (isPressed ? 4 : 11) * shadowScale
+                x: 11 * shadowScale,
+                y: 11 * shadowScale
             )
             .shadow(
                 color: MiNeumorphismTokens.shadowLight.opacity(isPressed ? 0.60 : 0.94),
                 radius: max(4, (MiNeumorphismTokens.outerShadow - 1) * shadowScale),
-                x: (isPressed ? -3 : -11) * shadowScale,
-                y: (isPressed ? -3 : -11) * shadowScale
+                x: -11 * shadowScale,
+                y: -11 * shadowScale
             )
+            .overlay {
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(0.22),
+                                .clear,
+                                MiNeumorphismTokens.shadowDark.opacity(0.04)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+            }
             .overlay {
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                     .strokeBorder(
                         LinearGradient(
                             colors: [
-                                Color.white.opacity(isPressed ? 0.42 : 0.62),
-                                MiNeumorphismTokens.stroke.opacity(0.62),
-                                MiNeumorphismTokens.shadowDark.opacity(isPressed ? 0.38 : 0.18)
+                                Color.white.opacity(0.60),
+                                MiNeumorphismTokens.stroke.opacity(0.55),
+                                MiNeumorphismTokens.shadowDark.opacity(0.18)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         ),
                         lineWidth: 1
                     )
-            }
-            .overlay {
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(isPressed ? 0.06 : 0.26),
-                                .clear,
-                                MiNeumorphismTokens.shadowDark.opacity(isPressed ? 0.08 : 0.04)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                    .opacity(borderOpacity)
             }
             .overlay {
                 if isPressed {
@@ -172,187 +312,5 @@ private struct MiNeumorphismRaisedSurface: View {
                         .blendMode(.screen)
                 }
             }
-    }
-}
-
-private struct MiNeumorphismBadge: View {
-    let shadowScale: CGFloat
-    let isPressed: Bool
-
-    var body: some View {
-        ZStack {
-            MiNeumorphismRaisedSurface(
-                cornerRadius: 14,
-                shadowScale: shadowScale * 0.50,
-                isPressed: isPressed
-            )
-
-            Text("NU")
-                .font(.system(size: 11.5, weight: .bold, design: .rounded))
-                .foregroundStyle(MiNeumorphismTokens.ink)
-        }
-        .frame(width: 42, height: 28)
-    }
-}
-
-private struct MiNeumorphismInsetInputPreview: View {
-    let shadowScale: CGFloat
-    let isDragging: Bool
-
-    var body: some View {
-        RoundedRectangle(cornerRadius: MiNeumorphismTokens.smallRadius, style: .continuous)
-            .fill(MiNeumorphismTokens.base)
-            .frame(height: 48)
-            .overlay(alignment: .leading) {
-                HStack(spacing: 8) {
-                    MiNeumorphismSoftDot(
-                        fill: MiNeumorphismTokens.focusAccent.opacity(0.92),
-                        size: 12,
-                        shadowScale: shadowScale * 0.54
-                    )
-
-                    RoundedRectangle(cornerRadius: 4, style: .continuous)
-                        .fill(MiNeumorphismTokens.muted.opacity(0.20))
-                        .frame(width: 70, height: 6)
-
-                    RoundedRectangle(cornerRadius: 4, style: .continuous)
-                        .fill(MiNeumorphismTokens.focusAccent.opacity(0.34))
-                        .frame(width: 26, height: 6)
-
-                    Spacer(minLength: 0)
-                }
-                .padding(.horizontal, 15)
-            }
-            .overlay { insetCarving }
-    }
-
-    // Inner-shadow carving uses blur + mask (GPU heavy). Render it only at rest;
-    // while the constellation is panning, drop it for a cheap flat inset stroke so
-    // many simultaneously-visible cards never re-rasterize blur per frame.
-    @ViewBuilder
-    private var insetCarving: some View {
-        let shape = RoundedRectangle(cornerRadius: MiNeumorphismTokens.smallRadius, style: .continuous)
-
-        if isDragging {
-            shape.strokeBorder(MiNeumorphismTokens.shadowDark.opacity(0.16), lineWidth: 1.5)
-        } else {
-            ZStack {
-                shape
-                    .stroke(MiNeumorphismTokens.shadowDark.opacity(0.50), lineWidth: 2)
-                    .blur(radius: 3)
-                    .offset(x: 3, y: 3)
-                    .mask {
-                        shape.fill(
-                            LinearGradient(
-                                colors: [.clear, .black.opacity(0.84)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                    }
-
-                shape
-                    .stroke(MiNeumorphismTokens.shadowLight.opacity(0.92), lineWidth: 2)
-                    .blur(radius: 3)
-                    .offset(x: -3, y: -3)
-                    .mask {
-                        shape.fill(
-                            LinearGradient(
-                                colors: [.black.opacity(0.86), .clear],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                    }
-            }
-        }
-    }
-}
-
-private struct MiNeumorphismControlStrip: View {
-    let shadowScale: CGFloat
-    let isPressed: Bool
-
-    var body: some View {
-        HStack(spacing: 9) {
-            MiNeumorphismSoftPill(
-                width: 42,
-                fill: MiNeumorphismTokens.focusAccent.opacity(0.78),
-                shadowScale: shadowScale,
-                isPressed: isPressed
-            )
-            MiNeumorphismSoftPill(
-                width: 28,
-                fill: MiNeumorphismTokens.baseLight,
-                shadowScale: shadowScale,
-                isPressed: false
-            )
-            MiNeumorphismSoftPill(
-                width: 28,
-                fill: MiNeumorphismTokens.base,
-                shadowScale: shadowScale,
-                isPressed: false
-            )
-            Spacer(minLength: 0)
-            MiNeumorphismSoftDot(
-                fill: MiNeumorphismTokens.baseLight,
-                size: 22,
-                shadowScale: shadowScale * 0.74
-            )
-        }
-        .frame(height: 26)
-    }
-}
-
-private struct MiNeumorphismSoftPill: View {
-    let width: CGFloat
-    let fill: Color
-    let shadowScale: CGFloat
-    let isPressed: Bool
-
-    var body: some View {
-        Capsule(style: .continuous)
-            .fill(fill)
-            .frame(width: width, height: 12)
-            .shadow(
-                color: MiNeumorphismTokens.shadowDark.opacity(isPressed ? 0.22 : 0.48),
-                radius: max(2, 5 * shadowScale),
-                x: (isPressed ? 1 : 4) * shadowScale,
-                y: (isPressed ? 1 : 4) * shadowScale
-            )
-            .shadow(
-                color: MiNeumorphismTokens.shadowLight.opacity(0.82),
-                radius: max(2, 5 * shadowScale),
-                x: (isPressed ? -1 : -4) * shadowScale,
-                y: (isPressed ? -1 : -4) * shadowScale
-            )
-            .overlay {
-                Capsule(style: .continuous)
-                    .stroke(Color.white.opacity(0.34), lineWidth: 0.8)
-            }
-    }
-}
-
-private struct MiNeumorphismSoftDot: View {
-    let fill: Color
-    let size: CGFloat
-    let shadowScale: CGFloat
-
-    var body: some View {
-        Circle()
-            .fill(fill)
-            .frame(width: size, height: size)
-            .shadow(
-                color: MiNeumorphismTokens.shadowDark.opacity(0.46),
-                radius: max(2, 5 * shadowScale),
-                x: 3.5 * shadowScale,
-                y: 3.5 * shadowScale
-            )
-            .shadow(
-                color: MiNeumorphismTokens.shadowLight.opacity(0.88),
-                radius: max(2, 5 * shadowScale),
-                x: -3.5 * shadowScale,
-                y: -3.5 * shadowScale
-            )
     }
 }

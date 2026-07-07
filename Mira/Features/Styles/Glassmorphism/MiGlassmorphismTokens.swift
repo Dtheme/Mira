@@ -14,6 +14,11 @@ enum MiGlassmorphismTokens {
     static let blue = Color(hex: 0x6EA8FF)
     static let violet = Color(hex: 0xB8A2FF)
     static let mint = Color(hex: 0xB9F6D3)
+    // Home card aurora field: cyan/blue/violet deepened to mid-saturation.
+    static let fieldCyan = Color(hex: 0x9BE2F2)
+    static let fieldBlue = Color(hex: 0x8CB4FD)
+    static let fieldViolet = Color(hex: 0xBBA4FF)
+    static let poolViolet = Color(hex: 0x9E82FF)
     static let surface = Color.white.opacity(0.54)
     static let border = Color.white.opacity(0.82)
     static let radius: CGFloat = 28

@@ -44,7 +44,7 @@
 - Inputs: higher opacity than decorative cards, clear focus ring.
 - Sheets: glass chrome is acceptable; body content may need stronger opacity.
 - Hero Preview: oversized frosted orb + reactive metric panel for layer count, blur strength, and focus state.
-- Home Card: translucent preview card with luminous edge, short description, and no dense text.
+- Home Card: a tilted frosted specimen pane (constant +4 deg clockwise lean, 22 pt continuous radius) floating over a saturated cyan-blue-violet aurora field with three gradient color pools; a dimmer echo pane peeks up-right behind it so layered depth reads in one glance. The pane carries only a small uppercase caption and the style title (important text on the most opaque surface), one diagonal light streak, and a luminous white-to-cyan rim; the field's pools are re-drawn milked inside the pane so color visibly diffuses through the glass with zero live blur. Press is pick-up-to-inspect: the pane scales to 1.02, rim and fill brighten, and the echo pane recedes 3 pt so the layer gap widens; the tilt never changes, and Reduced Motion keeps only the brightening. While the home canvas pans (isDragging) the interior frost pools collapse to a flat white overlay and shadows shrink and merge.
 - States: empty/loading/error/selected/disabled must use icon or text support in addition to tint.
 
 ## iOS / SwiftUI Notes

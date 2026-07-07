@@ -29,6 +29,7 @@ enum MiHanddrawnVlogTokens {
     static let cardRadius: CGFloat = 22
     static let photoRadius: CGFloat = 6
     static let photoTilt: Double = -3         // gentle hand-placed tilt (degrees)
+    static let homePolaroidTilt: Double = -2.5 // home card hero polaroid; straightens on press
     static let stickerTilt: Double = 8
     static let sectionSpacing: CGFloat = 26
 

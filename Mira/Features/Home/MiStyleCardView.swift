@@ -118,6 +118,14 @@ struct MiStyleCardView: View {
                     cornerRadius: cornerRadius,
                     isDragging: isDragging
                 )
+            } else if style.id == MiAppleLiquidGlassModule.styleID {
+                MiAppleLiquidGlassHomePreview(
+                    style: style,
+                    focus: focus,
+                    cardSize: cardSize,
+                    cornerRadius: cornerRadius,
+                    isDragging: isDragging
+                )
             } else {
                 standardCard
             }
@@ -413,7 +421,10 @@ private struct MiCardTitleRow: View {
     }
 
     private var shortCode: String {
-        let words = style.name
+        if isLiquidGlassCard {
+            return "ALG"
+        }
+        let words = MiL10n.text(style.name)
             .split(separator: " ")
             .prefix(2)
             .compactMap(\.first)

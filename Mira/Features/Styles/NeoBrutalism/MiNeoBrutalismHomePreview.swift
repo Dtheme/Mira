@@ -18,11 +18,11 @@ struct MiNeoBrutalismHomePreview: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
+        ZStack {
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .fill(MiNeoBrutalismTokens.ink.opacity(shadowOpacity))
+                .fill(MiNeoBrutalismTokens.ink.opacity(outerShadowOpacity))
                 .frame(width: cardSize.width, height: cardSize.height)
-                .offset(x: hardShadow.width, y: hardShadow.height)
+                .offset(x: outerShadow.width, y: outerShadow.height)
 
             cardContent
                 .offset(x: contentPressOffset.width, y: contentPressOffset.height)
@@ -32,74 +32,92 @@ struct MiNeoBrutalismHomePreview: View {
     }
 
     private var cardContent: some View {
-        ZStack(alignment: .topLeading) {
+        ZStack {
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .fill(MiNeoBrutalismTokens.paper)
+                .fill(MiNeoBrutalismTokens.yellow)
 
-            VStack(alignment: .leading, spacing: 13) {
-                HStack(alignment: .center, spacing: 9) {
-                    Text("NB")
-                        .font(.system(size: 12, weight: .black, design: .default))
-                        .foregroundStyle(MiNeoBrutalismTokens.ink)
-                        .padding(.horizontal, 9)
-                        .frame(height: 25)
-                        .background {
-                            MiNeoBrutalismSurface(
-                                shape: RoundedRectangle(cornerRadius: 8, style: .continuous),
-                                fill: MiNeoBrutalismTokens.yellow,
-                                lineWidth: 2,
-                                shadow: CGSize(width: 2, height: 2)
-                            )
-                        }
-
-                    Text(MiL10n.text(style.name))
-                        .font(.system(size: 20, weight: .black, design: .default))
-                        .foregroundStyle(MiNeoBrutalismTokens.ink)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.58)
-                        .miStyleTitleTransition(style.id)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-                Text(MiL10n.text("nb_card_summary"))
-                    .font(.system(size: 14.5, weight: .black, design: .default))
-                    .foregroundStyle(MiNeoBrutalismTokens.muted)
-                    .lineSpacing(2.4)
-                    .lineLimit(3)
-                    .minimumScaleFactor(0.74)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                Spacer(minLength: 0)
-
-                MiNeoBrutalismHomeActionStrip(isPressed: isPressed)
-            }
-            .padding(15)
+            arrowSlab
+                .position(x: cardSize.width * 0.55, y: cardSize.height * 0.42)
+        }
+        .overlay(alignment: .topLeading) {
+            stampPlate
+                .padding(15 * metricScale)
+        }
+        .overlay(alignment: .bottomLeading) {
+            titleBlock
+                .padding(15 * metricScale)
         }
         .frame(width: cardSize.width, height: cardSize.height)
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-        .overlay(alignment: .bottomTrailing) {
-            MiNeoBrutalismHomeTiltedTile()
-                .frame(width: 56, height: 56)
-                .rotationEffect(.degrees(-8))
-                .padding(.trailing, 20)
-                .padding(.bottom, 66)
-        }
-        .overlay(alignment: .bottomLeading) {
-            MiNeoBrutalismHomeRail()
-                .frame(width: cardSize.width * 0.58, height: 36)
-                .padding(.leading, 14)
-                .padding(.bottom, 58)
-        }
         .overlay {
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                 .strokeBorder(MiNeoBrutalismTokens.ink, lineWidth: MiNeoBrutalismTokens.lineWidth)
         }
     }
 
-    private var hardShadow: CGSize {
+    private var arrowSlab: some View {
+        let side = cardSize.width * 0.56
+
+        return MiNeoBrutalismSurface(
+            shape: RoundedRectangle(cornerRadius: MiNeoBrutalismTokens.radiusSM, style: .continuous),
+            fill: MiNeoBrutalismTokens.surface,
+            shadow: slabShadow
+        )
+        .overlay {
+            Image(systemName: "arrow.right")
+                .font(.system(size: side * 0.42, weight: .black))
+                .foregroundStyle(MiNeoBrutalismTokens.ink)
+        }
+        .frame(width: side, height: side)
+        // Offset before rotation so the press translation follows the rotated shadow direction.
+        .offset(x: slabPressOffset.width, y: slabPressOffset.height)
+        .rotationEffect(.degrees(-4))
+    }
+
+    private var stampPlate: some View {
+        Text(MiL10n.text("nb_card_monogram"))
+            .font(.system(size: 12 * metricScale, weight: .black, design: .default))
+            .foregroundStyle(MiNeoBrutalismTokens.yellow)
+            .padding(.horizontal, 8 * metricScale)
+            .frame(height: 24 * metricScale)
+            .background {
+                RoundedRectangle(cornerRadius: MiNeoBrutalismTokens.radiusXS, style: .continuous)
+                    .fill(MiNeoBrutalismTokens.ink)
+            }
+    }
+
+    private var titleBlock: some View {
+        VStack(alignment: .leading, spacing: 4 * metricScale) {
+            Text(MiL10n.text(style.name))
+                .font(.system(size: 21 * metricScale, weight: .black, design: .default))
+                .foregroundStyle(MiNeoBrutalismTokens.ink)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
+                .miStyleTitleTransition(style.id)
+
+            Text(MiL10n.text("nb_card_shadow_spec"))
+                .font(.system(size: 10.5 * metricScale, weight: .heavy, design: .default))
+                .tracking(0.8)
+                .foregroundStyle(MiNeoBrutalismTokens.ink.opacity(0.85))
+                .lineLimit(1)
+        }
+    }
+
+    private var metricScale: CGFloat {
+        cardSize.width / 174
+    }
+
+    private var outerShadow: CGSize {
         let base = CGFloat(max(5.0, 5.0 + focus.shadowOpacity * 12.0))
         let dragScale: CGFloat = isDragging ? 0.55 : 1
         return CGSize(width: base * dragScale, height: base * dragScale)
+    }
+
+    private var outerShadowOpacity: Double {
+        if isDragging {
+            return 0.32
+        }
+        return isPressed ? 0.46 : 0.82
     }
 
     private var contentPressOffset: CGSize {
@@ -107,99 +125,26 @@ struct MiNeoBrutalismHomePreview: View {
             return .zero
         }
 
-        let distance = min(max(hardShadow.width - 1.5, 4), 7)
+        let distance = min(max(outerShadow.width - 1.5, 4), 7)
         return CGSize(width: distance, height: distance)
     }
 
-    private var shadowOpacity: Double {
-        if isDragging {
-            return 0.32
+    // Resting 7x7 must stay fixed so the printed "7x7 · NO BLUR" spec matches reality at every card size.
+    private var slabShadow: CGSize {
+        if isPressed {
+            return .zero
         }
-        return isPressed ? 0.46 : 0.82
+        return isDragging ? MiNeoBrutalismTokens.shadowSmall : MiNeoBrutalismTokens.homeSlabShadow
+    }
+
+    private var slabPressOffset: CGSize {
+        guard isPressed, !reduceMotion else {
+            return .zero
+        }
+        return MiNeoBrutalismTokens.homeSlabShadow
     }
 
     private var isPressed: Bool {
-        pressedStyleID == style.id
-    }
-}
-
-private struct MiNeoBrutalismHomeActionStrip: View {
-    let isPressed: Bool
-
-    var body: some View {
-        HStack(spacing: 8) {
-            Text(MiL10n.text("nb_open_style"))
-                .font(.system(size: 12, weight: .black, design: .default))
-                .foregroundStyle(Color.white)
-                .lineLimit(1)
-
-            Spacer(minLength: 0)
-
-            Image(systemName: "arrow.right")
-                .font(.system(size: 12, weight: .black))
-                .foregroundStyle(Color.white)
-        }
-        .padding(.horizontal, 12)
-        .frame(height: 34)
-        .background {
-            MiNeoBrutalismSurface(
-                shape: RoundedRectangle(cornerRadius: 10, style: .continuous),
-                fill: MiNeoBrutalismTokens.blue,
-                lineWidth: 2,
-                shadow: isPressed ? .zero : CGSize(width: 4, height: 4)
-            )
-        }
-    }
-}
-
-private struct MiNeoBrutalismHomeRail: View {
-    var body: some View {
-        HStack(spacing: 7) {
-            MiNeoBrutalismHomeDot(fill: MiNeoBrutalismTokens.blue)
-            MiNeoBrutalismHomeDot(fill: MiNeoBrutalismTokens.green)
-            MiNeoBrutalismHomeDot(fill: MiNeoBrutalismTokens.orange)
-        }
-        .padding(8)
-        .background {
-            MiNeoBrutalismSurface(
-                shape: RoundedRectangle(cornerRadius: 14, style: .continuous),
-                fill: MiNeoBrutalismTokens.greenSoft,
-                lineWidth: 2,
-                shadow: CGSize(width: 4, height: 4)
-            )
-        }
-    }
-}
-
-private struct MiNeoBrutalismHomeColorBlock: View {
-    let fill: Color
-
-    var body: some View {
-        MiNeoBrutalismSurface(
-            shape: RoundedRectangle(cornerRadius: 13, style: .continuous),
-            fill: fill,
-            lineWidth: 2,
-            shadow: CGSize(width: 4, height: 4)
-        )
-    }
-}
-
-private struct MiNeoBrutalismHomeTiltedTile: View {
-    var body: some View {
-        MiNeoBrutalismHomeColorBlock(fill: MiNeoBrutalismTokens.orangeSoft)
-    }
-}
-
-private struct MiNeoBrutalismHomeDot: View {
-    let fill: Color
-
-    var body: some View {
-        MiNeoBrutalismSurface(
-            shape: RoundedRectangle(cornerRadius: 6, style: .continuous),
-            fill: fill,
-            lineWidth: 2,
-            shadow: CGSize(width: 3, height: 3)
-        )
-        .frame(height: 14)
+        pressedStyleID == style.id && !isDragging
     }
 }

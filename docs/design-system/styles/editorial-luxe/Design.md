@@ -2,7 +2,7 @@
 
 ## Style Identity
 
-- **Status**: Style documented. Runtime detail page pending under `Mira/Features/Styles/EditorialLuxe/`.
+- **Status**: Implementation-ready. Mira includes a homepage preview card and an independent detail page under `Mira/Features/Styles/EditorialLuxe/`.
 - **Definition**: Editorial Luxe is an elegant, magazine-inspired luxury style built from refined serif display typography, clean sans body text, generous whitespace, thin gold/ink hairline rules, and large imagery — restrained, premium, and beautiful.
 - **Core Feeling**: 优雅、高级、克制、有编辑品味;像一本精致杂志或精品品牌册子。
 - **Visual Keywords**: serif display, ivory paper, generous whitespace, hairline rules, gold accent, large imagery, byline, drop cap, refined restraint.
@@ -74,6 +74,7 @@
 - Navigation: a slim refined top bar with a hairline rule and a clear back control; kicker-style title.
 - Button: primary is an ink-filled pill with ivory text; secondary is a thin ink/gold outline; tertiary is an underlined gold text link.
 - Card: clean surface with a thin rule, a kicker label, a serif title, and a short body.
+- Home Card: an engraved monogram bookplate on pure flat paper, zero shadows. A sharp-cornered ink plate frame (0.75 pt, inset 9 pt) sits inside the hairline-bordered card; inside it, centered: a gold tracked kicker, one giant italic serif monogram (`home_ed_monogram`, ~0.415 x card height) standing over a 0.75 pt gold engraved rule that runs behind the glyph and shows through its counters, the serif title (17 pt), and a tick-flanked gold monospaced Roman folio (`home_ed_folio`, `Vol. II`). On press the plate inks in: the rule rises from 0.65 to full gold opacity and widens 10 pt while the framed content scales to 0.985; reduced motion keeps only the rule opacity crossfade. Idle is fully static, and every layer is a flat fill, hairline stroke, or text, so no isDragging fallback is needed — the card is equally cheap while panning.
 - Sheet / Modal: a clean paper sheet with a hairline and a refined close.
 - Form: minimal field with a bottom rule that turns gold on focus, and a clear label.
 - Tab / Segmented Control: understated text segments with a gold underline indicator for the selected item.

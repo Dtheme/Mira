@@ -132,6 +132,21 @@ Cards may scale around the center focus:
 
 ### Card Content Rules
 
+#### Implemented Style: Signature Preview Card (primary form)
+
+Every implemented style renders its own bespoke home preview instead of the generic placeholder. `MiStyleCardView` branches by style ID to a `Mi<Style>HomePreview` under `Mira/Features/Styles/<Style>/`; Apple Liquid Glass has its own `MiAppleLiquidGlassHomePreview` (an opaque soft-frost content page with one floating glass dock capsule as the signature control). The shared soft-frost `standardCard` remains only as the fallback for styles that are not yet implemented.
+
+Rules for a signature preview card:
+
+- The card must communicate its style in one glance, using the style's own surface, palette, type, and depth language from its `Design.md`; never reuse another style's card recipe.
+- Exactly one signature element per card (puffy button, lamp object, mini mosaic with a hero metric tile, floating lens, polaroid, progress bar, and so on), plus short copy: style name and a one-line hook. No dense text.
+- Each style's `Design.md` documents its own card under `Component Guidance > Home Card`; that section is the source of truth for the card's content.
+- Idle state is fully static: no `TimelineView`, no `repeatForever` animation, no live counter. Roughly 12-14 card replicas are on screen at once, so any continuous per-card animation multiplies across all of them.
+- Expensive passes (blur + mask carving, blurred highlights, live materials, glow shadows) are gated behind the `isDragging` flag with a cheap flat fallback; full richness returns at rest, when the user actually judges the card.
+- Shadows shrink or simplify while the canvas pans; hard offset shadows (Neo-Brutalism) shrink their offset instead of blurring.
+- Press feedback reads the `miHomePressedStyleID` environment and responds in the style's own idiom (clay compresses, brutalist card drops onto its shadow, polaroid straightens), always with a reduced-motion fallback.
+- The style title applies `miStyleTitleTransition(style.id)` so the title participates in the card-to-detail transition.
+
 #### With Screenshot
 
 If a style has a homepage screenshot:
@@ -251,7 +266,7 @@ Each implementation-ready style detail should also satisfy the component slots a
 - [ ] Cards without screenshots show style name and a short introduction.
 - [ ] Liquid Glass is prominent in shell controls and card treatment without weakening readability.
 - [ ] Home card rendering avoids live blur on every repeated card.
-- [ ] Home renders about 10 cards on iPhone and about 12 on iPad.
+- [ ] Home renders about 12 cards on iPhone and about 14 on iPad.
 - [ ] Center/focused card has a clear visual state.
 - [ ] Search/filter controls remain reachable.
 - [ ] Detail scrolling content avoids live glass effects on ordinary panels, repeated heavy shadows, and expensive nested material layers.

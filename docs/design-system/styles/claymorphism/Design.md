@@ -77,8 +77,10 @@
   - Tapping toggles raised and pressed states.
   - Status rows must update with state, depth, shadow, and motion values.
 - Home Card:
-  - Show a compact puffy button and pastel blobs.
-  - Keep copy short: style name, one-line summary, and 2-3 material labels.
+  - One poked clay specimen: a matte peach ellipse (wider than tall, center at 0.63 card height) with a thumbprint dent carved into its upper-left face and two tiny mint/butter crumbs resting low-right at its base.
+  - The field stays quiet: a near-flat cream vertical gradient plus one flat lilac arc cropping into the top-right corner; copy is only the style name and one hook line, top-left.
+  - Press is the poke: the ball squashes volume-preservingly (scale x 1.06, y 0.92, anchored at its bottom) while the dent grows and darkens; dual outer shadows pull in tight, then everything springs back with a jelly rebound. Reduced motion drops the squash and offset, keeping only shadow contraction and dent darkening.
+  - The masked inner puff and the dent's blurred inset strokes render only at rest; while the home canvas pans (isDragging) they fall back to flat fills plus a plain hairline, and shadow radii roughly halve.
 - Buttons:
   - Minimum 44 pt touch target.
   - Press feedback must show physical compression, not only color change.

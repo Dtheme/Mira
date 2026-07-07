@@ -12,23 +12,45 @@ struct MiAppRootView: View {
     @State private var selectedStyle: MiDesignStyle?
     @State private var unavailableStyle: MiDesignStyle?
     @State private var showsUnavailableToast = false
+    @State private var showsDemoList = false
+    @State private var selectedDemo: MiDemo?
     @Namespace private var dummyNamespace
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ZStack {
             homeLayer
-                .opacity(selectedStyle == nil ? 1 : 0)
-                .scaleEffect(selectedStyle == nil ? 1 : 0.96)
-                .allowsHitTesting(selectedStyle == nil)
+                .opacity(isHomeCovered ? 0 : 1)
+                .scaleEffect(isHomeCovered ? 0.96 : 1)
+                .allowsHitTesting(!isHomeCovered)
 
             if let selectedStyle {
                 detailView(for: selectedStyle)
                     .transition(detailTransition)
                     .zIndex(10)
             }
+
+            if showsDemoList {
+                MiDemoListView(
+                    demos: MiDemoRepository.demos,
+                    onSelect: { openDemo($0) },
+                    onBack: { closeDemoList() }
+                )
+                .transition(detailTransition)
+                .zIndex(20)
+            }
+
+            if let selectedDemo {
+                MiHoloCardModule.showcaseView(for: selectedDemo) {
+                    closeDemo()
+                }
+                .transition(detailTransition)
+                .zIndex(30)
+            }
         }
         .animation(dissolveAnimation, value: selectedStyle?.id)
+        .animation(dissolveAnimation, value: showsDemoList)
+        .animation(dissolveAnimation, value: selectedDemo?.id)
         .tint(MiColorTokens.appleBlue500)
         .toast(
             isPresenting: $showsUnavailableToast,
@@ -76,6 +98,13 @@ struct MiAppRootView: View {
                 unavailableStyle = style
                 showsUnavailableToast = true
             }
+        }
+        .overlay(alignment: .bottom) {
+            MiDemoEntryCard {
+                openDemoList()
+            }
+            .padding(.horizontal, MiSpacingTokens.md)
+            .padding(.bottom, MiSpacingTokens.sm)
         }
     }
 
@@ -170,6 +199,27 @@ struct MiAppRootView: View {
 
     private func closeDetail() {
         selectedStyle = nil
+    }
+
+    private func openDemoList() {
+        showsDemoList = true
+    }
+
+    private func closeDemoList() {
+        showsDemoList = false
+    }
+
+    private func openDemo(_ demo: MiDemo) {
+        guard MiHoloCardModule.canOpen(demo) else { return }
+        selectedDemo = demo
+    }
+
+    private func closeDemo() {
+        selectedDemo = nil
+    }
+
+    private var isHomeCovered: Bool {
+        selectedStyle != nil || showsDemoList
     }
 }
 

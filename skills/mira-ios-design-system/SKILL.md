@@ -78,6 +78,15 @@ When the user asks for a style direction, UI plan, or SwiftUI implementation:
 - Prefer native SwiftUI concepts before adding dependencies.
 - For new Mira app code, every newly created Swift type and matching Swift file must use the `Mi` prefix, such as `MiHomeView.swift`, `MiDesignStyle.swift`, or `MiStyleRepository.swift`.
 
+## Home Style Cards
+
+The home screen is a pan canvas rendering about 12-14 card replicas at once; every implemented style has a bespoke signature preview card. The full contract lives in `docs/design-system/mira-app-design-system.md` (`Card Content Rules > Implemented Style: Signature Preview Card`), and each style documents its own card under `Component Guidance > Home Card` in its `Design.md`. When creating or optimizing a home card:
+
+- One signature element per card, expressed in the style's own idiom; the card must read as its style in one glance and must not reuse another style's card recipe.
+- Idle is fully static: no `TimelineView`, no `repeatForever`, no live counters. Gate blur+mask passes, blurred highlights, live materials, and glow shadows behind the `isDragging` flag with a cheap flat fallback; shrink or simplify shadows while the canvas pans.
+- Press feedback reads the `miHomePressedStyleID` environment and responds in-idiom with a reduced-motion fallback; the title applies `miStyleTitleTransition(style.id)`.
+- New style integration touchpoints: `MiStyleRepository.styles`, `MiAppRootView` (canOpen + detail branch), `MiStyleCardView` (home preview branch), en/zh localization, and the `style-taxonomy.md` table.
+
 ## Anti-AI-Slop Discipline
 
 Generic AI interfaces share a set of tells. Before generating any design or SwiftUI, avoid the default reaches below so the result reads as the chosen style, not as a template. These rules govern the UI and the sample copy you produce, not this internal document. The selected style's `Design.md` always wins over a generic instinct.

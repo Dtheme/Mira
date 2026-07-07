@@ -31,6 +31,7 @@ enum MiMaterial3Tokens {
     static let onSurfaceVariant = Color(hex: 0x49454F)
     static let error = Color(hex: 0xB3261E)
     static let errorContainer = Color(hex: 0xF9DEDC)
+    static let shadowPlum = Color(hex: 0x4A4458)
     static let radius: CGFloat = 24
     static let sectionSpacing: CGFloat = 28
 

@@ -22,28 +22,21 @@
                                     <constraint firstAttribute="width" constant="120" id="MiL-logo-width"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Mira" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MiL-label-title">
-                                <rect key="frame" x="160.66666666666666" y="696" width="71.666666666666657" height="43"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="36"/>
-                                <color key="textColor" red="0.058823529411764705" green="0.078431372549019607" blue="0.11764705882352941" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Design Styles, Made Native" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MiL-label-slogan">
-                                <rect key="frame" x="95.000000000000014" y="746" width="203.33333333333337" height="20"/>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
-                                <color key="textColor" red="0.3843137254901961" green="0.43137254901960786" blue="0.50196078431372548" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mira_wordmark.png" translatesAutoresizingMaskIntoConstraints="NO" id="MiL-img-title">
+                                <rect key="frame" x="159.5" y="695" width="74" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="MiL-title-height"/>
+                                    <constraint firstAttribute="width" constant="74" id="MiL-title-width"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="MiL-safe-area"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="MiL-img-logo" firstAttribute="centerX" secondItem="MiL-view-root" secondAttribute="centerX" id="MiL-logo-center-x"/>
                             <constraint firstItem="MiL-img-logo" firstAttribute="centerY" secondItem="MiL-view-root" secondAttribute="centerY" constant="-54" id="MiL-logo-center-y"/>
-                            <constraint firstItem="MiL-label-slogan" firstAttribute="centerX" secondItem="MiL-view-root" secondAttribute="centerX" id="MiL-slogan-center-x"/>
-                            <constraint firstItem="MiL-label-slogan" firstAttribute="top" secondItem="MiL-label-title" secondAttribute="bottom" constant="7" id="MiL-slogan-top"/>
-                            <constraint firstItem="MiL-label-title" firstAttribute="centerX" secondItem="MiL-view-root" secondAttribute="centerX" id="MiL-title-center-x"/>
-                            <constraint firstItem="MiL-safe-area" firstAttribute="bottom" secondItem="MiL-label-slogan" secondAttribute="bottom" constant="18" id="U1r-fL-3fN"/>
+                            <constraint firstItem="MiL-img-title" firstAttribute="centerX" secondItem="MiL-view-root" secondAttribute="centerX" id="MiL-title-center-x"/>
+                            <constraint firstItem="MiL-safe-area" firstAttribute="bottom" secondItem="MiL-img-title" secondAttribute="bottom" constant="45" id="MiL-title-bottom"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -54,5 +47,6 @@
     </scenes>
     <resources>
         <image name="app_logo.png" width="1254" height="1254"/>
+        <image name="mira_wordmark.png" width="574" height="344"/>
     </resources>
 </document>

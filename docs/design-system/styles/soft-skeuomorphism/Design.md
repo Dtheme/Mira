@@ -83,6 +83,7 @@
 - Navigation: floating cream pill with moss/peach accent and a clear back action.
 - Button: cream or peach pill, soft lower shadow, subtle press compression, clear label.
 - Card: warm cream panel, low-contrast depth, rounded corners, and small ambient object illustration.
+- Home Card: a dusk nightstand poster. Cream-to-peach sky over a darker warm table plane on the bottom 30%, separated by a 1 pt lit shelf line; a hero mushroom lamp stands on the shelf with an ambient halo, an under-dome light slit, a contact shadow, and a pool of light on the table. Moss is deliberately absent; warm lamp light is the only accent. Text budget is the title plus one engraved nameplate ("LAMP, DUSK"). Press blooms every light layer and scales the lamp 1.02 from its base; under reduced motion the bloom is fill-only and the object does not move. All glows are plain radial gradients at idle; the two blurred highlights (dome slit bloom, stem specular) render only at rest and fall back to a flat slit or are omitted while the home canvas pans (`isDragging`).
 - Sheet / Modal: nested cream panel with readable copy and one clear close or confirm action.
 - Form: inset cream troughs; focused state gets moss stroke and dark label, not only glow.
 - Tab / Segmented Control: pill segments with selected fill, moss text, and shape difference.

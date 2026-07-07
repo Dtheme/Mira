@@ -2,7 +2,7 @@
 
 ## Style Identity
 
-- **Status**: Style documented. Runtime detail page pending under `Mira/Features/Styles/BentoGrid/`.
+- **Status**: Implementation-ready. Mira includes a homepage preview card and an independent detail page under `Mira/Features/Styles/BentoGrid/`.
 - **Definition**: Bento Grid is a layout-led style that arranges content into a modular mosaic of rounded rectangular cells of varied sizes — like a Japanese bento box — where each cell is a self-contained, scannable module.
 - **Core Feeling**: 模块化、清晰、信息有密度但有呼吸、精致现代、可快速扫描。
 - **Visual Keywords**: modular cells, varied tile sizes, rounded rectangles, consistent gutters, dashboard mosaic, asymmetric balance, one hero tile, calm neutral surfaces.
@@ -77,6 +77,7 @@
 - Navigation: standard iOS navigation; tapping a cell opens its detail. Use SwiftUI `NavigationStack`.
 - Button: action cells contain one clear primary control; keep at least 44 pt height.
 - Card: each cell is a module with a header label, a focal value/visual, and optional one-line caption. Build with `RoundedRectangle(style: .continuous)` surfaces.
+- Home Card: the whole card face IS the bento board — a full-bleed 3-column `Grid` on the flat canvas neutral, one shared cell radius and gutter, flat fills only (no gradients, no materials). Row 1: a 2-column indigo hero tile (tiny caps "Hero" label, large white numeral, spark bars) beside a white cell holding the single green ring and a muted quiet cell; row 2: a small alt cell plus a 2-column skeleton-line cell; row 3: the title lives inside its own full-width name-plate tile with a 2x2 micro-grid glyph. White cells carry a 1 pt hairline; depth is one ink-tinted card shadow plus an accent-tinted hero lift. Press feedback is local to the hero tile: 0.965 scale-down, a 6% ink overlay, and a tightened shadow (reduced motion skips the scale and animates opacity only). While dragging, the card shadow simplifies and the hero's accent shadow is removed; idle is fully static.
 - Sheet / Modal: cell detail can open in a sheet that reuses the same rounded surface language.
 - Form: inputs live inside a dedicated input cell with a visible label and clear focus ring.
 - Tab / Segmented Control: a board-level segmented control can switch the mosaic's data set.

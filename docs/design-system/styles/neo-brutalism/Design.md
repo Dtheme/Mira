@@ -84,6 +84,7 @@
 
 - **Hero**: paper card, 3pt border, large hard shadow, short title, and a compact visual preview.
 - **Style Card**: `NB` tag, style name, short summary, saturated blocks, 3pt border, hard shadow.
+- **Home Card**: a full-bleed yellow slab with a 3pt ink border over a solid offset ink shadow; the only object is one white arrow block (rotated -4 degrees, `7pt x 7pt` solid shadow), plus a printed ink `NB` stamp (flat, no shadow) and a bottom-left title with the shadow-spec caption `7x7 · NO BLUR`, which states the block's actual resting shadow. Press drops the card onto its outer shadow while the block translates `7pt x 7pt` onto its own shadow, which collapses to zero. While the home canvas drags (isDragging fallback) the outer shadow offset shrinks to 0.55x at 0.32 opacity and the block shadow degrades to `4pt x 4pt`; nothing ever blurs. Reduced Motion removes all translation and changes shadow states only.
 - **Button**: at least 44pt high, filled rectangle, 3pt border, hard shadow, bold label.
 - **Pressed Button**: translate `4pt x 4pt`, collapse shadow to zero. Reduced Motion only changes shadow/border.
 - **Toggle**: visible on/off text, thick track border, knob border, color plus text state.

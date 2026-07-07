@@ -1150,3 +1150,70 @@
 "hv_tokens" = "颜料罐";
 "hv_tokens_body" = "褪色胶片色板,加一抹干燥玫瑰强调。";
 "hv_prompt" = "提示词指南";
+
+/* Demo area */
+"demo_area_title" = "实验室";
+"demo_area_subtitle" = "交互效果演示";
+"demo_list_title" = "实验室";
+"demo_back" = "返回";
+
+/* Holo card demo */
+"demo_holo_title" = "诗词卡";
+"demo_holo_subtitle" = "Metal 与陀螺仪驱动的全息卡";
+"demo_holo_caption" = "拖动卡面,光随指尖流动;倾斜设备也会反光。左右切换稀有度。";
+"card_a11y_fmt" = "%@,%@,全息卡演示";
+"card_aurora_name" = "极光游者";
+"card_aurora_type" = "霜属";
+"card_aurora_stat" = "在极夜的微光里悄然游移。";
+"card_verdant_name" = "静林";
+"card_verdant_type" = "叶属";
+"card_verdant_stat" = "栖息于无风的林间空地。";
+"card_ember_name" = "余烬轻纱";
+"card_ember_type" = "火属";
+"card_ember_stat" = "披着将熄未熄的暖光。";
+
+/* Holo card deck (rarities) */
+"card_prisma_name" = "棱镜兔";
+"card_nebula_name" = "星云体";
+"card_voltail_name" = "伏特尾";
+"elem_fairy" = "妖精系";
+"elem_psychic" = "超能系";
+"elem_lightning" = "电系";
+"rarity_rainbow" = "彩虹罕贵";
+"rarity_cosmos" = "银河全息";
+"rarity_holo" = "稀有全息";
+
+/* Art cards */
+"rarity_art" = "艺术罕贵";
+"card_aurora2_name" = "极夜流光";
+"card_aurora2_sub" = "北境之诗 · 限定";
+"card_cloud_name" = "云巅破晓";
+"card_cloud_sub" = "云海之上 · 限定";
+"card_tide_name" = "潮汐之月";
+"card_tide_sub" = "夜海回响 · 限定";
+"card_snow_name" = "独钓寒江雪";
+"card_snow_sub" = "千山暮雪 · 限定";
+"card_waterfall_name" = "飞瀑垂虹";
+"card_waterfall_sub" = "空山飞瀑 · 限定";
+
+/* Per-card classical poem lines (public-domain Tang verse) */
+"card_aurora2_poem" = "明月松间照，清泉石上流";
+"card_cloud_poem" = "众鸟高飞尽，孤云独去闲";
+"card_tide_poem" = "海上生明月，天涯共此时";
+"card_snow_poem" = "孤舟蓑笠翁，独钓寒江雪";
+"card_waterfall_poem" = "飞流直下三千尺，疑是银河落九天";
+"demo_prev" = "上一张";
+"demo_next" = "下一张";
+
+/* Home style card redesign (aesthetic pass) */
+"home_alg_short" = "内容在下，玻璃在上。";
+"home_clay_hook" = "刚捏好的黏土";
+"home_ed_monogram" = "E";
+"home_ed_folio" = "Vol. II";
+"home_glass_caption" = "磨砂样片";
+"home_m3_seed" = "#6750A4";
+"min_card_axes" = "网格 · 字体 · 留白";
+"nb_card_monogram" = "NB";
+"nb_card_shadow_spec" = "7×7 · 无模糊";
+"rd_home_cmdk" = "⌘K";
+"home_softsk_nameplate" = "暮色台灯";

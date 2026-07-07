@@ -17,6 +17,7 @@ enum MiRefinedDarkTokens {
     static let danger = Color(hex: 0xF36F6F)
     static let hairline = Color.white.opacity(0.08)
     static let hairlineStrong = Color.white.opacity(0.16)
+    static let cardShadow = Color(hex: 0x101228)
 
     static let radius: CGFloat = 18
     static let smallRadius: CGFloat = 12

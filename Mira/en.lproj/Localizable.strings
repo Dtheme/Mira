@@ -1150,3 +1150,70 @@
 "hv_tokens" = "Color jar";
 "hv_tokens_body" = "The faded film palette, with one dried-rose accent.";
 "hv_prompt" = "Prompt guidance";
+
+/* Demo area */
+"demo_area_title" = "Lab";
+"demo_area_subtitle" = "Interactive effect demos";
+"demo_list_title" = "Lab";
+"demo_back" = "Back";
+
+/* Holo card demo */
+"demo_holo_title" = "Poetry Card";
+"demo_holo_subtitle" = "A holographic card driven by Metal and the gyroscope";
+"demo_holo_caption" = "Drag across the card and the light follows your finger; tilt the device to make it shimmer. Swipe the arrows for rarities.";
+"card_a11y_fmt" = "%@, %@, holographic card demo";
+"card_aurora_name" = "Aurora Drift";
+"card_aurora_type" = "Frost";
+"card_aurora_stat" = "Drifts quietly through the polar dusk.";
+"card_verdant_name" = "Verdant Hush";
+"card_verdant_type" = "Leaf";
+"card_verdant_stat" = "Rests in a windless forest clearing.";
+"card_ember_name" = "Ember Veil";
+"card_ember_type" = "Ember";
+"card_ember_stat" = "Wrapped in a warm, fading glow.";
+
+/* Holo card deck (rarities) */
+"card_prisma_name" = "Prismit";
+"card_nebula_name" = "Nebulon";
+"card_voltail_name" = "Voltail";
+"elem_fairy" = "Fairy";
+"elem_psychic" = "Psychic";
+"elem_lightning" = "Lightning";
+"rarity_rainbow" = "Rainbow Rare";
+"rarity_cosmos" = "Cosmos Holo";
+"rarity_holo" = "Rare Holo";
+
+/* Art cards */
+"rarity_art" = "Art Rare";
+"card_aurora2_name" = "Aurora Veil";
+"card_aurora2_sub" = "Song of the North · Limited";
+"card_cloud_name" = "Skybreak";
+"card_cloud_sub" = "Above the Clouds · Limited";
+"card_tide_name" = "Tidemoon";
+"card_tide_sub" = "Echo of the Tide · Limited";
+"card_snow_name" = "River Snow";
+"card_snow_sub" = "Snow on the Cold River · Limited";
+"card_waterfall_name" = "Rainbow Cascade";
+"card_waterfall_sub" = "Cascade in Empty Hills · Limited";
+
+/* Per-card classical poem lines (public-domain Tang verse) */
+"card_aurora2_poem" = "明月松间照，清泉石上流";
+"card_cloud_poem" = "众鸟高飞尽，孤云独去闲";
+"card_tide_poem" = "海上生明月，天涯共此时";
+"card_snow_poem" = "孤舟蓑笠翁，独钓寒江雪";
+"card_waterfall_poem" = "飞流直下三千尺，疑是银河落九天";
+"demo_prev" = "Previous";
+"demo_next" = "Next";
+
+/* Home style card redesign (aesthetic pass) */
+"home_alg_short" = "Content below. Glass above.";
+"home_clay_hook" = "Freshly kneaded";
+"home_ed_monogram" = "E";
+"home_ed_folio" = "Vol. II";
+"home_glass_caption" = "Frost specimen";
+"home_m3_seed" = "#6750A4";
+"min_card_axes" = "GRID · TYPE · SPACE";
+"nb_card_monogram" = "NB";
+"nb_card_shadow_spec" = "7×7 · NO BLUR";
+"rd_home_cmdk" = "⌘K";
+"home_softsk_nameplate" = "LAMP, DUSK";

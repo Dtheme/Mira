@@ -17,70 +17,76 @@ struct MiEditorialLuxeHomePreview: View {
 
     private typealias EdT = MiEditorialLuxeTokens
     private var isPressed: Bool { pressedStyleID == style.id && !isDragging }
+    private var scale: CGFloat { cardSize.width / 174 }
+    private var monogramSize: CGFloat { min(cardSize.height * 0.415, 116) }
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        let frameInset = 9 * scale
+        let ruleBaseWidth = cardSize.width - frameInset * 2 - 24 * scale
+        let ruleWidth = (isPressed && !reduceMotion) ? ruleBaseWidth + 10 * scale : ruleBaseWidth
 
         ZStack {
             shape.fill(EdT.paper)
 
-            VStack(alignment: .leading, spacing: 9) {
-                HStack(spacing: 7) {
-                    Rectangle().fill(EdT.gold).frame(width: 16, height: 1.5)
+            // Inner bookplate frame: deliberately sharp-cornered for a print feel.
+            ZStack {
+                Rectangle()
+                    .strokeBorder(EdT.ink.opacity(0.30), lineWidth: 0.75)
+
+                VStack(spacing: 0) {
                     Text(MiL10n.text("ed_feature_kicker_1"))
-                        .font(.system(size: 9, weight: .semibold, design: .default))
-                        .tracking(1.2)
+                        .font(.system(size: 8.5, weight: .semibold))
+                        .tracking(1.6)
                         .foregroundStyle(EdT.gold)
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
-                }
+                        .padding(.top, 12 * scale)
 
-                Text(MiL10n.text(style.name))
-                    .font(EdT.serif(22, .regular))
-                    .foregroundStyle(EdT.ink)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.7)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .miStyleTitleTransition(style.id)
+                    Spacer(minLength: 8 * scale)
 
-                Text(MiL10n.text("home_ed_short"))
-                    .font(.system(size: 11, weight: .regular, design: .default))
-                    .foregroundStyle(EdT.muted)
-                    .lineSpacing(2)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
+                    // Engraved rule runs behind the monogram so it shows through the counters.
+                    ZStack {
+                        Rectangle()
+                            .fill(EdT.gold.opacity(isPressed ? 1.0 : 0.65))
+                            .frame(width: ruleWidth, height: 0.75)
 
-                Spacer(minLength: 0)
+                        Text(MiL10n.text("home_ed_monogram"))
+                            .font(EdT.serif(monogramSize, .regular).italic())
+                            .foregroundStyle(EdT.ink)
+                            .fixedSize()
+                    }
+                    .frame(height: monogramSize * 0.86)
 
-                Rectangle().fill(EdT.hairline).frame(height: 1)
-
-                HStack {
-                    Text(MiL10n.text("ed_feature_byline"))
-                        .font(EdT.serif(11, .regular))
-                        .italic()
-                        .foregroundStyle(EdT.muted)
+                    Text(MiL10n.text(style.name))
+                        .font(EdT.serif(17, .regular))
+                        .foregroundStyle(EdT.ink)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                    Spacer(minLength: 0)
-                    Text("No.01")
-                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(EdT.gold)
+                        .minimumScaleFactor(0.75)
+                        .miStyleTitleTransition(style.id)
+                        .padding(.top, 7 * scale)
+
+                    Spacer(minLength: 8 * scale)
+
+                    HStack(spacing: 6) {
+                        Rectangle().fill(EdT.gold).frame(width: 12 * scale, height: 0.75)
+                        Text(MiL10n.text("home_ed_folio"))
+                            .font(.system(size: 9.5, weight: .semibold, design: .monospaced))
+                            .foregroundStyle(EdT.gold)
+                        Rectangle().fill(EdT.gold).frame(width: 12 * scale, height: 0.75)
+                    }
+                    .padding(.bottom, 11 * scale)
                 }
+                .padding(.horizontal, 13 * scale)
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 16)
-            .padding(.bottom, 15)
-            .offset(y: isPressed ? 1 : 0)
+            .padding(frameInset)
+            .scaleEffect(isPressed && !reduceMotion ? 0.985 : 1)
         }
         .frame(width: cardSize.width, height: cardSize.height)
         .clipShape(shape)
         .overlay {
             shape.strokeBorder(
-                LinearGradient(
-                    colors: [EdT.gold.opacity(0.4 + focus.borderOpacity * 0.3), EdT.hairline],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
+                EdT.hairline.opacity(0.55 + focus.borderOpacity * 0.45),
                 lineWidth: 1
             )
         }

@@ -174,6 +174,7 @@ Official interpretation for Mira:
   - home cards with screenshots use full-bleed screenshot backgrounds plus readable style names
   - home cards without screenshots show the style name and a short introduction on a lightweight, readable white/frost placeholder surface
   - avoid applying live glass material to every card in the Apple Watch-style home canvas
+  - the Apple Liquid Glass home card (`MiAppleLiquidGlassHomePreview`) demonstrates the doctrine itself: an opaque soft-frost content page (title, hook, quiet page furniture) with ONE floating glass dock capsule as the signature control, whose lens uses a browse (grid) semantic, not search; glass is double-gated (`glassEffect` behind `#available(iOS 26,*)`, `ultraThinMaterial` fallback, flat gradient while the canvas pans)
 - Sheet / Modal:
   - use glass for sheet chrome, grabber area, close/action controls, and inspector headers
   - body content uses readable grouped sections

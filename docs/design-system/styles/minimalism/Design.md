@@ -42,6 +42,7 @@
 - Tags / filters: rectangular chips with selected fill and unselected outline.
 - Segmented control: crisp selected fill, no blur or decorative glow.
 - Hero Preview: oversized typographic/grid tile + reactive metrics for grid, type, and density.
+- Home Card: a single Swiss poster page. Flat paper, two structural hairlines only (a margin column at ~13% of width and a title baseline at 26% of height), a solid accent origin square at their intersection, a 9 pt tracked micro label, a one-line semibold title, and a giant ink issue numeral "01" at 50% of card height that bleeds past the bottom-right edge and is cropped by the card shape. Radius rule is outer 8 / inner 0: the shell keeps a fixed 8 pt continuous radius while every internal element stays square. One constant 1 pt ink border (opacity follows focus, fills to full on press) and a single ink-tinted shadow. Press sinks the label + title + numeral group by 1 px and scales the origin square to 1.35x while the grid lines and border never move; Reduce Motion makes the switch instant. Idle is fully static, and the only isDragging fallback is flattening the shadow (radius 10 -> 3), since the card uses no blur, material, or glow.
 
 ## iOS / SwiftUI Notes
 

@@ -2,7 +2,7 @@
 
 ## Style Identity
 
-- **Status**: Style documented. Runtime detail page pending under `Mira/Features/Styles/RefinedDark/`.
+- **Status**: Implementation-ready. Mira includes a homepage preview card and an independent detail page under `Mira/Features/Styles/RefinedDark/`.
 - **Definition**: Refined Dark is a polished dark product-UI style (in the spirit of modern developer tools like Linear and Vercel): a deep near-black base, subtle multi-stop gradients, crisp hairline borders, restrained accent with tasteful glow, and precise small-to-medium typography.
 - **Core Feeling**: 冷静、精密、高级、专业;暗色不沉闷,靠极细边框、微妙渐变和克制发光建立层级。
 - **Visual Keywords**: deep dark base, hairline borders, subtle gradient sheen, restrained indigo accent, soft glow, crisp type, micro-interactions, product-grade polish.
@@ -76,6 +76,7 @@
 - Navigation: a slim dark top bar with a hairline bottom edge and a clear back control.
 - Button: primary uses an accent gradient with a faint glow and crisp white text; secondary uses surface + hairline; ghost is transparent + hairline. Micro press (scale + brightness).
 - Card: dark surface, hairline border, top highlight line, optional accent left-edge for active.
+- Home Card: a Cmd-K command palette poster on the deepest `base` surface. Upper field carries a static dot grid fading toward one focused command bar (raised-surface gradient fill, accent hairline border, a static full-accent caret, muted placeholder, and a ⌘K keycap) floating at 40% height over an accent bloom and a light pool below; the footer is a hairline with a 12 pt accent tick above the title. The bar's accent glow is the card's only glow and drops to zero while the home canvas pans (`isDragging`), where the indigo-tinted outer shadow also tightens; press brightens the bar border and glow like focus landing in the input, with a fill/border-only fallback under reduced motion. Separation stays border-led, never heavy shadows.
 - Sheet / Modal: raised dark surface with a hairline and a clear close.
 - Form: dark inset field with a hairline that brightens to accent on focus.
 - Tab / Segmented Control: a dark track with a raised, subtly glowing selected segment.

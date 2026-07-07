@@ -43,7 +43,7 @@
 - Chips: selected chips include icon/shape support, not color alone.
 - Search/Input: use surface container, visible icon/placeholder, clear focus treatment.
 - Navigation: Material-like segmented/tab controls are allowed, but iOS back behavior remains native.
-- Home Card: show the same signature idea at card scale: source color, compact role chips, one tonal container, and one FAB. Avoid search bars, bottom navigation, or full app chrome on the card.
+- Home Card: a tonal shape-quad glyph on a quiet surface-to-surface-container-low field: four M3 family shapes in one 2x2 cluster (primary petal, tertiary-container circle with a tertiary role dot, secondary-container eight-lobe scallop, secondary squircle), plus the title and a monospaced `#6750A4` seed annotation with a primary seed dot. Border is a 1pt outline-variant hairline; the only shadows are outside the card and tinted (primary + deep plum), never black. Press morphs the shape tokens (petal relaxes toward a squircle, squircle grows toward a circle, scallop rotates half a lobe, role dot grows) beneath 0.10 on-color state layers; reduced motion keeps only the state-layer fade. Idle is fully static, and while dragging the card falls back to a single small shadow. Avoid switches, chips, badges, search bars, bottom navigation, or full app chrome on the card.
 - Hero Preview: show one focused signature component, not a crowded miniature app. The preferred demo is a dynamic tonal component: one source color generates primary/secondary/tertiary/neutral roles, a primary container, FAB color, shape radius, and state-layer feedback.
 
 ## iOS / SwiftUI Notes

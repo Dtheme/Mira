@@ -2,7 +2,8 @@
 //  MiGlassmorphismHomePreview.swift
 //  Mira
 //
-//  Created on 2026/5/25.
+//  Glassmorphism home style card: a frosted specimen slide tilted +4 deg over a
+//  saturated aurora field, with a dim echo pane behind it for layered depth.
 //
 
 import SwiftUI
@@ -14,265 +15,213 @@ struct MiGlassmorphismHomePreview: View {
     let cornerRadius: CGFloat
     let isDragging: Bool
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.miHomePressedStyleID) private var pressedStyleID
+
+    private var isPressed: Bool { pressedStyleID == style.id && !isDragging }
+    // Pick-up press effects that reduced motion suppresses (pane scale + echo gap);
+    // rim and fill brightening stay on so layer hierarchy still reads.
+    private var isLifted: Bool { isPressed && !reduceMotion }
+    private var k: CGFloat { cardSize.width / 174 }
+
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
 
-        ZStack(alignment: .topLeading) {
-            MiGlassmorphismHomeBackground(shape: shape, focus: focus)
+        ZStack {
+            auroraField(shape: shape)
 
-            MiGlassmorphismFloatingLens(focus: focus, isDragging: isDragging)
-                .frame(width: cardSize.width * 0.58, height: cardSize.height * 0.54)
-                .offset(x: cardSize.width * 0.35, y: cardSize.height * 0.18)
+            echoPane
+                .position(x: cardSize.width * 0.62, y: cardSize.height * 0.34)
 
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(alignment: .center, spacing: 8) {
-                    MiGlassmorphismBadge()
-
-                    Text(MiL10n.text(style.name))
-                        .font(.system(size: 18, weight: .semibold, design: .rounded))
-                        .foregroundStyle(MiGlassmorphismTokens.ink)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.66)
-                        .miStyleTitleTransition(style.id)
-                }
-
-                Text(MiL10n.text("home_glass_short"))
-                    .font(.system(size: 11.8, weight: .semibold, design: .rounded))
-                    .lineSpacing(2.4)
-                    .foregroundStyle(MiGlassmorphismTokens.ink.opacity(0.78))
-                    .fixedSize(horizontal: false, vertical: true)
-
-                Spacer(minLength: 0)
-
-                MiGlassmorphismHomeMetrics(isDragging: isDragging)
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 22)
+            specimenPane
+                .position(x: cardSize.width * 0.48, y: cardSize.height * 0.60)
         }
         .frame(width: cardSize.width, height: cardSize.height)
         .clipShape(shape)
         .overlay {
-            shape
-                .strokeBorder(
-                    LinearGradient(
-                        colors: [
-                            Color.white.opacity(0.96),
-                            MiGlassmorphismTokens.cyan.opacity(0.32 + focus.borderOpacity * 0.54),
-                            MiGlassmorphismTokens.violet.opacity(0.18),
-                            Color.white.opacity(0.38)
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    lineWidth: 1.35
-                )
+            shape.strokeBorder(
+                LinearGradient(
+                    colors: [
+                        Color.white.opacity(0.85),
+                        MiGlassmorphismTokens.cyan.opacity(0.30 + focus.borderOpacity * 0.35),
+                        MiGlassmorphismTokens.violet.opacity(0.18),
+                        Color.white.opacity(0.30)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                lineWidth: 1.1
+            )
         }
-        .overlay(alignment: .topLeading) {
-            shape
-                .strokeBorder(Color.white.opacity(0.32 + focus.borderOpacity * 0.20), lineWidth: 5)
-                .blendMode(.screen)
-                .padding(1.5)
-        }
-        .shadow(color: MiGlassmorphismTokens.cyan.opacity(focus.shadowOpacity * 0.36), radius: isDragging ? 8 : 24, x: 0, y: isDragging ? 5 : 14)
-        .shadow(color: MiGlassmorphismTokens.blue.opacity(focus.shadowOpacity * 0.24), radius: isDragging ? 10 : 28, x: 0, y: isDragging ? 7 : 18)
-        .shadow(color: Color(hex: 0x75859C).opacity(focus.shadowOpacity * 0.28), radius: isDragging ? 12 : 30, x: 0, y: isDragging ? 8 : 20)
+        .shadow(
+            color: MiGlassmorphismTokens.blue.opacity(focus.shadowOpacity * (isDragging ? 0.22 : 0.28)),
+            radius: isDragging ? 8 : 22,
+            x: 0,
+            y: isDragging ? 6 : 14
+        )
+        .shadow(
+            color: MiGlassmorphismTokens.violet.opacity(isDragging ? 0 : focus.shadowOpacity * 0.16),
+            radius: 26,
+            x: 0,
+            y: 18
+        )
+        .animation(
+            reduceMotion ? .easeOut(duration: 0.01) : .spring(response: 0.32, dampingFraction: 0.8),
+            value: isPressed
+        )
     }
-}
 
-private struct MiGlassmorphismHomeBackground: View {
-    let shape: RoundedRectangle
-    let focus: MiCardFocus
+    // MARK: Aurora field
 
-    var body: some View {
+    private func auroraField(shape: RoundedRectangle) -> some View {
         shape
             .fill(
                 LinearGradient(
                     colors: [
-                        Color(hex: 0xF9FEFF),
-                        MiGlassmorphismTokens.cyan.opacity(0.24 + focus.borderOpacity * 0.12),
-                        MiGlassmorphismTokens.blue.opacity(0.18),
-                        MiGlassmorphismTokens.violet.opacity(0.24)
+                        MiGlassmorphismTokens.fieldCyan,
+                        MiGlassmorphismTokens.fieldBlue,
+                        MiGlassmorphismTokens.fieldViolet
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
             )
-            .overlay(alignment: .topTrailing) {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [
-                                MiGlassmorphismTokens.cyan.opacity(0.62),
-                                MiGlassmorphismTokens.blue.opacity(0.18),
-                                .clear
-                            ],
-                            center: .center,
-                            startRadius: 4,
-                            endRadius: 96
-                        )
-                    )
-                    .frame(width: 132, height: 132)
-                    .offset(x: 30, y: -34)
-            }
-            .overlay(alignment: .bottomLeading) {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [
-                                MiGlassmorphismTokens.violet.opacity(0.48),
-                                MiGlassmorphismTokens.mint.opacity(0.18),
-                                .clear
-                            ],
-                            center: .center,
-                            startRadius: 8,
-                            endRadius: 112
-                        )
-                    )
-                    .frame(width: 154, height: 154)
-                    .offset(x: -46, y: 42)
-            }
             .overlay(alignment: .topLeading) {
+                poolCircle(MiGlassmorphismTokens.cyan.opacity(0.85), diameter: 150 * k)
+                    .offset(x: -20 * k, y: -26 * k)
+            }
+            .overlay(alignment: .bottomTrailing) {
+                poolCircle(MiGlassmorphismTokens.poolViolet.opacity(0.75), diameter: 190 * k)
+                    .offset(x: 38 * k, y: 44 * k)
+            }
+            .overlay(alignment: .leading) {
+                poolCircle(MiGlassmorphismTokens.mint.opacity(0.6), diameter: 70 * k)
+                    .offset(x: -22 * k, y: cardSize.height * 0.12)
+            }
+            .overlay(alignment: .top) {
+                LinearGradient(
+                    colors: [Color.white.opacity(0.30), .clear],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: cardSize.height * 0.40)
+            }
+    }
+
+    private func poolCircle(_ color: Color, diameter: CGFloat) -> some View {
+        Circle()
+            .fill(
+                RadialGradient(
+                    colors: [color, .clear],
+                    center: .center,
+                    startRadius: 1,
+                    endRadius: diameter / 2
+                )
+            )
+            .frame(width: diameter, height: diameter)
+    }
+
+    // MARK: Echo pane
+
+    private var echoPane: some View {
+        let echoShape = RoundedRectangle(cornerRadius: 22 * k, style: .continuous)
+
+        return echoShape
+            .fill(Color.white.opacity(isLifted ? 0.18 : 0.13))
+            .overlay {
+                echoShape.strokeBorder(Color.white.opacity(0.32), lineWidth: 1)
+            }
+            .frame(width: cardSize.width * 0.60, height: cardSize.height * 0.36)
+            .rotationEffect(.degrees(4))
+            .offset(x: isLifted ? 3 * k : 0, y: isLifted ? -3 * k : 0)
+    }
+
+    // MARK: Front specimen pane
+
+    private var specimenPane: some View {
+        let paneW = cardSize.width * 0.82
+        let paneH = cardSize.height * 0.50
+        let paneShape = RoundedRectangle(cornerRadius: 22 * k, style: .continuous)
+
+        return paneShape
+            .fill(
                 LinearGradient(
                     colors: [
-                        Color.white.opacity(0.70),
-                        Color.white.opacity(0.18),
-                        .clear
+                        Color.white.opacity(isPressed ? 0.50 : 0.44),
+                        Color.white.opacity(0.16)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
+            )
+            .overlay {
+                ZStack(alignment: .topLeading) {
+                    if isDragging {
+                        Color.white.opacity(0.06)
+                    } else {
+                        // Frost pass: the field's pools re-drawn milked, as if
+                        // color were diffusing through the glass body.
+                        poolCircle(MiGlassmorphismTokens.cyan.opacity(0.28), diameter: 130 * k)
+                            .position(x: paneW * 0.12, y: paneH * 0.08)
+                        poolCircle(MiGlassmorphismTokens.poolViolet.opacity(0.24), diameter: 150 * k)
+                            .position(x: paneW * 0.92, y: paneH * 0.96)
+                        poolCircle(MiGlassmorphismTokens.mint.opacity(0.12), diameter: 80 * k)
+                            .position(x: 0, y: paneH * 0.52)
+                    }
+
+                    Capsule(style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.white.opacity(0.55), Color.white.opacity(0)],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(width: 64 * k, height: 10 * k)
+                        .rotationEffect(.degrees(-34))
+                        .offset(x: 16 * k, y: 18 * k)
+                }
+                .clipShape(paneShape)
             }
-    }
-}
+            .overlay(alignment: .bottomLeading) {
+                VStack(alignment: .leading, spacing: 3 * k) {
+                    Text(MiL10n.text("home_glass_caption").uppercased())
+                        .font(.system(size: 8.5 * k, weight: .heavy, design: .rounded))
+                        .tracking(1.3)
+                        .foregroundStyle(MiGlassmorphismTokens.ink.opacity(0.6))
+                        .lineLimit(1)
 
-private struct MiGlassmorphismFloatingLens: View {
-    let focus: MiCardFocus
-    let isDragging: Bool
-
-    var body: some View {
-        ZStack(alignment: .bottomLeading) {
-            RoundedRectangle(cornerRadius: 34, style: .continuous)
-                .fill(
+                    Text(MiL10n.text(style.name))
+                        .font(.system(size: 17 * k, weight: .semibold, design: .rounded))
+                        .foregroundStyle(MiGlassmorphismTokens.ink)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                        .miStyleTitleTransition(style.id)
+                }
+                .padding(14 * k)
+            }
+            .overlay {
+                paneShape.strokeBorder(
                     LinearGradient(
                         colors: [
-                            Color.white.opacity(isDragging ? 0.42 : 0.54),
-                            Color.white.opacity(0.20),
-                            MiGlassmorphismTokens.cyan.opacity(0.16)
+                            Color.white.opacity(isPressed ? 1.0 : 0.95),
+                            MiGlassmorphismTokens.cyan.opacity(isPressed ? 0.75 : 0.55),
+                            Color.white.opacity(isPressed ? 0.30 : 0.22)
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
-                    )
+                    ),
+                    lineWidth: 1.2
                 )
-                .overlay(alignment: .topLeading) {
-                    Capsule(style: .continuous)
-                        .fill(Color.white.opacity(0.82))
-                        .frame(width: 54, height: 8)
-                        .rotationEffect(.degrees(-34))
-                        .offset(x: 18, y: 23)
-                }
-                .overlay {
-                    RoundedRectangle(cornerRadius: 34, style: .continuous)
-                        .strokeBorder(
-                            LinearGradient(
-                                colors: [
-                                    Color.white.opacity(0.96),
-                                    MiGlassmorphismTokens.cyan.opacity(0.58),
-                                    Color.white.opacity(0.22)
-                                ],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            ),
-                            lineWidth: 1.35
-                        )
-                }
-                .shadow(color: MiGlassmorphismTokens.blue.opacity(focus.shadowOpacity * 0.34), radius: isDragging ? 8 : 18, x: 0, y: isDragging ? 5 : 13)
-
-            HStack(spacing: 6) {
-                MiGlassmorphismMiniPill(width: 26, color: MiGlassmorphismTokens.cyan)
-                MiGlassmorphismMiniPill(width: 18, color: MiGlassmorphismTokens.blue)
-                MiGlassmorphismMiniPill(width: 22, color: MiGlassmorphismTokens.violet)
             }
-            .padding(13)
-        }
-    }
-}
-
-private struct MiGlassmorphismBadge: View {
-    var body: some View {
-        Text("G")
-            .font(.system(size: 11, weight: .black, design: .rounded))
-            .foregroundStyle(MiGlassmorphismTokens.ink)
-            .frame(width: 30, height: 30)
-            .background {
-                Circle()
-                    .fill(Color.white.opacity(0.66))
-                    .overlay {
-                        Circle()
-                            .strokeBorder(Color.white.opacity(0.96), lineWidth: 1)
-                    }
-            }
-    }
-}
-
-private struct MiGlassmorphismHomeMetrics: View {
-    let isDragging: Bool
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            MiGlassmorphismHomeMetric(labelKey: "home_glass_frost", value: isDragging ? "42%" : "58%")
-            MiGlassmorphismHomeMetric(labelKey: "home_glass_depth", value: "3L")
-            MiGlassmorphismHomeMetric(labelKey: "home_glass_edge", value: MiL10n.text("glass_high"))
-        }
-        .padding(10)
-        .background {
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(Color.white.opacity(0.46))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .strokeBorder(Color.white.opacity(0.84), lineWidth: 1)
-                }
-        }
-    }
-}
-
-private struct MiGlassmorphismHomeMetric: View {
-    let labelKey: String
-    let value: String
-
-    var body: some View {
-        HStack(spacing: 8) {
-            Text(MiL10n.text(labelKey).uppercased())
-                .font(.system(size: 8.8, weight: .black, design: .rounded))
-                .foregroundStyle(MiGlassmorphismTokens.muted)
-                .tracking(0.5)
-                .lineLimit(1)
-
-            Spacer(minLength: 6)
-
-            Text(value)
-                .font(.system(size: 10, weight: .black, design: .rounded))
-                .foregroundStyle(MiGlassmorphismTokens.ink)
-                .padding(.horizontal, 7)
-                .frame(height: 20)
-                .background {
-                    Capsule(style: .continuous)
-                        .fill(Color.white.opacity(0.62))
-                }
-        }
-    }
-}
-
-private struct MiGlassmorphismMiniPill: View {
-    let width: CGFloat
-    let color: Color
-
-    var body: some View {
-        Capsule(style: .continuous)
-            .fill(color.opacity(0.42))
-            .frame(width: width, height: 8)
-            .overlay {
-                Capsule(style: .continuous)
-                    .strokeBorder(Color.white.opacity(0.9), lineWidth: 0.8)
-            }
+            .frame(width: paneW, height: paneH)
+            .shadow(
+                color: MiGlassmorphismTokens.blue.opacity(focus.shadowOpacity * 0.35),
+                radius: isDragging ? 6 : 16,
+                x: 0,
+                y: isDragging ? 5 : 10
+            )
+            .scaleEffect(isLifted ? 1.02 : 1.0)
+            .rotationEffect(.degrees(4))
     }
 }

@@ -19,75 +19,109 @@ struct MiSoftSkeuomorphismHomePreview: View {
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        let w = cardSize.width
+        let h = cardSize.height
+        let s = w / 174
+        let shelfY = h * 0.70
+        let poolSide = w * 0.62
+        let contactSide = w * 0.34
+        let lampHeight = w * 0.52 * 0.60 + 36 * s
 
         ZStack {
-            shape
+            LinearGradient(
+                stops: [
+                    .init(color: MiSoftSkeuomorphismTokens.creamLight, location: 0),
+                    .init(color: MiSoftSkeuomorphismTokens.cream, location: 0.55),
+                    .init(color: MiSoftSkeuomorphismTokens.cream, location: 0.70)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+
+            RadialGradient(
+                colors: [MiSoftSkeuomorphismTokens.peach.opacity(0.14), .clear],
+                center: UnitPoint(x: 0.85, y: 0.06),
+                startRadius: 0,
+                endRadius: w * 0.50
+            )
+
+            RadialGradient(
+                colors: [
+                    MiSoftSkeuomorphismTokens.glow.opacity(isPressed ? 0.55 : 0.34),
+                    MiSoftSkeuomorphismTokens.peach.opacity(isPressed ? 0.20 : 0.12),
+                    .clear
+                ],
+                center: UnitPoint(x: 0.50, y: 0.46),
+                startRadius: 0,
+                endRadius: h * 0.46
+            )
+
+            Rectangle()
                 .fill(
                     LinearGradient(
                         colors: [
-                            MiSoftSkeuomorphismTokens.creamLight,
-                            MiSoftSkeuomorphismTokens.cream,
-                            MiSoftSkeuomorphismTokens.peach.opacity(0.34),
-                            MiSoftSkeuomorphismTokens.moss.opacity(0.18)
+                            MiSoftSkeuomorphismTokens.cardDeep,
+                            MiSoftSkeuomorphismTokens.shadow.opacity(0.92)
                         ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
+                        startPoint: .top,
+                        endPoint: .bottom
                     )
                 )
-                .overlay(MiSoftSkeuomorphismAmbientField(focus: focus, isBlooming: isPressed))
-                .shadow(color: MiSoftSkeuomorphismTokens.highlight.opacity(isPressed ? 0.40 : 0.74), radius: isDragging ? 8 : 18, x: -8, y: -8)
-                .shadow(color: MiSoftSkeuomorphismTokens.shadow.opacity(focus.shadowOpacity * (isPressed ? 0.34 : 0.64)), radius: isDragging ? 10 : 24, x: 0, y: isDragging ? 8 : 18)
-
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(spacing: 9) {
-                    MiSoftSkeuomorphismHomeBadge()
-
-                    Text(MiL10n.text(style.name))
-                        .font(.system(size: 18, weight: .semibold, design: .rounded))
-                        .foregroundStyle(MiSoftSkeuomorphismTokens.ink)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.62)
-                        .miStyleTitleTransition(style.id)
+                .overlay(alignment: .top) {
+                    Rectangle()
+                        .fill(MiSoftSkeuomorphismTokens.creamLight.opacity(0.85))
+                        .frame(height: 1)
                 }
+                .frame(height: h * 0.30)
+                .frame(maxHeight: .infinity, alignment: .bottom)
 
-                Text(MiL10n.text("home_softsk_short"))
-                    .font(.system(size: 11.6, weight: .medium, design: .rounded))
-                    .foregroundStyle(MiSoftSkeuomorphismTokens.muted)
-                    .lineSpacing(2.2)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
+            // Squashed circular gradients stand in for blurred ellipses (no blur at idle).
+            RadialGradient(
+                colors: [MiSoftSkeuomorphismTokens.glow.opacity(isPressed ? 0.80 : 0.50), .clear],
+                center: .center,
+                startRadius: 0,
+                endRadius: poolSide / 2
+            )
+            .frame(width: poolSide, height: poolSide)
+            .scaleEffect(x: isPressed ? 1.08 : 1, y: 24 * s / poolSide)
+            .position(x: w * 0.50, y: shelfY + 10 * s)
 
-                Spacer(minLength: 0)
+            RadialGradient(
+                colors: [MiSoftSkeuomorphismTokens.warmShadow.opacity(0.30), .clear],
+                center: .center,
+                startRadius: 0,
+                endRadius: contactSide / 2
+            )
+            .frame(width: contactSide, height: contactSide)
+            .scaleEffect(x: 1, y: 10 * s / contactSide)
+            .position(x: w * 0.50, y: shelfY + 2 * s)
 
-                MiSoftSkeuomorphismLampObject(isBlooming: isPressed, scale: cardSize.width < 185 ? 0.78 : 0.86, isDragging: isDragging)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 92)
+            MiSoftSkeuomorphismHeroLamp(
+                cardWidth: w,
+                scaleFactor: s,
+                isBlooming: isPressed,
+                isDragging: isDragging
+            )
+            .scaleEffect(isPressed && !reduceMotion ? 1.02 : 1, anchor: .bottom)
+            .position(x: w * 0.50, y: shelfY - lampHeight / 2)
 
-                HStack(spacing: 7) {
-                    MiSoftSkeuomorphismHomePill(titleKey: "home_softsk_cream", fill: MiSoftSkeuomorphismTokens.creamLight)
-                    MiSoftSkeuomorphismHomePill(titleKey: "home_softsk_moss", fill: MiSoftSkeuomorphismTokens.moss.opacity(0.62))
+            Text(MiL10n.text(style.name))
+                .font(.system(size: 17.5 * s, weight: .semibold, design: .rounded))
+                .foregroundStyle(MiSoftSkeuomorphismTokens.ink)
+                .lineLimit(1)
+                .minimumScaleFactor(0.62)
+                .miStyleTitleTransition(style.id)
+                .padding(.horizontal, 18 * s)
+                .padding(.top, 18 * s)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 
-                    Spacer(minLength: 0)
-
-                    Text(MiL10n.text(isPressed ? "softsk_bloom_on" : "softsk_bloom_idle"))
-                        .font(.system(size: 9.5, weight: .black, design: .rounded))
-                        .foregroundStyle(MiSoftSkeuomorphismTokens.ink)
-                        .padding(.horizontal, 9)
-                        .frame(height: 24)
-                        .background {
-                            Capsule(style: .continuous)
-                                .fill(isPressed ? MiSoftSkeuomorphismTokens.butter.opacity(0.82) : MiSoftSkeuomorphismTokens.card)
-                                .overlay {
-                                    Capsule(style: .continuous)
-                                        .strokeBorder(MiSoftSkeuomorphismTokens.highlight.opacity(0.68), lineWidth: 1)
-                                }
-                        }
-                }
-            }
-            .padding(.horizontal, 18)
-            .padding(.top, 19)
-            .padding(.bottom, 17)
-            .offset(y: isPressed ? 1.2 : 0)
+            Text(MiL10n.text("home_softsk_nameplate"))
+                .font(.system(size: 9.5 * s, weight: .medium, design: .rounded))
+                .kerning(0.8)
+                .foregroundStyle(MiSoftSkeuomorphismTokens.muted)
+                .padding(.leading, 18 * s)
+                .padding(.bottom, 13 * s)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
         }
         .frame(width: cardSize.width, height: cardSize.height)
         .clipShape(shape)
@@ -96,21 +130,116 @@ struct MiSoftSkeuomorphismHomePreview: View {
                 .strokeBorder(
                     LinearGradient(
                         colors: [
-                            MiSoftSkeuomorphismTokens.highlight.opacity(0.76),
-                            MiSoftSkeuomorphismTokens.moss.opacity(0.16 + focus.borderOpacity * 0.20),
-                            MiSoftSkeuomorphismTokens.shadow.opacity(0.12)
+                            MiSoftSkeuomorphismTokens.highlight.opacity(0.75),
+                            MiSoftSkeuomorphismTokens.warmShadow.opacity(0.12 + focus.borderOpacity * 0.10)
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ),
-                    lineWidth: 1.1
+                    lineWidth: 1
                 )
         }
-        .animation(reduceMotion ? .easeOut(duration: 0.01) : .spring(response: 0.28, dampingFraction: 0.78), value: isPressed)
+        .shadow(
+            color: MiSoftSkeuomorphismTokens.highlight.opacity(isPressed ? 0.40 : 0.74),
+            radius: isDragging ? 8 : 18,
+            x: -8,
+            y: -8
+        )
+        .shadow(
+            color: MiSoftSkeuomorphismTokens.shadow.opacity(focus.shadowOpacity * (isPressed ? 0.36 : 0.62)),
+            radius: isDragging ? 10 : 24,
+            x: 0,
+            y: isDragging ? 8 : 18
+        )
+        .animation(reduceMotion ? .easeOut(duration: 0.01) : .spring(response: 0.30, dampingFraction: 0.80), value: isPressed)
     }
 
     private var isPressed: Bool {
         pressedStyleID == style.id && !isDragging
+    }
+}
+
+// Card-only hero lamp; the shared MiSoftSkeuomorphismLampObject below stays for the detail view.
+private struct MiSoftSkeuomorphismHeroLamp: View {
+    let cardWidth: CGFloat
+    let scaleFactor: CGFloat
+    let isBlooming: Bool
+    let isDragging: Bool
+
+    var body: some View {
+        let s = scaleFactor
+        let domeWidth = cardWidth * 0.52
+        let domeHeight = domeWidth * 0.60
+        let stemHeight = 44 * s
+        let overlap = 8 * s
+
+        ZStack(alignment: .bottom) {
+            RoundedRectangle(cornerRadius: 16 * s, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            MiSoftSkeuomorphismTokens.creamLight,
+                            MiSoftSkeuomorphismTokens.card,
+                            MiSoftSkeuomorphismTokens.peach.opacity(0.50)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .frame(width: cardWidth * 0.20, height: stemHeight)
+                .overlay(alignment: .topLeading) {
+                    if !isDragging {
+                        Capsule(style: .continuous)
+                            .fill(MiSoftSkeuomorphismTokens.highlight.opacity(0.40))
+                            .frame(width: 12 * s, height: 30 * s)
+                            .blur(radius: 3)
+                            .offset(x: 5 * s, y: 5 * s)
+                    }
+                }
+
+            Ellipse()
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            MiSoftSkeuomorphismTokens.creamLight,
+                            MiSoftSkeuomorphismTokens.butter.opacity(isBlooming ? 0.95 : 0.72),
+                            MiSoftSkeuomorphismTokens.peach
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .frame(width: domeWidth, height: domeHeight)
+                .shadow(
+                    color: MiSoftSkeuomorphismTokens.warmShadow.opacity(0.22),
+                    radius: isDragging ? 5 : 12,
+                    x: 0,
+                    y: isDragging ? 4 : 8
+                )
+                .overlay {
+                    Ellipse()
+                        .strokeBorder(MiSoftSkeuomorphismTokens.highlight.opacity(0.70), lineWidth: 1)
+                        .mask(alignment: .top) {
+                            Rectangle().frame(height: domeHeight * 0.5)
+                        }
+                }
+                .overlay(alignment: .bottom) {
+                    if isDragging {
+                        Capsule(style: .continuous)
+                            .fill(MiSoftSkeuomorphismTokens.glow.opacity(0.5))
+                            .frame(width: cardWidth * 0.36, height: 6 * s)
+                            .offset(y: 1)
+                    } else {
+                        Capsule(style: .continuous)
+                            .fill(MiSoftSkeuomorphismTokens.glow.opacity(isBlooming ? 0.85 : 0.55))
+                            .frame(width: cardWidth * 0.36, height: 6 * s)
+                            .blur(radius: 4)
+                            .offset(y: 1)
+                    }
+                }
+                .offset(y: -(stemHeight - overlap))
+        }
+        .frame(width: domeWidth, height: stemHeight + domeHeight - overlap, alignment: .bottom)
     }
 }
 
@@ -191,70 +320,5 @@ struct MiSoftSkeuomorphismLampObject: View {
         }
         .scaleEffect(scale * (isBlooming ? 1.03 : 1))
         .accessibilityHidden(true)
-    }
-}
-
-private struct MiSoftSkeuomorphismAmbientField: View {
-    let focus: MiCardFocus
-    let isBlooming: Bool
-
-    var body: some View {
-        ZStack {
-            Circle()
-                .fill(MiSoftSkeuomorphismTokens.moss.opacity(0.20 + focus.borderOpacity * 0.08))
-                .frame(width: 118, height: 118)
-                .offset(x: 70, y: -72)
-
-            Circle()
-                .fill(MiSoftSkeuomorphismTokens.peach.opacity(isBlooming ? 0.38 : 0.24))
-                .frame(width: 136, height: 136)
-                .offset(x: -64, y: 64)
-
-            RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .fill(MiSoftSkeuomorphismTokens.card.opacity(0.72))
-                .frame(width: 112, height: 74)
-                .rotationEffect(.degrees(-8))
-                .offset(x: 54, y: 66)
-        }
-        .allowsHitTesting(false)
-    }
-}
-
-private struct MiSoftSkeuomorphismHomeBadge: View {
-    var body: some View {
-        Text("SS")
-            .font(.system(size: 11, weight: .black, design: .rounded))
-            .foregroundStyle(MiSoftSkeuomorphismTokens.mossDeep)
-            .frame(width: 38, height: 30)
-            .background {
-                Capsule(style: .continuous)
-                    .fill(MiSoftSkeuomorphismTokens.creamLight.opacity(0.92))
-                    .overlay {
-                        Capsule(style: .continuous)
-                            .strokeBorder(MiSoftSkeuomorphismTokens.moss.opacity(0.25), lineWidth: 1)
-                    }
-                    .shadow(color: MiSoftSkeuomorphismTokens.shadow.opacity(0.20), radius: 8, x: 0, y: 5)
-            }
-    }
-}
-
-private struct MiSoftSkeuomorphismHomePill: View {
-    let titleKey: String
-    let fill: Color
-
-    var body: some View {
-        Text(MiL10n.text(titleKey))
-            .font(.system(size: 9.2, weight: .black, design: .rounded))
-            .foregroundStyle(MiSoftSkeuomorphismTokens.ink)
-            .padding(.horizontal, 8)
-            .frame(height: 22)
-            .background {
-                Capsule(style: .continuous)
-                    .fill(fill)
-                    .overlay {
-                        Capsule(style: .continuous)
-                            .strokeBorder(MiSoftSkeuomorphismTokens.highlight.opacity(0.58), lineWidth: 0.9)
-                    }
-            }
     }
 }
