@@ -248,9 +248,9 @@ struct MiAppleLiquidGlassHomePreview: View {
         }
         .shadow(
             color: shadowSlate.opacity(focus.shadowOpacity * (isDragging ? 0.30 : 0.45)),
-            radius: isDragging ? 8 : (isPressed ? 12 : 16),
+            radius: isDragging ? 8 : (isPressed && !reduceMotion ? 12 : 16),
             x: 0,
-            y: isDragging ? 5 : (isPressed ? 6 : 9)
+            y: isDragging ? 5 : (isPressed && !reduceMotion ? 6 : 9)
         )
         .shadow(
             color: MiColorTokens.appleBlue500.opacity(isDragging ? 0 : focus.shadowOpacity * 0.22),

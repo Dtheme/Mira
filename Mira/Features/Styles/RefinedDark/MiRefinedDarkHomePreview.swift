@@ -128,7 +128,7 @@ struct MiRefinedDarkHomePreview: View {
                 .fill(MiRefinedDarkTokens.accent)
                 .frame(width: 2, height: 15)
 
-            Text(MiL10n.text("rd_search_placeholder"))
+            Text(MiL10n.text("rd_home_placeholder"))
                 .font(.system(size: 11))
                 .foregroundStyle(MiRefinedDarkTokens.muted)
                 .lineLimit(1)

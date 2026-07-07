@@ -40,18 +40,6 @@ struct MiClaymorphismHomePreview: View {
                         .offset(x: 72 * s, y: -92 * s)
                         .allowsHitTesting(false)
                 }
-                .shadow(
-                    color: MiClaymorphismTokens.shadowLight.opacity(0.85),
-                    radius: (isDragging ? 8 : 18) * s,
-                    x: (isPressed ? -5 : -10) * s,
-                    y: (isPressed ? -5 : -10) * s
-                )
-                .shadow(
-                    color: MiClaymorphismTokens.shadowDark.opacity(focus.shadowOpacity * 0.60 * (isPressed ? 0.6 : 1)),
-                    radius: (isDragging ? 9 : 24) * s,
-                    x: (isPressed ? 7 : 14) * s,
-                    y: (isPressed ? 9 : 18) * s
-                )
 
             ZStack {
                 VStack(alignment: .leading, spacing: 3 * s) {
@@ -98,6 +86,18 @@ struct MiClaymorphismHomePreview: View {
                     lineWidth: 1
                 )
         }
+        .shadow(
+            color: MiClaymorphismTokens.shadowLight.opacity(0.85),
+            radius: (isDragging ? 8 : 18) * s,
+            x: (isPressed ? -5 : -10) * s,
+            y: (isPressed ? -5 : -10) * s
+        )
+        .shadow(
+            color: MiClaymorphismTokens.shadowDark.opacity(focus.shadowOpacity * 0.60 * (isPressed ? 0.6 : 1)),
+            radius: (isDragging ? 9 : 24) * s,
+            x: (isPressed ? 7 : 14) * s,
+            y: (isPressed ? 9 : 18) * s
+        )
         .animation(reduceMotion ? .easeOut(duration: 0.01) : .spring(response: 0.24, dampingFraction: 0.58), value: isPressed)
     }
 
