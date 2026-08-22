@@ -16,6 +16,14 @@ enum MiDemoRepository {
             systemImage: "sparkles",
             accentHex: 0x6C5CE7,
             isReady: true
+        ),
+        MiDemo(
+            id: "holo-egg",
+            titleKey: "demo_egg_title",
+            subtitleKey: "demo_egg_subtitle",
+            systemImage: "oval.portrait.fill",
+            accentHex: 0xA556E8,
+            isReady: true
         )
     ]
 }

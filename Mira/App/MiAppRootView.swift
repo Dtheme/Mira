@@ -41,11 +41,9 @@ struct MiAppRootView: View {
             }
 
             if let selectedDemo {
-                MiHoloCardModule.showcaseView(for: selectedDemo) {
-                    closeDemo()
-                }
-                .transition(detailTransition)
-                .zIndex(30)
+                demoView(for: selectedDemo)
+                    .transition(detailTransition)
+                    .zIndex(30)
             }
         }
         .animation(dissolveAnimation, value: selectedStyle?.id)
@@ -209,8 +207,21 @@ struct MiAppRootView: View {
         showsDemoList = false
     }
 
+    @ViewBuilder
+    private func demoView(for demo: MiDemo) -> some View {
+        if MiHoloCardModule.canOpen(demo) {
+            MiHoloCardModule.showcaseView(for: demo) {
+                closeDemo()
+            }
+        } else if MiHoloEggModule.canOpen(demo) {
+            MiHoloEggModule.showcaseView(for: demo) {
+                closeDemo()
+            }
+        }
+    }
+
     private func openDemo(_ demo: MiDemo) {
-        guard MiHoloCardModule.canOpen(demo) else { return }
+        guard MiHoloCardModule.canOpen(demo) || MiHoloEggModule.canOpen(demo) else { return }
         selectedDemo = demo
     }
 
@@ -219,7 +230,7 @@ struct MiAppRootView: View {
     }
 
     private var isHomeCovered: Bool {
-        selectedStyle != nil || showsDemoList
+        selectedStyle != nil || showsDemoList || selectedDemo != nil
     }
 }
 

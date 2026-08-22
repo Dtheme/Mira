@@ -1205,6 +1205,13 @@
 "demo_prev" = "上一张";
 "demo_next" = "下一张";
 
+/* Holo egg demo */
+"demo_egg_title" = "幻彩蛋";
+"demo_egg_subtitle" = "Metal 流光彩蛋与星尘粒子场";
+"demo_egg_caption" = "轻点彩蛋，放大或缩小。壳上的流光与星尘背景都由 Metal 着色器实时驱动。";
+"demo_egg_a11y" = "幻彩蛋，晶莹剔透的流光彩蛋";
+"demo_egg_a11y_hint" = "轻点两下放大或缩小";
+
 /* Home style card redesign (aesthetic pass) */
 "home_alg_short" = "内容在下，玻璃在上。";
 "home_clay_hook" = "刚捏好的黏土";

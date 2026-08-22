@@ -1205,6 +1205,13 @@
 "demo_prev" = "Previous";
 "demo_next" = "Next";
 
+/* Holo egg demo */
+"demo_egg_title" = "Opal Egg";
+"demo_egg_subtitle" = "A flowing opal egg over a Metal star-dust field";
+"demo_egg_caption" = "Tap the egg to zoom in or out. The flowing shell light and the star-dust field are live Metal shaders.";
+"demo_egg_a11y" = "Opal egg, a crystal translucent egg with flowing light";
+"demo_egg_a11y_hint" = "Double tap to zoom in or out";
+
 /* Home style card redesign (aesthetic pass) */
 "home_alg_short" = "Content below. Glass above.";
 "home_clay_hook" = "Freshly kneaded";
