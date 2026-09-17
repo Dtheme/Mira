@@ -8,7 +8,8 @@ struct MiPlayfulOutlineDetailView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Namespace private var navigationNamespace
     @State private var chapter = 0
-    @State private var isPlaying = false
+    @State private var destination = 0
+    @State private var inputState = MiPlayfulOutlineInputState()
     @State private var isSaved = false
     @State private var elastic = true
     @State private var showsDialog = false
@@ -22,47 +23,25 @@ struct MiPlayfulOutlineDetailView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 0) {
-                    introduction
-                        .padding(.horizontal, 24)
-                        .padding(.top, 20)
-                        .padding(.bottom, 28)
-                    MiPlayfulOutlineRhythmDemo(
-                        isPlaying: $isPlaying,
-                        elastic: elastic,
-                        isSuspended: showsDialog || showsSheet || showsDetail
-                    )
-                    componentLab
-                        .padding(.horizontal, 24)
-                        .padding(.top, 48)
-                        .padding(.bottom, 36)
-                        .background { MiPlayfulOutlineWave(phase: 0.6, amplitude: 16).fill(T.paper) }
-                        .background(T.accent)
-                    presentationLab
-                        .padding(.horizontal, 24)
-                        .padding(.top, 48)
-                        .padding(.bottom, 36)
-                        .background { MiPlayfulOutlineWave(phase: 2.2, amplitude: 16).fill(T.tint) }
-                    MiPlayfulOutlineInputDemo()
-                        .padding(.horizontal, 24)
-                        .padding(.top, 48)
-                        .padding(.bottom, 36)
-                        .background { MiPlayfulOutlineWave(phase: 4.4, amplitude: 16).fill(T.paper) }
-                        .background(T.tint)
-                    designNotes
-                        .padding(.horizontal, 24)
-                        .padding(.top, 48)
-                        .padding(.bottom, 44)
-                        .background { MiPlayfulOutlineWave(phase: 1.8, amplitude: 16).fill(T.surface) }
+            VStack(spacing: 0) {
+                topBar
+                ZStack {
+                    ScrollView {
+                        destinationContent
+                            .frame(maxWidth: 660)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .id(destination)
+                    .transition(.opacity)
+                    .scrollIndicators(.hidden)
+                    .scrollDismissesKeyboard(.interactively)
                 }
-                .frame(maxWidth: 660)
-                .frame(maxWidth: .infinity)
+                .frame(maxHeight: .infinity)
+                .animation(reduceMotion || !elastic ? nil : .easeOut(duration: 0.16), value: destination)
+
+                MiPlayfulOutlineFlowTabBar(selection: $destination, isElastic: elastic)
             }
-            .scrollIndicators(.hidden)
-            .scrollDismissesKeyboard(.interactively)
             .background(T.paper.ignoresSafeArea())
-            .safeAreaInset(edge: .top, spacing: 0) { topBar }
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(isPresented: $showsDetail) {
                 if reduceMotion {
@@ -75,6 +54,8 @@ struct MiPlayfulOutlineDetailView: View {
         }
         .foregroundStyle(T.ink)
         .tint(T.ink)
+        .preferredColorScheme(.light)
+        .disabled(showsDialog)
         .accessibilityHidden(showsDialog)
         .allowsHitTesting(!showsDialog)
         .overlay {
@@ -103,6 +84,28 @@ struct MiPlayfulOutlineDetailView: View {
         }
     }
 
+    @ViewBuilder
+    private var destinationContent: some View {
+        switch destination {
+        case 0:
+            MiPlayfulOutlineInspirationView(styleName: style.localizedName, isSaved: $isSaved)
+        case 1:
+            VStack(alignment: .leading, spacing: 48) {
+                componentLab
+                presentationLab
+                MiPlayfulOutlineInputDemo(state: $inputState)
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 24)
+            .padding(.bottom, 36)
+        default:
+            designNotes
+                .padding(.horizontal, 24)
+                .padding(.top, 24)
+                .padding(.bottom, 36)
+        }
+    }
+
     private var topBar: some View {
         HStack(spacing: 12) {
             Button {
@@ -122,30 +125,6 @@ struct MiPlayfulOutlineDetailView: View {
         .background(T.paper)
     }
 
-    private var introduction: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(MiL10n.text(style.localizedName))
-                .font(.system(.largeTitle, design: .rounded, weight: .black))
-                .fixedSize(horizontal: false, vertical: true)
-                .accessibilityAddTraits(.isHeader)
-            Text(MiL10n.text("po_hero_body"))
-                .font(.body)
-                .foregroundStyle(T.muted)
-                .fixedSize(horizontal: false, vertical: true)
-            DisclosureGroup(MiL10n.text("po_spec_reference")) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(style.category.title + " · " + MiL10n.text("c_ready"))
-                    Text(style.designDocumentPath).textSelection(.enabled)
-                    Text(style.screenshotStatus)
-                }
-                .font(.caption)
-                .foregroundStyle(T.muted)
-                .padding(.top, 8)
-            }
-            .font(.caption.weight(.medium))
-        }
-    }
-
     private var componentLab: some View {
         VStack(alignment: .leading, spacing: 20) {
             sectionHeading("po_controls_heading", "po_controls_body")
@@ -154,7 +133,7 @@ struct MiPlayfulOutlineDetailView: View {
                 if chapter == 0 { buttons } else { switches }
             }
             .id(chapter)
-            .transition(reduceMotion ? .opacity : .opacity.combined(with: .offset(y: 10)))
+            .transition(reduceMotion || !elastic ? .opacity : .opacity.combined(with: .offset(y: 10)))
         }
     }
 
@@ -189,7 +168,7 @@ struct MiPlayfulOutlineDetailView: View {
 
     private var switches: some View {
         VStack(alignment: .leading, spacing: 24) {
-            Toggle(isOn: $isPlaying) { switchLabel("po_switch_play", "po_switch_play_body") }
+            Toggle(isOn: $isSaved) { switchLabel("po_switch_saved", "po_switch_saved_body") }
             Toggle(isOn: $elastic) { switchLabel("po_switch_elastic", "po_switch_elastic_body") }
             Toggle(isOn: .constant(false)) { switchLabel("po_switch_disabled", "po_switch_disabled_body") }
                 .disabled(true)
@@ -248,6 +227,13 @@ struct MiPlayfulOutlineDetailView: View {
     private var designNotes: some View {
         VStack(alignment: .leading, spacing: 20) {
             sectionHeading("po_design_heading", "po_design_body")
+            VStack(alignment: .leading, spacing: 6) {
+                Text(style.category.title + " · " + MiL10n.text("c_ready"))
+                Text(style.designDocumentPath).textSelection(.enabled)
+                Text(style.screenshotStatus)
+            }
+            .font(.caption)
+            .foregroundStyle(T.muted)
             ViewThatFits(in: .horizontal) {
                 HStack(alignment: .center, spacing: 24) { homeCard; tokenList }
                 VStack(alignment: .leading, spacing: 24) { homeCard; tokenList }

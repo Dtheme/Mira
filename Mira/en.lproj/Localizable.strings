@@ -1137,41 +1137,39 @@
 "po_dialog_success_body" = "A clear finish, drawn in a single line. Your content is still right where you left it.";
 "style_po" = "Playful Outline";
 "style_po_native" = "Playful Outline";
-"po_summary" = "Flowing color fields, round controls, playful motion.";
-"po_description" = "A flat, borderless interface with filled circular controls and color fields joined by soft waves. Shape edges define the outline; clear state changes provide the motion.";
+"po_summary" = "Soft color fields, fluid seams, and a tab bar that follows your touch.";
+"po_description" = "Open space, apricot and mint fields, and an ink navigation surface create a light graphic mood. Three tabs reshape one continuous boundary with no enclosing borders or shadows.";
 "po_token_paper" = "Page background";
 "po_token_ink" = "Text and primary controls";
 "po_token_mint" = "Selected surfaces";
 "po_token_outline" = "No component borders";
 "po_token_shadow" = "No shadows";
 "po_identity_rule_line" = "Let filled shape edges define the outline. Do not draw enclosing lines around controls or sections.";
-"po_identity_rule_shape" = "Filled circles, capsules, and wave seams create the visual rhythm.";
+"po_identity_rule_shape" = "Light and ink fields meet along a continuous curve; its position, icon and label identify the active tab.";
 "po_identity_rule_depth" = "Use tonal contrast, flowing color fields, and space for hierarchy, with no borders, shadows, or blur.";
 "po_motion_summary" = "Each gesture has a clear response and a stable resting state.";
-"po_motion_rule_press" = "Buttons compress briefly on press, then settle with a short spring.";
+"po_motion_rule_press" = "Buttons compress gently; tab boundaries travel and reshape with an interruptible spring.";
 "po_motion_rule_switch" = "Switches slide into place and show an explicit on or off symbol.";
 "po_motion_rule_dialog" = "Dialogs support opening, cancellation, confirmation, completion, and dismissal.";
 "po_acceptance_summary" = "Expressive interactions must remain readable, interruptible, and accessible.";
 "po_check_shadow" = "Keep controls and custom panels free of borders, shadows, glow, and glass. Icon strokes remain useful.";
 "po_check_states" = "Give every action a visible result, including disabled, empty, and error states.";
 "po_check_motion" = "Keep home previews still; Reduce Motion removes geometric and continuous animation.";
-"po_card_hook" = "Color flows. Shapes respond.";
-"po_studio" = "MOTION STUDIO";
-"po_hero_body" = "Tap to set the shapes in motion. White, soft mint, and deep green flow into each other without frames or shadows.";
+"po_card_hook" = "Small joys, kept close.";
+"po_studio" = "Playful Outline";
+"po_hero_body" = "A little note. A brighter day.\nKeep something that makes you smile.";
 "po_controls_heading" = "Small gestures, full of character.";
 "po_controls_body" = "Press, release, switch. Every response comes from a real change of state.";
 "po_tab_buttons" = "Buttons";
 "po_tab_switches" = "Switches";
-"po_save" = "Save this style";
-"po_saved" = "Style saved";
+"po_save" = "Save this note";
+"po_saved" = "Note saved";
 "po_reset" = "Reset";
 "po_remove" = "Remove demo";
 "po_saved_hint" = "Saved for this demo. Reset is now available.";
 "po_button_hint" = "A deep primary, a softer secondary, and a disabled reset. Try saving first.";
-"po_switch_play" = "Motion on";
-"po_switch_play_body" = "Controls the beat demo above.";
-"po_switch_elastic" = "Living curves";
-"po_switch_elastic_body" = "Let the beat and wave gently move.";
+"po_switch_elastic" = "Elastic transitions";
+"po_switch_elastic_body" = "Let the bottom curve travel and reshape around the selected tab.";
 "po_switch_disabled" = "Coming later";
 "po_switch_disabled_body" = "A disabled switch still explains itself.";
 "po_reduced" = "Reduce Motion is on · static shapes, clear states.";
@@ -1185,19 +1183,12 @@
 "po_confirmed_count" = "%d confirmations completed in this demo.";
 "po_sheet_title" = "Room to unfold";
 "po_prompt_heading" = "Build in this style";
-"po_prompt" = "Create an iOS SwiftUI interface in the Playful Outline style. Outline means the edge of a filled shape, not a component border. Use a solid deep-green primary circle, softer filled secondary controls, and white, pale-mint, mint, and deep color fields joined by full-width organic waves. Use no enclosing strokes, inner rings, divider lines, custom shadows, or blur. Inputs show focus and errors through background color with visible error text. Icon strokes such as checkmarks are allowed. Animate real state changes with short, interruptible springs. Preserve native button, toggle, and navigation semantics, Dynamic Type, and a Reduce Motion fallback. The palette may change; yellow is not required. Read docs/design-system/styles/playful-outline/Design.md for the full specification.";
+"po_prompt" = "Create a Playful Outline iOS interface with open space, mint, apricot and deep ink color fields. Use a smooth curved boundary only to connect or separate functional regions; avoid decorative waves and repeated ribbons. Show a note with content and a save action on the home card, with no tabs or circular player. Keep three real destinations in the demo. Preserve the navigation container while a broad continuous curve moves and reshapes toward the selected tab, with matching icon and label states. Preserve input and saved state. Use no enclosing strokes, dividers, custom shadows or blur. Switch directly under Reduce Motion and preserve native control semantics and Dynamic Type. See docs/design-system/styles/playful-outline/Design.md.";
 "po_sheet_footer" = "Drag the handle or choose a height. The content keeps its place.";
 "po_design_heading" = "How the color fields fit.";
 "po_design_body" = "The same identity, from a home card to a full screen. Colors can change; flowing shape edges and clear states stay.";
 "po_avoid" = "Let color fields meet. Avoid enclosing lines, double rings, card frames around every section, shadows, glass, and motion without purpose.";
 "po_home_preview" = "Playful Outline home card preview";
-"po_motion_label" = "Let the shapes move.";
-"po_playing" = "Motion demo · playing";
-"po_paused" = "Motion demo · tap to begin";
-"po_play" = "Start motion demo";
-"po_pause" = "Pause motion demo";
-"po_state_on" = "On";
-"po_state_off" = "Off";
 "po_input_heading" = "Clear at every step.";
 "po_input_body" = "Search the three shapes, try an empty result, then explore a simulated loading and retry flow.";
 "po_search_label" = "Find a shape";
@@ -1244,16 +1235,7 @@
 "po_detail_back" = "Back to the playground";
 
 // Playful Outline
-"po_spec_reference" = "Design reference";
-"po_layout_tokens" = "Rounded type · System text styles\nGroup spacing 8 / 12 / 16 / 20 / 24 / 28 / 32 / 36 pt\nContinuous wave sections · Filled circles and capsules\nComponent borders: 0 · Custom shadows: none";
-"po_signature_hint" = "Double-tap to switch the motion demo on or off.";
-"po_readout_motion" = "Motion switch";
-"po_readout_curves" = "Curves";
-"po_curve_reduced" = "Static · Reduce Motion";
-"po_curve_disabled" = "Flow turned off";
-"po_curve_ready" = "Ready to move";
-"po_curve_flowing" = "Flowing";
-"po_curve_suspended" = "Paused while hidden";
+"po_layout_tokens" = "Rounded type · Dynamic Type\nOpen space and continuous Bézier seams\nThree real tabs · selection follows the curve\nComponent borders: 0 · Custom shadows: none";
 
 "po_token_tint" = "Soft section color";
 "po_token_control" = "Secondary controls";
@@ -1360,3 +1342,37 @@
 "m3_demo_adaptation" = "Baseline Material 3 proportions are adapted to iOS with SF typography, SF Symbols, native sheet gestures and at least 48-point touch areas.";
 "m3_clear_input" = "Clear text";
 "m3_demo_close" = "Close";
+
+"po_nav_inspiration" = "Inspiration";
+
+"po_nav_components" = "Components";
+
+"po_nav_reference" = "Guide";
+
+
+
+
+
+
+
+"po_switch_saved" = "Saved note";
+
+"po_switch_saved_body" = "Linked to the saved note on the inspiration page.";
+
+"po_token_apricot" = "Saved-note surface";
+
+"po_note_label" = "A little note";
+
+"po_note_content" = "Take it slow.\nGood things grow.";
+
+"po_note_save" = "Keep this note";
+
+"po_note_saved" = "Note saved";
+
+"po_note_unsave" = "Unsave this note";
+
+"po_note_collection_saved" = "A little joy, kept close.";
+
+"po_note_collection_empty" = "Make room for a little joy.";
+
+"po_note_collection_body" = "Tap the bottom of the note to save it, then tap again to undo. Your collection lasts for this demo session.";

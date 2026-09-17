@@ -508,6 +508,7 @@ private extension MiStyleRepository {
             MiTokenSpec(name: "mi-po-control", value: "#D0E3D8", role: "po_token_control"),
             MiTokenSpec(name: "mi-po-ink", value: "#233B33", role: "po_token_ink"),
             MiTokenSpec(name: "mi-po-mint", value: "#BDE7D5", role: "po_token_mint"),
+            MiTokenSpec(name: "mi-po-apricot", value: "#F5D1BC", role: "po_token_apricot"),
             MiTokenSpec(name: "mi-po-error-surface", value: "#FAE6E1", role: "po_token_error_surface"),
             MiTokenSpec(name: "mi-po-outline", value: "0", role: "po_token_outline"),
             MiTokenSpec(name: "mi-po-shadow", value: "0", role: "po_token_shadow")

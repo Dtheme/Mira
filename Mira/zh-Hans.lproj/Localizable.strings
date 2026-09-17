@@ -1137,41 +1137,39 @@
 "po_dialog_success_body" = "用一笔勾线，给操作一个清楚的回应。你的内容仍然保留。";
 "style_po" = "Playful Outline";
 "style_po_native" = "灵动描线";
-"po_summary" = "流动色面、圆控件、轻快的状态动效。";
-"po_description" = "以实心圆控件和柔和波浪拼接色面，用明度差组织无描边的平面界面。轮廓来自色块边缘，动效让状态变化清楚可见。";
+"po_summary" = "柔和色块、流线分区、随选中流动的 Tab。";
+"po_description" = "以白色留白、杏色与薄荷色面、深墨色底栏呈现轻盈的韩风图形感。三枚 Tab 改变连续曲线的位置与形状，轮廓来自色块边缘，无需描边或阴影。";
 "po_token_paper" = "页面背景";
 "po_token_ink" = "文字与主控件";
 "po_token_mint" = "选中表面";
 "po_token_outline" = "无组件描边";
 "po_token_shadow" = "零阴影";
 "po_identity_rule_line" = "轮廓来自填色形状的边缘，不沿控件或分区外围画包围线。";
-"po_identity_rule_shape" = "实心圆、胶囊与波浪色面拼接共同形成视觉节奏。";
+"po_identity_rule_shape" = "浅色与深墨色沿连续曲线衔接，当前 Tab 通过曲线位置、图标和文字共同点亮。";
 "po_identity_rule_depth" = "通过明度差、流动色面和留白建立层级，不使用边框、阴影或模糊。";
 "po_motion_summary" = "每次操作都有明确反馈，交互结束后回到安静的状态。";
-"po_motion_rule_press" = "按钮按下时轻压，释放后以短弹簧回位。";
+"po_motion_rule_press" = "按钮按下轻压，Tab 边界用可打断的短弹簧平滑移动、变形。";
 "po_motion_rule_switch" = "开关滑块沿轨道移动，同时显示明确的开关状态图标。";
 "po_motion_rule_dialog" = "弹窗完整支持打开、取消、确认、完成和关闭。";
 "po_acceptance_summary" = "丰富交互应始终可读、可打断，也能被辅助功能完整使用。";
 "po_check_shadow" = "控件和自绘面板都不使用包围线、阴影、发光或玻璃；图标笔画可以保留。";
 "po_check_states" = "每次动作都有可见结果，禁用、空结果和错误状态同样明确。";
 "po_check_motion" = "首页预览静止；减少动态效果时关闭几何变化和持续动画。";
-"po_card_hook" = "色面流动，形状回应。";
-"po_studio" = "动效实验室";
-"po_hero_body" = "轻触，让形状动起来。白色、浅薄荷和深绿色沿波浪边缘相接，无需边框或阴影。";
+"po_card_hook" = "轻轻收好，一点心情。";
+"po_studio" = "Playful Outline";
+"po_hero_body" = "一张便签，一点好心情。\n把喜欢的，轻轻收好。";
 "po_controls_heading" = "小动作，也有性格。";
 "po_controls_body" = "按下、松开、切换。每一个回应，都来自真实的状态变化。";
 "po_tab_buttons" = "按钮";
 "po_tab_switches" = "开关";
-"po_save" = "收藏这个风格";
-"po_saved" = "已收藏风格";
+"po_save" = "收藏这张便签";
+"po_saved" = "便签已收藏";
 "po_reset" = "重置";
 "po_remove" = "移除演示";
 "po_saved_hint" = "已在本次演示中收藏，现在可以重置。";
 "po_button_hint" = "深色主按钮、浅色次按钮和禁用态。先试试收藏。";
-"po_switch_play" = "开启动效";
-"po_switch_play_body" = "控制上方的节拍演示。";
-"po_switch_elastic" = "流动曲线";
-"po_switch_elastic_body" = "让节拍与波浪轻轻流动。";
+"po_switch_elastic" = "弹性切换";
+"po_switch_elastic_body" = "让底部流线随选中的入口移动、舒展。";
 "po_switch_disabled" = "暂未开放";
 "po_switch_disabled_body" = "禁用状态，也保持清晰可读。";
 "po_reduced" = "减少动态效果已开启 · 保留静态形状与清晰状态。";
@@ -1185,19 +1183,12 @@
 "po_confirmed_count" = "本次演示已完成 %d 次确认。";
 "po_sheet_title" = "慢慢展开";
 "po_prompt_heading" = "用这个风格开始";
-"po_prompt" = "以 Playful Outline 灵动描线风格创建 iOS SwiftUI 界面。轮廓来自填色形状的边缘，不是组件边框。使用深绿色实心主圆、较浅的实色次要控件，以白色、浅薄荷、薄荷和深色面通过全宽有机波浪拼接分区。不要添加包围线、内圈、分隔线、自定义阴影或模糊。输入框通过背景色表达焦点与错误，同时显示错误文字；勾和箭头等图标笔画可以保留。用短促、可打断的弹簧动画表达真实状态变化，保留原生按钮、开关与导航语义，适配动态字体和减少动态效果。配色可以替换，不必使用黄色。完整规范见 docs/design-system/styles/playful-outline/Design.md。";
+"po_prompt" = "以 Playful Outline 灵动描线风格创建 iOS SwiftUI 界面。用留白、薄荷、杏色与深墨色面呈现轻盈的韩风图形感。曲面只用来连接或分隔有功能的区域，不画装饰性波浪线或重复条带。首页展示便签的正文与收藏操作区，不放 Tab 或圆形播放器。详情保留三个真实入口；导航容器在切换时保持稳定，让宽缓的连续曲面随选中入口移动、变形，图标与标签同步点亮。保留输入与收藏状态。无包围线、分隔线、自定义阴影或模糊，减少动态效果时直接切换。保留原生控件语义和动态字体。完整规范见 docs/design-system/styles/playful-outline/Design.md。";
 "po_sheet_footer" = "拖动顶部手柄，或点选高度。内容会留在当前面板里。";
 "po_design_heading" = "色面如何相接。";
 "po_design_body" = "从首页卡片到完整页面，保持同一种性格。颜色可以换，流动边缘和清晰状态始终保留。";
 "po_avoid" = "让色面自然相接。避免包围线、双圈、层层卡片框、投影、玻璃和无目的的持续动画。";
 "po_home_preview" = "灵动描线首页卡片预览";
-"po_motion_label" = "让形状动起来。";
-"po_playing" = "动效演示 · 已开启";
-"po_paused" = "动效演示 · 轻触开始";
-"po_play" = "开始动效演示";
-"po_pause" = "暂停动效演示";
-"po_state_on" = "已开启";
-"po_state_off" = "已关闭";
 "po_input_heading" = "每一步，都有回应。";
 "po_input_body" = "搜索三种形状，试试空结果，再体验加载与重试的模拟流程。";
 "po_search_label" = "查找形状";
@@ -1244,16 +1235,7 @@
 "po_detail_back" = "返回动效工作台";
 
 // Playful Outline
-"po_spec_reference" = "风格规范";
-"po_layout_tokens" = "圆润字体 · 系统语义字号\n组内间距 8 / 12 / 16 / 20 / 24 / 28 / 32 / 36 pt\n连续波浪分区 · 实心圆与胶囊控件\n组件描边：0 · 自定义阴影：无";
-"po_signature_hint" = "轻点两下，开启或关闭动效演示。";
-"po_readout_motion" = "动效开关";
-"po_readout_curves" = "曲线状态";
-"po_curve_reduced" = "静态 · 减少动态效果";
-"po_curve_disabled" = "已关闭流动";
-"po_curve_ready" = "等待开启";
-"po_curve_flowing" = "流动中";
-"po_curve_suspended" = "暂离时暂停";
+"po_layout_tokens" = "圆润字体 · 系统语义字号\n留白与连续 Bézier 色面分区\n真实三 Tab · 选中位置与曲线同步\n组件描边：0 · 自定义阴影：无";
 
 "po_token_tint" = "柔和分区色";
 "po_token_control" = "次要控件底色";
@@ -1360,3 +1342,37 @@
 "m3_demo_adaptation" = "此处以 SF 字体、SF Symbols、原生 sheet 手势和至少 48 pt 触控区，将基线 Material 3 适配到 iOS。";
 "m3_clear_input" = "清空输入";
 "m3_demo_close" = "关闭";
+
+"po_nav_inspiration" = "灵感";
+
+"po_nav_components" = "组件";
+
+"po_nav_reference" = "规范";
+
+
+
+
+
+
+
+"po_switch_saved" = "收藏状态";
+
+"po_switch_saved_body" = "与灵感页的便签收藏状态同步。";
+
+"po_token_apricot" = "收藏反馈色面";
+
+"po_note_label" = "灵感便签";
+
+"po_note_content" = "慢慢来。\n好心情会发芽。";
+
+"po_note_save" = "收好这份心情";
+
+"po_note_saved" = "已收好";
+
+"po_note_unsave" = "取消收藏便签";
+
+"po_note_collection_saved" = "喜欢的，已经收好了。";
+
+"po_note_collection_empty" = "给喜欢的留个位置。";
+
+"po_note_collection_body" = "轻点便签底部即可收藏，再点一次取消。收藏状态只在本次演示中保留。";
