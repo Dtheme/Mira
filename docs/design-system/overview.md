@@ -87,3 +87,4 @@ The first batch is a backlog for authoring. Each style must receive a dedicated 
 | Refined Dark | 精致暗色 | Minimal / Systematic | `docs/design-system/styles/refined-dark/Design.md` |
 | Editorial Luxe | 轻奢编辑 | Minimal / Systematic | `docs/design-system/styles/editorial-luxe/Design.md` |
 | Hand-drawn Vlog | Vlog 手绘风 | Cultural / Editorial | `docs/design-system/styles/handdrawn-vlog/Design.md` |
+| Playful Outline | 灵动描线 | Experimental / Visual | `docs/design-system/styles/playful-outline/Design.md` |

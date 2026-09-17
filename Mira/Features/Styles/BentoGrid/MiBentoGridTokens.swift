@@ -12,6 +12,7 @@ enum MiBentoGridTokens {
     static let ink = Color(hex: 0x1A1D24)
     static let muted = Color(hex: 0x6B7280)
     static let accent = Color(hex: 0x5B6CFF)
+    static let homeHeroFill = Color(hex: 0x4E5CE0)
     static let accent2 = Color(hex: 0x15C39A)
     static let stroke = Color(hex: 0xE3E6EC)
 

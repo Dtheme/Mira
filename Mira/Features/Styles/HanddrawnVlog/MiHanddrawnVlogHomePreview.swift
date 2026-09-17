@@ -33,7 +33,7 @@ struct MiHanddrawnVlogHomePreview: View {
     private var matWidth: CGFloat { cardSize.width * 0.80 }
     private var matPadding: CGFloat { 8 * scale }
     private var photoWidth: CGFloat { matWidth - matPadding * 2 }
-    private var photoHeight: CGFloat { photoWidth * 0.90 }
+    private var photoHeight: CGFloat { photoWidth * 0.82 }
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
@@ -141,13 +141,15 @@ struct MiHanddrawnVlogHomePreview: View {
 
     // The mat caption: the style title as diary handwriting, one rose heart.
     private var captionStrip: some View {
-        HStack(spacing: 0) {
+        HStack(alignment: .lastTextBaseline, spacing: 0) {
             Text(MiL10n.text(style.name))
                 .font(HV.hand(15 * scale, .semibold))
                 .italic()
                 .foregroundStyle(HV.ink)
-                .lineLimit(1)
-                .minimumScaleFactor(0.6)
+                .lineLimit(2)
+                .minimumScaleFactor(0.85)
+                .fixedSize(horizontal: false, vertical: true)
+                .layoutPriority(1)
                 .miStyleTitleTransition(style.id)
 
             Spacer(minLength: 5 * scale)
@@ -179,17 +181,17 @@ struct MiHanddrawnVlogHomePreview: View {
     private var pageNote: some View {
         HStack(spacing: 5 * scale) {
             Text("5.24")
-                .font(HV.hand(10.5 * scale, .semibold))
+                .font(HV.hand(11 * scale, .semibold))
                 .italic()
-                .foregroundStyle(HV.pencil)
+                .foregroundStyle(HV.ink.opacity(0.78))
 
             Text(MiL10n.text("hv_mem_cap_1"))
-                .font(HV.hand(10.5 * scale, .medium))
+                .font(HV.hand(11 * scale, .medium))
                 .italic()
-                .foregroundStyle(HV.pencil.opacity(0.9))
+                .foregroundStyle(HV.ink.opacity(0.78))
                 .lineLimit(1)
         }
-        .padding(.leading, 18 * scale)
+        .padding(.horizontal, 18 * scale)
         .padding(.bottom, 14 * scale)
     }
 }

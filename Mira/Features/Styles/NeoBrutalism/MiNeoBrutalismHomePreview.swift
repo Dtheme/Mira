@@ -37,7 +37,7 @@ struct MiNeoBrutalismHomePreview: View {
                 .fill(MiNeoBrutalismTokens.yellow)
 
             arrowSlab
-                .position(x: cardSize.width * 0.55, y: cardSize.height * 0.42)
+                .position(x: cardSize.width * 0.55, y: cardSize.height * 0.39)
         }
         .overlay(alignment: .topLeading) {
             stampPlate
@@ -56,7 +56,7 @@ struct MiNeoBrutalismHomePreview: View {
     }
 
     private var arrowSlab: some View {
-        let side = cardSize.width * 0.56
+        let side = cardSize.width * 0.52
 
         return MiNeoBrutalismSurface(
             shape: RoundedRectangle(cornerRadius: MiNeoBrutalismTokens.radiusSM, style: .continuous),
@@ -89,15 +89,16 @@ struct MiNeoBrutalismHomePreview: View {
     private var titleBlock: some View {
         VStack(alignment: .leading, spacing: 4 * metricScale) {
             Text(MiL10n.text(style.name))
-                .font(.system(size: 21 * metricScale, weight: .black, design: .default))
+                .font(.system(size: 20 * metricScale, weight: .black, design: .default))
                 .foregroundStyle(MiNeoBrutalismTokens.ink)
-                .lineLimit(1)
-                .minimumScaleFactor(0.6)
+                .lineLimit(2)
+                .minimumScaleFactor(0.85)
+                .fixedSize(horizontal: false, vertical: true)
                 .miStyleTitleTransition(style.id)
 
             Text(MiL10n.text("nb_card_shadow_spec"))
-                .font(.system(size: 10.5 * metricScale, weight: .heavy, design: .default))
-                .tracking(0.8)
+                .font(.system(size: 11 * metricScale, weight: .heavy, design: .default))
+                .tracking(0.5)
                 .foregroundStyle(MiNeoBrutalismTokens.ink.opacity(0.85))
                 .lineLimit(1)
         }

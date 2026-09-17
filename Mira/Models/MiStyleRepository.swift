@@ -20,7 +20,8 @@ enum MiStyleRepository {
         bentoGrid,
         refinedDark,
         editorialLuxe,
-        handdrawnVlog
+        handdrawnVlog,
+        playfulOutline
     ]
 
     static func style(id: String) -> MiDesignStyle? {
@@ -488,6 +489,48 @@ private extension MiStyleRepository {
         ],
         demoSlots: standardDemoSlots,
         isImplementationReady: MiHanddrawnVlogModule.isImplemented
+    )
+
+    static let playfulOutline = MiDesignStyle(
+        id: MiPlayfulOutlineModule.styleID,
+        name: "style_po",
+        localizedName: "style_po_native",
+        slug: "playful-outline",
+        category: .experimentalVisual,
+        summary: "po_summary",
+        description: "po_description",
+        designDocumentPath: MiPlayfulOutlineModule.designDocumentPath,
+        screenshotAssetName: nil,
+        accentHex: 0xBDE7D5,
+        visualTokens: [
+            MiTokenSpec(name: "mi-po-paper", value: "#F6FAF7", role: "po_token_paper"),
+            MiTokenSpec(name: "mi-po-tint", value: "#E0EEE6", role: "po_token_tint"),
+            MiTokenSpec(name: "mi-po-control", value: "#D0E3D8", role: "po_token_control"),
+            MiTokenSpec(name: "mi-po-ink", value: "#233B33", role: "po_token_ink"),
+            MiTokenSpec(name: "mi-po-mint", value: "#BDE7D5", role: "po_token_mint"),
+            MiTokenSpec(name: "mi-po-error-surface", value: "#FAE6E1", role: "po_token_error_surface"),
+            MiTokenSpec(name: "mi-po-outline", value: "0", role: "po_token_outline"),
+            MiTokenSpec(name: "mi-po-shadow", value: "0", role: "po_token_shadow")
+        ],
+        sections: [
+            MiStyleDetailSection(
+                title: "ds_identity",
+                summary: "po_description",
+                bullets: ["po_identity_rule_line", "po_identity_rule_shape", "po_identity_rule_depth"]
+            ),
+            MiStyleDetailSection(
+                title: "ds_motion",
+                summary: "po_motion_summary",
+                bullets: ["po_motion_rule_press", "po_motion_rule_switch", "po_motion_rule_dialog"]
+            ),
+            MiStyleDetailSection(
+                title: "ds_acceptance",
+                summary: "po_acceptance_summary",
+                bullets: ["po_check_shadow", "po_check_states", "po_check_motion"]
+            )
+        ],
+        demoSlots: standardDemoSlots,
+        isImplementationReady: MiPlayfulOutlineModule.isImplemented
     )
 
     static let standardDemoSlots: [MiDemoSlot] = [

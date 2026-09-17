@@ -147,6 +147,16 @@ Rules for a signature preview card:
 - Press feedback reads the `miHomePressedStyleID` environment and responds in the style's own idiom (clay compresses, brutalist card drops onto its shadow, polaroid straightens), always with a reduced-motion fallback.
 - The style title applies `miStyleTitleTransition(style.id)` so the title participates in the card-to-detail transition.
 
+Home card refinement baseline:
+
+- Treat the 174 x 222 pt compact card as the tightest composition; check the 186 x 236, 198 x 250, and 220 x 272 pt variants too. Preserve each style's signature object, palette, and type family.
+- Keep supporting labels at least 11 pt before the canvas focus transform. Give long names up to two lines where the composition permits, with a title shrink floor of 0.85; leave explicit room between the text and the signature object. This is a specimen scale, not a claim that distant cards satisfy body-text sizing.
+- Keep small text on a stable, high-contrast surface. Gold, pencil, and translucent treatments belong to decorative rules and surfaces; readable labels may use the style's muted ink. Glass specimen text sits on the milkier lower part of its pane.
+- Numeric specimen content and its supporting graphic must fit together without shrinking the number. The Bento home hero uses its own deeper indigo fill (`homeHeroFill`) for white text; the detail-page accent remains unchanged.
+- Reduced Motion suppresses both the shared press scale and style-specific movement; retain fill, border, and shadow feedback. Reduced Transparency makes the Apple dock and Glassmorphism text pane opaque while preserving their silhouettes.
+- `MiStyleCardView.swift` includes galleries for all implemented styles at compact and iPad card sizes, plus pressed/reduced-motion and dragging/reduced-transparency states. Test English and Simplified Chinese using the app language setting: `MiL10n` reads `Bundle.main`, so changing only the SwiftUI locale environment is insufficient.
+- The galleries verify specimens at unit scale; also inspect the real constellation's focus scaling, tap-to-detail transition, and accessibility text sizes. Fixed specimen typography does not replace Dynamic Type support in the app shell and detail content; VoiceOver receives the full card name and summary.
+
 #### With Screenshot
 
 If a style has a homepage screenshot:

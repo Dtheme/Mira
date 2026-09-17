@@ -34,6 +34,7 @@ Typical styles:
 - Cyberpunk
 - Glitch
 - Psychedelic
+- Playful Outline / 灵动描线
 
 Use carefully in iOS: keep navigation, form input, and readability stable while allowing visual expression in hero areas, cards, covers, or editorial surfaces.
 
@@ -147,3 +148,4 @@ Each style may include tags from these dimensions:
 | Refined Dark | Minimal & Systematic | Balanced | Medium | Medium | `docs/design-system/styles/refined-dark/Design.md` |
 | Editorial Luxe | Minimal & Systematic | Balanced | Medium | Low | `docs/design-system/styles/editorial-luxe/Design.md` |
 | Hand-drawn Vlog | Cultural & Editorial | Expressive | Medium | Medium | `docs/design-system/styles/handdrawn-vlog/Design.md` |
+| Playful Outline | Experimental Visual | Expressive | Medium | Medium | `docs/design-system/styles/playful-outline/Design.md` |

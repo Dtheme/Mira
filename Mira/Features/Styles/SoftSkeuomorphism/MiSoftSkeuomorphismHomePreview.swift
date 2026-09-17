@@ -83,7 +83,7 @@ struct MiSoftSkeuomorphismHomePreview: View {
                 endRadius: poolSide / 2
             )
             .frame(width: poolSide, height: poolSide)
-            .scaleEffect(x: isPressed ? 1.08 : 1, y: 24 * s / poolSide)
+            .scaleEffect(x: isPressed && !reduceMotion ? 1.08 : 1, y: 24 * s / poolSide)
             .position(x: w * 0.50, y: shelfY + 10 * s)
 
             RadialGradient(
@@ -108,17 +108,18 @@ struct MiSoftSkeuomorphismHomePreview: View {
             Text(MiL10n.text(style.name))
                 .font(.system(size: 17.5 * s, weight: .semibold, design: .rounded))
                 .foregroundStyle(MiSoftSkeuomorphismTokens.ink)
-                .lineLimit(1)
-                .minimumScaleFactor(0.62)
+                .lineLimit(2)
+                .minimumScaleFactor(0.85)
+                .fixedSize(horizontal: false, vertical: true)
                 .miStyleTitleTransition(style.id)
                 .padding(.horizontal, 18 * s)
-                .padding(.top, 18 * s)
+                .padding(.top, 16 * s)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 
             Text(MiL10n.text("home_softsk_nameplate"))
-                .font(.system(size: 9.5 * s, weight: .medium, design: .rounded))
-                .kerning(0.8)
-                .foregroundStyle(MiSoftSkeuomorphismTokens.muted)
+                .font(.system(size: 11 * s, weight: .medium, design: .rounded))
+                .kerning(0.5)
+                .foregroundStyle(MiSoftSkeuomorphismTokens.ink.opacity(0.78))
                 .padding(.leading, 18 * s)
                 .padding(.bottom, 13 * s)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)

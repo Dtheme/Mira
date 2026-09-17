@@ -150,18 +150,18 @@ struct MiNeumorphismHomePreview: View {
     // MARK: - Text block
 
     private var textBlock: some View {
-        VStack(alignment: .leading, spacing: 3) {
+        VStack(alignment: .leading, spacing: 5) {
             Text(MiL10n.text("neu_soft_ui"))
                 .font(.system(size: kickerSize, weight: .medium, design: .rounded))
-                .foregroundStyle(MiNeumorphismTokens.quietText)
-                .tracking(1.4)
+                .foregroundStyle(MiNeumorphismTokens.ink.opacity(0.85))
+                .tracking(1.0)
                 .textCase(.uppercase)
 
             Text(MiL10n.text(style.name))
                 .font(.system(size: titleSize, weight: .semibold, design: .rounded))
                 .foregroundStyle(MiNeumorphismTokens.ink)
                 .lineLimit(1)
-                .minimumScaleFactor(0.62)
+                .minimumScaleFactor(0.85)
                 .miStyleTitleTransition(style.id)
         }
         .padding(textPadding)
@@ -225,7 +225,7 @@ struct MiNeumorphismHomePreview: View {
     }
 
     private var kickerSize: CGFloat {
-        cardSize.width < 180 ? 10.5 : 11
+        11 * cardSize.width / 174
     }
 
     private var titleSize: CGFloat {

@@ -123,7 +123,7 @@ struct MiRefinedDarkHomePreview: View {
     private var commandBar: some View {
         let barShape = RoundedRectangle(cornerRadius: MiRefinedDarkTokens.smallRadius, style: .continuous)
 
-        return HStack(spacing: 8) {
+        return HStack(spacing: 6) {
             RoundedRectangle(cornerRadius: 1, style: .continuous)
                 .fill(MiRefinedDarkTokens.accent)
                 .frame(width: 2, height: 15)
@@ -132,14 +132,13 @@ struct MiRefinedDarkHomePreview: View {
                 .font(.system(size: 11))
                 .foregroundStyle(MiRefinedDarkTokens.muted)
                 .lineLimit(1)
-                .minimumScaleFactor(0.7)
 
-            Spacer(minLength: 6)
+            Spacer(minLength: 2)
 
             Text(MiL10n.text("rd_home_cmdk"))
-                .font(.system(size: 9.5, weight: .semibold, design: .monospaced))
+                .font(.system(size: 11, weight: .semibold, design: .monospaced))
                 .foregroundStyle(MiRefinedDarkTokens.ink.opacity(0.85))
-                .padding(.horizontal, 6)
+                .padding(.horizontal, 5)
                 .padding(.vertical, 3)
                 .background {
                     RoundedRectangle(cornerRadius: 5, style: .continuous)
@@ -149,10 +148,11 @@ struct MiRefinedDarkHomePreview: View {
                                 .strokeBorder(Color.white.opacity(0.14), lineWidth: 1)
                         }
                 }
+                .fixedSize()
         }
-        .padding(.leading, 13)
+        .padding(.leading, 10)
         .padding(.trailing, 10)
-        .frame(width: cardSize.width - 44, height: 40)
+        .frame(width: cardSize.width - 32, height: 40)
         .background { barShape.fill(barFill) }
         .overlay(alignment: .top) {
             // 1 pt inner highlight echoing the card-level top line.
@@ -187,7 +187,7 @@ struct MiRefinedDarkHomePreview: View {
                 .font(.system(size: 17, weight: .semibold, design: .rounded))
                 .foregroundStyle(MiRefinedDarkTokens.ink)
                 .lineLimit(1)
-                .minimumScaleFactor(0.6)
+                .minimumScaleFactor(0.85)
                 .miStyleTitleTransition(style.id)
         }
         .padding(.horizontal, 18)

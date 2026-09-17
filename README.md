@@ -82,7 +82,7 @@
       <tr>
         <td><strong>Material 3</strong></td>
         <td>Implemented</td>
-        <td>Tonal containers, rounded shapes, semantic color roles, chips, state layers, and iOS adaptation notes.</td>
+        <td>Classic Material You: semantic light/dark palettes, standard controls, and a working inspiration library with search, saved items, creation, and undo. Includes a dedicated Material 3 skill.</td>
       </tr>
       <tr>
         <td><strong>Claymorphism</strong></td>
@@ -114,6 +114,11 @@
         <td>Implemented</td>
         <td>Korean film-diary cute: warm cream paper, faded film tones, polaroid framing, handwriting, washi tape, and hand-drawn doodles with a tap-to-flip polaroid memory-board signature.</td>
       </tr>
+      <tr>
+        <td><strong>Playful Outline</strong></td>
+        <td>Implemented</td>
+        <td>Borderless color fields, filled circular controls, flowing wave divisions, and zero shadows, with elastic buttons, switches, dialogs, and reduced-motion alternatives.</td>
+      </tr>
     </tbody>
   </table>
 
@@ -129,7 +134,7 @@
   <ul>
     <li><strong>Target screen</strong>: subscription page, dashboard, search, onboarding, settings, etc.</li>
     <li><strong>User scenario</strong>: what the user is trying to do and what must stay clear.</li>
-    <li><strong>Selected style</strong>: Apple Liquid Glass, Glassmorphism, Neumorphism, Claymorphism, Soft Skeuomorphism, Neo-Brutalism, Minimalism, Material 3, Bento Grid, Refined Dark, Editorial Luxe, Hand-drawn Vlog, or another future style.</li>
+    <li><strong>Selected style</strong>: Apple Liquid Glass, Glassmorphism, Neumorphism, Claymorphism, Soft Skeuomorphism, Neo-Brutalism, Minimalism, Material 3, Bento Grid, Refined Dark, Editorial Luxe, Hand-drawn Vlog, Playful Outline, or another future style.</li>
     <li><strong>Platform constraints</strong>: iOS / SwiftUI, Dynamic Type, VoiceOver, Reduced Motion, safe areas, and performance.</li>
   </ul>
 
@@ -220,7 +225,7 @@ Output: visual direction, tokens, layout rules, component guidance, SwiftUI note
       <tr>
         <td><strong>Material 3</strong></td>
         <td>已实现</td>
-        <td>色调容器、圆角形状、语义色彩、标签、状态层和 iOS 适配说明，已有独立详情页。</td>
+        <td>经典 Material You：语义浅深配色、标准比例组件，以及可搜索、收藏、新建和撤销的灵感库，配有专用 Material 3 skill。</td>
       </tr>
       <tr>
         <td><strong>黏土形态</strong></td>
@@ -252,6 +257,11 @@ Output: visual direction, tokens, layout rules, component guidance, SwiftUI note
         <td>已实现</td>
         <td>韩系胶片日记可爱风：奶油纸面、褪色胶片色、拍立得相框、手写字、和纸胶带和手绘涂鸦，以拍立得「记忆板」点击翻页为签名交互，已有独立详情页。</td>
       </tr>
+      <tr>
+        <td><strong>Playful Outline / 灵动描线</strong></td>
+        <td>已实现</td>
+        <td>轮廓来自色面边缘，以实心圆控件、全宽波浪拼接和明度差区分层级，无组件描边、无阴影，包含弹性按钮、开关、完整弹窗交互与减少动态效果适配。</td>
+      </tr>
     </tbody>
   </table>
 
@@ -267,7 +277,7 @@ Output: visual direction, tokens, layout rules, component guidance, SwiftUI note
   <ul>
     <li><strong>目标界面</strong>：订阅页、首页卡片、搜索页、设置页、引导页等。</li>
     <li><strong>用户场景</strong>：用户正在做什么，哪些内容必须清楚可见。</li>
-    <li><strong>选定风格</strong>：Apple Liquid Glass、玻璃拟物化、新拟态、黏土形态、柔和有机拟物、新粗野主义、极简主义、Material 3、便当网格、精致暗色（Refined Dark）、轻奢编辑（Editorial Luxe）、Vlog 手绘风（Hand-drawn Vlog），或后续新增风格。</li>
+    <li><strong>选定风格</strong>：Apple Liquid Glass、玻璃拟物化、新拟态、黏土形态、柔和有机拟物、新粗野主义、极简主义、Material 3、便当网格、精致暗色（Refined Dark）、轻奢编辑（Editorial Luxe）、Vlog 手绘风（Hand-drawn Vlog）、灵动描线（Playful Outline），或后续新增风格。</li>
     <li><strong>平台约束</strong>：iOS / SwiftUI、动态字体、VoiceOver、减少动态效果、安全区和性能。</li>
   </ul>
 

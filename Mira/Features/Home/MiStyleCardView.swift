@@ -118,6 +118,14 @@ struct MiStyleCardView: View {
                     cornerRadius: cornerRadius,
                     isDragging: isDragging
                 )
+            } else if style.id == MiPlayfulOutlineModule.styleID {
+                MiPlayfulOutlineHomePreview(
+                    style: style,
+                    focus: focus,
+                    cardSize: cardSize,
+                    cornerRadius: cornerRadius,
+                    isDragging: isDragging
+                )
             } else if style.id == MiAppleLiquidGlassModule.styleID {
                 MiAppleLiquidGlassHomePreview(
                     style: style,
@@ -473,4 +481,46 @@ private struct MiScreenshotCardLabel: View {
     )
     .padding(80)
     .background(MiColorTokens.appBackground)
+}
+
+#Preview("Cards · Compact") {
+    MiHomeCardGalleryPreview()
+}
+
+#Preview("Cards · iPad") {
+    MiHomeCardGalleryPreview(cardSize: MiSpacingTokens.homeCardPad, cornerRadius: MiSpacingTokens.homeCardRadiusPad)
+}
+
+#Preview("Cards · Pressed") {
+    MiHomeCardGalleryPreview(isPressed: true)
+}
+
+#Preview("Cards · Drag") {
+    MiHomeCardGalleryPreview(isDragging: true)
+}
+
+private struct MiHomeCardGalleryPreview: View {
+    var cardSize = MiSpacingTokens.homeCardCompact
+    var cornerRadius = MiSpacingTokens.homeCardRadiusCompact
+    var isPressed = false
+    var isDragging = false
+
+    var body: some View {
+        ScrollView([.horizontal, .vertical]) {
+            LazyVGrid(columns: Array(repeating: GridItem(.fixed(cardSize.width), spacing: 24), count: 2), spacing: 32) {
+                ForEach(MiStyleRepository.styles) { style in
+                    MiStyleCardView(
+                        style: style,
+                        focus: MiCardFocus(scale: 1, opacity: 1, shadowOpacity: 0.28, borderOpacity: 0.62, zIndex: 0),
+                        cardSize: cardSize,
+                        cornerRadius: cornerRadius,
+                        isDragging: isDragging
+                    )
+                    .environment(\.miHomePressedStyleID, isPressed ? style.id : nil)
+                }
+            }
+            .padding(32)
+        }
+        .background(MiColorTokens.appBackground)
+    }
 }

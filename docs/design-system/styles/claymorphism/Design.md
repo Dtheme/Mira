@@ -81,6 +81,7 @@
   - The field stays quiet: a near-flat cream vertical gradient plus one flat lilac arc cropping into the top-right corner; copy is only the style name and one hook line, top-left.
   - Press is the poke: the ball squashes volume-preservingly (scale x 1.06, y 0.92, anchored at its bottom) while the dent grows and darkens; dual outer shadows pull in tight, then everything springs back with a jelly rebound. Reduced motion drops the squash and offset, keeping only shadow contraction and dent darkening.
   - The masked inner puff and the dent's blurred inset strokes render only at rest; while the home canvas pans (isDragging) they fall back to flat fills plus a plain hairline, and shadow radii roughly halve.
+  - Refine the compact title to 19 pt bold rounded type with a 0.85 minimum scale; keep the 11 pt hook 5 pt below it in ink at 0.80 opacity. Bring the two crumbs inward (x offsets 64 and 48 pt from center) so their silhouettes and shadows have room inside the lower-right curve. Scale these dimensions with card width, retaining the ball's existing anchor and press response.
 - Buttons:
   - Minimum 44 pt touch target.
   - Press feedback must show physical compression, not only color change.

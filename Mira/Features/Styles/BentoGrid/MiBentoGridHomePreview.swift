@@ -69,17 +69,17 @@ struct MiBentoGridHomePreview: View {
     private var heroTile: some View {
         let cellShape = RoundedRectangle(cornerRadius: m.cellRadius, style: .continuous)
         return cellShape
-            .fill(MiBentoGridTokens.accent)
+            .fill(MiBentoGridTokens.homeHeroFill)
             .overlay {
                 cellShape.fill(MiBentoGridTokens.ink.opacity(isPressed ? 0.06 : 0))
             }
             .overlay {
                 VStack(alignment: .leading, spacing: 0) {
                     Text(MiL10n.text("bento_cell_hero"))
-                        .font(.system(size: 9 * m.scale, weight: .heavy, design: .rounded))
-                        .tracking(1.3)
+                        .font(.system(size: 11 * m.scale, weight: .semibold, design: .rounded))
+                        .tracking(0.8)
                         .textCase(.uppercase)
-                        .foregroundStyle(Color.white.opacity(0.72))
+                        .foregroundStyle(Color.white)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     Spacer(minLength: 0)
@@ -89,7 +89,8 @@ struct MiBentoGridHomePreview: View {
                             .font(.system(size: m.heroNumeralSize, weight: .heavy, design: .rounded))
                             .foregroundStyle(.white)
                             .lineLimit(1)
-                            .minimumScaleFactor(0.8)
+                            .monospacedDigit()
+                            .fixedSize()
                         Spacer(minLength: 4 * m.scale)
                         sparkBars
                     }
@@ -108,11 +109,11 @@ struct MiBentoGridHomePreview: View {
 
     private var sparkBars: some View {
         let heights: [CGFloat] = [10, 17, 13, 21]
-        return HStack(alignment: .bottom, spacing: 3.5 * m.scale) {
+        return HStack(alignment: .bottom, spacing: 2 * m.scale) {
             ForEach(Array(heights.enumerated()), id: \.offset) { _, height in
                 RoundedRectangle(cornerRadius: 2 * m.scale, style: .continuous)
                     .fill(Color.white.opacity(0.78))
-                    .frame(width: 4.5 * m.scale, height: height * m.scale)
+                    .frame(width: 3 * m.scale, height: height * m.scale)
             }
         }
     }
@@ -165,7 +166,8 @@ struct MiBentoGridHomePreview: View {
                         .font(.system(size: m.titleSize, weight: .bold, design: .rounded))
                         .foregroundStyle(MiBentoGridTokens.ink)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.6)
+                        .minimumScaleFactor(0.85)
+                        .layoutPriority(1)
                         .miStyleTitleTransition(style.id)
 
                     Spacer(minLength: 6 * m.scale)
@@ -237,7 +239,7 @@ private struct MiBentoBoardMetrics {
         heroH = boardH * 0.425
         midH = boardH * 0.225
         titleH = boardH - heroH - midH - gutter * 2
-        heroNumeralSize = min(max(cardSize.width * 0.165, 28), 34)
+        heroNumeralSize = min(max(cardSize.width * 0.15, 26), 32)
         titleSize = min(max(cardSize.width * 0.10, 17), 21)
     }
 }

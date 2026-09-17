@@ -10,6 +10,7 @@ import AlertToast
 
 struct MiAppRootView: View {
     @State private var selectedStyle: MiDesignStyle?
+    @State private var lastDetailStyleID: String?
     @State private var unavailableStyle: MiDesignStyle?
     @State private var showsUnavailableToast = false
     @State private var showsDemoList = false
@@ -21,12 +22,12 @@ struct MiAppRootView: View {
         ZStack {
             homeLayer
                 .opacity(isHomeCovered ? 0 : 1)
-                .scaleEffect(isHomeCovered ? 0.96 : 1)
+                .scaleEffect(homeLayerScale)
                 .allowsHitTesting(!isHomeCovered)
 
             if let selectedStyle {
                 detailView(for: selectedStyle)
-                    .transition(detailTransition)
+                    .transition(detailTransition(for: selectedStyle))
                     .zIndex(10)
             }
 
@@ -46,7 +47,7 @@ struct MiAppRootView: View {
                     .zIndex(30)
             }
         }
-        .animation(dissolveAnimation, value: selectedStyle?.id)
+        .animation(styleNavigationAnimation, value: selectedStyle?.id)
         .animation(dissolveAnimation, value: showsDemoList)
         .animation(dissolveAnimation, value: selectedDemo?.id)
         .tint(MiColorTokens.appleBlue500)
@@ -90,7 +91,8 @@ struct MiAppRootView: View {
                 || MiBentoGridModule.canOpen(style)
                 || MiRefinedDarkModule.canOpen(style)
                 || MiEditorialLuxeModule.canOpen(style)
-                || MiHanddrawnVlogModule.canOpen(style) {
+                || MiHanddrawnVlogModule.canOpen(style)
+                || MiPlayfulOutlineModule.canOpen(style) {
                 openDetail(for: style)
             } else {
                 unavailableStyle = style
@@ -164,6 +166,10 @@ struct MiAppRootView: View {
                 MiHanddrawnVlogModule.detailView(for: style) {
                     closeDetail()
                 }
+            } else if MiPlayfulOutlineModule.canOpen(style) {
+                MiPlayfulOutlineModule.detailView(for: style) {
+                    closeDetail()
+                }
             } else {
                 EmptyView()
             }
@@ -185,6 +191,42 @@ struct MiAppRootView: View {
         return .opacity.combined(with: .scale(scale: 1.02, anchor: .center))
     }
 
+    private func detailTransition(for style: MiDesignStyle) -> AnyTransition {
+        guard style.id == MiPlayfulOutlineModule.styleID else {
+            return detailTransition
+        }
+        guard !reduceMotion else { return .opacity }
+
+        return .asymmetric(
+            insertion: .opacity
+                .combined(with: .offset(y: 28))
+                .combined(with: .scale(scale: 0.97, anchor: .bottom)),
+            removal: .opacity
+                .combined(with: .offset(y: 12))
+                .combined(with: .scale(scale: 0.99, anchor: .bottom))
+        )
+    }
+
+    private var styleNavigationAnimation: Animation {
+        guard lastDetailStyleID == MiPlayfulOutlineModule.styleID else {
+            return dissolveAnimation
+        }
+        if reduceMotion { return .easeOut(duration: 0.18) }
+        return selectedStyle == nil
+            ? .easeOut(duration: 0.24)
+            : .spring(response: 0.40, dampingFraction: 0.82)
+    }
+
+    private var homeLayerScale: CGFloat {
+        if reduceMotion,
+           lastDetailStyleID == MiPlayfulOutlineModule.styleID,
+           !showsDemoList,
+           selectedDemo == nil {
+            return 1
+        }
+        return isHomeCovered ? 0.96 : 1
+    }
+
     private var dissolveAnimation: Animation {
         reduceMotion
             ? .easeInOut(duration: 0.20)
@@ -192,6 +234,7 @@ struct MiAppRootView: View {
     }
 
     private func openDetail(for style: MiDesignStyle) {
+        lastDetailStyleID = style.id
         selectedStyle = style
     }
 

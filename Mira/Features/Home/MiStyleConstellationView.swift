@@ -309,7 +309,7 @@ private struct MiWatchAppCardReplicaView: View {
     }
 
     private var pressScale: CGFloat {
-        guard isPressed else {
+        guard isPressed, !reduceMotion else {
             return 1
         }
         if style.id == MiNeoBrutalismModule.styleID {

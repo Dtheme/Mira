@@ -174,7 +174,10 @@ Official interpretation for Mira:
   - home cards with screenshots use full-bleed screenshot backgrounds plus readable style names
   - home cards without screenshots show the style name and a short introduction on a lightweight, readable white/frost placeholder surface
   - avoid applying live glass material to every card in the Apple Watch-style home canvas
-  - the Apple Liquid Glass home card (`MiAppleLiquidGlassHomePreview`) demonstrates the doctrine itself: an opaque soft-frost content page (title, hook, quiet page furniture) with ONE floating glass dock capsule as the signature control, whose lens uses a browse (grid) semantic, not search; glass is double-gated (`glassEffect` behind `#available(iOS 26,*)`, `ultraThinMaterial` fallback, flat gradient while the canvas pans)
+- Home Card:
+  - `MiAppleLiquidGlassHomePreview` demonstrates the doctrine itself: an opaque soft-frost content page with ONE floating glass dock capsule. Its lens uses a browse (grid) semantic, not search; use `glassEffect` on iOS 26, material below 26, and a flat gradient while panning.
+  - Reserve two lines for the 18 pt title (minimum scale 0.85), followed by the 11 pt hook in solid slate ink. On the compact specimen, the page illustration starts at y = 102 and the 54 pt dock at y = 146; scale those anchors with card height so long titles do not collide with the page furniture.
+  - Reduced Transparency replaces the dock material with opaque frost. Keep the refraction cue static, the content page opaque, and all decorative dock glyphs within the card's single navigation target.
 - Sheet / Modal:
   - use glass for sheet chrome, grabber area, close/action controls, and inspector headers
   - body content uses readable grouped sections

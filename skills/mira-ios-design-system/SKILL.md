@@ -35,11 +35,12 @@ For implemented style modules:
 - Neo-Brutalism: `docs/design-system/styles/neo-brutalism/Design.md`
 - Neo-Brutalism component spec: `docs/design-system/styles/neo-brutalism/component-spec.md`
 - Minimalism: `docs/design-system/styles/minimalism/Design.md`
-- Material 3: `docs/design-system/styles/material-3/Design.md`
+- Material 3: `docs/design-system/styles/material-3/Design.md`; focused adapter: `skills/mira-material-3/SKILL.md`
 - Bento Grid: `docs/design-system/styles/bento-grid/Design.md`
 - Refined Dark: `docs/design-system/styles/refined-dark/Design.md`
 - Editorial Luxe: `docs/design-system/styles/editorial-luxe/Design.md`
 - Hand-drawn Vlog: `docs/design-system/styles/handdrawn-vlog/Design.md`
+- Playful Outline: `docs/design-system/styles/playful-outline/Design.md`; focused adapter: `skills/mira-playful-outline/SKILL.md`
 
 ## Core Workflow
 
@@ -66,12 +67,13 @@ When the user asks for a style direction, UI plan, or SwiftUI implementation:
 - For Soft Skeuomorphism implementation, follow `docs/design-system/styles/soft-skeuomorphism/Design.md`; use warm cream surfaces, organic product objects, moss/peach accents, soft gauges, tactile pills, and low-contrast but readable depth. Runtime code lives under `Mira/Features/Styles/SoftSkeuomorphism/`.
 - For Glassmorphism implementation, follow `docs/design-system/styles/glassmorphism/Design.md`; keep it distinct from Apple Liquid Glass by defining background, shell glass, content glass, overlay glass, and readable opacity boundaries. Runtime code lives under `Mira/Features/Styles/Glassmorphism/`.
 - For Minimalism implementation, follow `docs/design-system/styles/minimalism/Design.md`; use grid, type scale, whitespace, hairlines, and explicit states instead of decorative effects. Runtime code lives under `Mira/Features/Styles/Minimalism/`.
-- For Material 3 implementation, follow `docs/design-system/styles/material-3/Design.md`; define semantic color roles, tonal containers, shape scale, state layers, and iOS adaptation boundaries. Runtime code lives under `Mira/Features/Styles/Material3/`.
+- For Material 3 implementation, follow `docs/design-system/styles/material-3/Design.md` and `skills/mira-material-3/SKILL.md`; use the classic baseline, semantic light/dark palettes, standard component proportions and real task states. Do not substitute Expressive or a purple rounded-card aesthetic. Runtime code lives under `Mira/Features/Styles/Material3/`.
 - For Bento Grid implementation, follow `docs/design-system/styles/bento-grid/Design.md`; build a modular mosaic with spanning cells (`Grid` + `gridCellColumns`), one hero tile, consistent radius and gutters, neutral elevated surfaces, and hierarchy from cell size, not decoration. Runtime code lives under `Mira/Features/Styles/BentoGrid/`.
 - For Refined Dark implementation, follow `docs/design-system/styles/refined-dark/Design.md`; a precise dark product UI (Linear-style) with a deep base, 1 pt hairline borders, subtle gradients, one restrained indigo accent with a soft glow, crisp type, and fast micro-motion. Separation comes from contrast and borders, not heavy shadows. Runtime code lives under `Mira/Features/Styles/RefinedDark/`.
 - For Editorial Luxe implementation, follow `docs/design-system/styles/editorial-luxe/Design.md`; elegant magazine-style luxury with serif headlines (`design: .serif`), ivory paper, generous whitespace, thin gold/ink hairline rules, large imagery, and one restrained gold accent. Elegance comes from type and space, not effects; keep gold an accent and body text high-contrast. Runtime code lives under `Mira/Features/Styles/EditorialLuxe/`.
 - For Hand-drawn Vlog implementation, follow `docs/design-system/styles/handdrawn-vlog/Design.md`; Korean film-diary cute with warm cream paper, faded film tones (not candy pastels), polaroid framing, handwriting, washi tape, and `Path`/`Canvas` hand-drawn doodles with one dried-rose accent and warm-tinted shadows. Charm comes from paper, film tone, framing, handwriting, and restraint (max 1-2 decorations per card), not saturation. Runtime code lives under `Mira/Features/Styles/HanddrawnVlog/`; do not reuse another style's detail template.
 - Do not duplicate full design style content inside this skill.
+- For Playful Outline implementation, use `docs/design-system/styles/playful-outline/Design.md` and `skills/mira-playful-outline/SKILL.md`; keep runtime code under `Mira/Features/Styles/PlayfulOutline/`. Outline means the edge of a color field: use filled circular controls and continuous wave divisions, with zero component borders and zero shadows. Preserve state-driven motion and reduced-motion alternatives; keep home replicas static at rest.
 - Do not treat web CSS effects as direct iOS implementation instructions.
 - Do not reduce a style to one visual trick, such as "blur equals glass" or "thick border equals brutalism".
 - Preserve iOS usability: safe areas, Dynamic Type, VoiceOver, 44x44 pt touch targets, reduced motion, and readable contrast.
@@ -85,6 +87,9 @@ The home screen is a pan canvas rendering about 12-14 card replicas at once; eve
 - One signature element per card, expressed in the style's own idiom; the card must read as its style in one glance and must not reuse another style's card recipe.
 - Idle is fully static: no `TimelineView`, no `repeatForever`, no live counters. Gate blur+mask passes, blurred highlights, live materials, and glow shadows behind the `isDragging` flag with a cheap flat fallback; shrink or simplify shadows while the canvas pans.
 - Press feedback reads the `miHomePressedStyleID` environment and responds in-idiom with a reduced-motion fallback; the title applies `miStyleTitleTransition(style.id)`.
+- For a polish pass, follow the **Home card refinement baseline** in `docs/design-system/mira-app-design-system.md`, then the selected style's **Home Card** guidance. Refine the existing specimen rather than replacing its visual concept.
+- Use the card galleries in `Mira/Features/Home/MiStyleCardView.swift` for side-by-side checks, then verify the real constellation. Switch the app language for localization checks; a preview's SwiftUI locale does not change `MiL10n`'s main-bundle lookup. Report syntax checks, builds, and rendered inspection separately when a toolchain or simulator is unavailable.
+- Keep concrete card geometry and palette decisions in the corresponding `Design.md`; update those rules together with the implementation rather than copying each recipe into this adapter.
 - New style integration touchpoints: `MiStyleRepository.styles`, `MiAppRootView` (canOpen + detail branch), `MiStyleCardView` (home preview branch), en/zh localization, and the `style-taxonomy.md` table.
 
 ## Anti-AI-Slop Discipline

@@ -62,3 +62,8 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 
 .playwright-mcp
+
+# Impeccable local context
+/.impeccable/
+/PRODUCT.md
+/DESIGN.md

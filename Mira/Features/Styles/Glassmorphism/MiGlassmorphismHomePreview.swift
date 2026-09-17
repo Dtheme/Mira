@@ -16,6 +16,7 @@ struct MiGlassmorphismHomePreview: View {
     let isDragging: Bool
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.miHomePressedStyleID) private var pressedStyleID
 
     private var isPressed: Bool { pressedStyleID == style.id && !isDragging }
@@ -147,8 +148,8 @@ struct MiGlassmorphismHomePreview: View {
             .fill(
                 LinearGradient(
                     colors: [
-                        Color.white.opacity(isPressed ? 0.50 : 0.44),
-                        Color.white.opacity(0.16)
+                        Color.white.opacity(reduceTransparency ? 1 : (isPressed ? 0.50 : 0.44)),
+                        Color.white.opacity(reduceTransparency ? 1 : 0.78)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -156,7 +157,7 @@ struct MiGlassmorphismHomePreview: View {
             )
             .overlay {
                 ZStack(alignment: .topLeading) {
-                    if isDragging {
+                    if isDragging || reduceTransparency {
                         Color.white.opacity(0.06)
                     } else {
                         // Frost pass: the field's pools re-drawn milked, as if
@@ -186,19 +187,19 @@ struct MiGlassmorphismHomePreview: View {
             .overlay(alignment: .bottomLeading) {
                 VStack(alignment: .leading, spacing: 3 * k) {
                     Text(MiL10n.text("home_glass_caption").uppercased())
-                        .font(.system(size: 8.5 * k, weight: .heavy, design: .rounded))
-                        .tracking(1.3)
-                        .foregroundStyle(MiGlassmorphismTokens.ink.opacity(0.6))
+                        .font(.system(size: 11 * k, weight: .semibold, design: .rounded))
+                        .tracking(0.3)
+                        .foregroundStyle(MiGlassmorphismTokens.ink.opacity(0.85))
                         .lineLimit(1)
 
                     Text(MiL10n.text(style.name))
                         .font(.system(size: 17 * k, weight: .semibold, design: .rounded))
                         .foregroundStyle(MiGlassmorphismTokens.ink)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.7)
+                        .minimumScaleFactor(0.85)
                         .miStyleTitleTransition(style.id)
                 }
-                .padding(14 * k)
+                .padding(12 * k)
             }
             .overlay {
                 paneShape.strokeBorder(

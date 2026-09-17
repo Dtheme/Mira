@@ -42,17 +42,17 @@ struct MiClaymorphismHomePreview: View {
                 }
 
             ZStack {
-                VStack(alignment: .leading, spacing: 3 * s) {
+                VStack(alignment: .leading, spacing: 5 * s) {
                     Text(MiL10n.text(style.name))
-                        .font(.system(size: 20 * s, weight: .black, design: .rounded))
+                        .font(.system(size: 19 * s, weight: .bold, design: .rounded))
                         .foregroundStyle(MiClaymorphismTokens.ink)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.62)
+                        .minimumScaleFactor(0.85)
                         .miStyleTitleTransition(style.id)
 
                     Text(MiL10n.text("home_clay_hook"))
                         .font(.system(size: 11 * s, weight: .semibold, design: .rounded))
-                        .foregroundStyle(MiClaymorphismTokens.muted)
+                        .foregroundStyle(MiClaymorphismTokens.ink.opacity(0.80))
                         .lineLimit(1)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -63,10 +63,10 @@ struct MiClaymorphismHomePreview: View {
                     .offset(y: ballCenterOffsetY)
 
                 crumb(color: MiClaymorphismTokens.mint, diameter: 14 * s, s: s)
-                    .offset(x: 72 * s, y: ballCenterOffsetY + 38 * s)
+                    .offset(x: 64 * s, y: ballCenterOffsetY + 38 * s)
 
                 crumb(color: MiClaymorphismTokens.butter, diameter: 9 * s, s: s)
-                    .offset(x: 56 * s, y: ballCenterOffsetY + 50 * s)
+                    .offset(x: 48 * s, y: ballCenterOffsetY + 50 * s)
             }
             .offset(y: isPressed && !reduceMotion ? 1.5 * s : 0)
         }

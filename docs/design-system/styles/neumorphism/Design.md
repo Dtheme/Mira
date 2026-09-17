@@ -46,6 +46,7 @@
 
 - **Cards**: Raised rounded rectangles with paired shadows and a subtle white edge highlight.
 - **Home Card**: one raised soft-UI board carrying a single sculptural object — a large raised dial (0.58 × card width) seated in an inset circular groove centered at 0.40 × card height, so raised and inset read in one glance. The dial carries the card's only accent: a small `focusAccent` indicator dot at the 10 o'clock position. Bottom-left text block: a tracked "SOFT UI" kicker over the style title. Press sinks the dial (shadows collapse to 0.3x, fill darkens toward `basePressed`, content nudges 1.5 pt, dial an extra 1 pt) and lights the outer white rim; reduce-motion drops the offsets and keeps only the shadow/fill state change. The blur+mask groove carving renders only at rest; while the home canvas pans (isDragging) it falls back to a flat inset stroke and scaled-down shadows.
+  - Refinement: keep the sculpted dial and groove unchanged. Separate the bottom label and title by 5 pt; use 11 pt scaled type and `ink` at 0.85 opacity for the label instead of low-contrast `quietText`. The title uses a 0.85 minimum scale. The paired shadows describe the object; they must not wash out its identifying text.
 - **Inputs**: Resting fields can be raised or flat; focused fields should become inset with a visible focus accent.
 - **Buttons**: Raised by default, pressed state collapses shadow and slightly darkens the fill.
 - **Pressed Highlight**: Use the white rim as an interaction result on the outer border; do not draw a constant inner white line.

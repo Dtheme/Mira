@@ -13,6 +13,7 @@ struct MiAppleLiquidGlassHomePreview: View {
     let isDragging: Bool
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.miHomePressedStyleID) private var pressedStyleID
 
     private var isPressed: Bool { pressedStyleID == style.id && !isDragging }
@@ -23,9 +24,9 @@ struct MiAppleLiquidGlassHomePreview: View {
 
     private var capsuleWidth: CGFloat { cardSize.width - 28 * sw }
     private var capsuleHeight: CGFloat { 54 * sh }
-    private var capsuleOrigin: CGPoint { CGPoint(x: 14 * sw, y: 132 * sh) }
+    private var capsuleOrigin: CGPoint { CGPoint(x: 14 * sw, y: 146 * sh) }
     private var photoSize: CGSize { CGSize(width: 82 * sw, height: 60 * sh) }
-    private var photoOrigin: CGPoint { CGPoint(x: cardSize.width - (16 + 82) * sw, y: 76 * sh) }
+    private var photoOrigin: CGPoint { CGPoint(x: cardSize.width - (16 + 82) * sw, y: 102 * sh) }
 
     private let titleInk = Color(hex: 0x121A27)
     private let hookInk = Color(hex: 0x354154)
@@ -105,13 +106,14 @@ struct MiAppleLiquidGlassHomePreview: View {
                 Text(MiL10n.text(style.name))
                     .font(.system(size: 18 * sw, weight: .semibold))
                     .foregroundStyle(titleInk.opacity(0.95))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.6)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.85)
+                    .fixedSize(horizontal: false, vertical: true)
                     .miStyleTitleTransition(style.id)
 
                 Text(MiL10n.text("home_alg_short"))
                     .font(.system(size: 11 * sw, weight: .medium))
-                    .foregroundStyle(hookInk.opacity(0.72))
+                    .foregroundStyle(hookInk)
                     .lineSpacing(2)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
@@ -122,10 +124,10 @@ struct MiAppleLiquidGlassHomePreview: View {
             photoBlock(bright: false)
                 .offset(x: photoOrigin.x, y: photoOrigin.y)
 
-            ghostBar(width: 46 * sw, y: 84 * sh, bright: false)
-            ghostBar(width: 38 * sw, y: 97 * sh, bright: false)
-            ghostBar(width: 30 * sw, y: 110 * sh, bright: false)
-            ghostBar(width: cardSize.width * 0.72, y: 158 * sh, bright: false)
+            ghostBar(width: 46 * sw, y: 108 * sh, bright: false)
+            ghostBar(width: 38 * sw, y: 121 * sh, bright: false)
+            ghostBar(width: 30 * sw, y: 134 * sh, bright: false)
+            ghostBar(width: cardSize.width * 0.72, y: 172 * sh, bright: false)
         }
     }
 
@@ -136,7 +138,7 @@ struct MiAppleLiquidGlassHomePreview: View {
             photoBlock(bright: true)
                 .offset(x: photoOrigin.x, y: photoOrigin.y - 1.5)
 
-            ghostBar(width: cardSize.width * 0.72, y: 158 * sh - 1.5, bright: true)
+            ghostBar(width: cardSize.width * 0.72, y: 172 * sh - 1.5, bright: true)
         }
         .frame(width: cardSize.width, height: cardSize.height, alignment: .topLeading)
         .mask(alignment: .topLeading) {
@@ -266,7 +268,9 @@ struct MiAppleLiquidGlassHomePreview: View {
     // iOS 26 glass when idle, material fallback below 26, flat gradient while dragging.
     @ViewBuilder
     private func capsuleSurface(_ capShape: Capsule) -> some View {
-        if isDragging {
+        if reduceTransparency {
+            capShape.fill(MiColorTokens.frost050)
+        } else if isDragging {
             capShape.fill(
                 LinearGradient(
                     colors: [Color.white.opacity(0.78), MiColorTokens.frost050.opacity(0.60)],
